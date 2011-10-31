@@ -1,0 +1,19 @@
+
+
+python_version=2.6
+
+defines= {'PYTHON_VERSION_MAJOR' : int(python_version), 'PYTHON_VERSION_MINOR': int(python_version*10)%10 }
+
+env = Environment(CPPDEFINES=defines)
+
+
+env.Append(CPPPATH=["/usr/include/python" + str(python_version) + "/"])
+env.Append(LIBS=["boost_python" ] )
+
+## setups vars
+
+
+env.ParseConfig("pkg-config --cflags --libs libgfal2")
+env.ParseConfig("pkg-config --cflags --libs glib-2.0")
+
+libgfal_bindings = env.SharedLibrary("libgfal2_python", Glob("*.cpp"))
