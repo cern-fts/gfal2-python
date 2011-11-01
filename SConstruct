@@ -16,7 +16,10 @@ if ARGUMENTS.get('python_core','no') =='yes':
 	python_core=True
 
 
+
+
 env = Environment(tools=['default', 'packaging'])
+
 
 builder = Builder(action = "cd ${TARGET.dir} && ln -s ${SOURCE.file} ${TARGET.file}", chdir = False)
 env.Append(BUILDERS = {"Symlink" : builder})
@@ -37,6 +40,8 @@ if ARGUMENTS.get('profile','0') =='yes':
 if ARGUMENTS.get('production','0') =='yes':
 	print "prod MODE"
 	env.Append(CPPFLAGS='-O3')
+
+
 
 
 VariantDir('build', 'src')
