@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include <string>
-
+#include <boost/python.hpp>
 
 
 #include "gfal_stat.h"
@@ -79,6 +79,8 @@ int mkdir(const std::string &, mode_t mode);
 
 int rmdir(const std::string &);
 
+
+boost::python::list listdir(const std::string &);
 
 
 }

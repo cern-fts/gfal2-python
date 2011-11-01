@@ -86,6 +86,8 @@ BOOST_PYTHON_MODULE(gfal2)
     def("mkdir", &Gfal::mkdir);
     
     def("rmdir", &Gfal::rmdir);
+    
+    def("listdir", &Gfal::listdir);
 
 }
 

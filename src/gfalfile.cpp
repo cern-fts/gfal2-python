@@ -177,5 +177,25 @@ int Gfal::rmdir(const std::string & path){
 	return 0;	
 }
 
+/**
+ * wrapper to a concat gfal_opendir/readdir/closedir 
+ * 
+ * */
+boost::python::list Gfal::listdir(const std::string & path){
+	DIR* d = gfal_opendir(path.c_str());
+	if(d== NULL)
+		gfal_GError_to_exception();	
+	boost::python::list resu;
+	struct dirent* st;
+	while( (st= gfal_readdir(d) ) != NULL){
+		resu.append<std::string>(std::string(st->d_name));
+	}
+	gfal_closedir(d);
+	if(gfal_posix_code_error())
+		gfal_GError_to_exception();		
+	
+	return resu;
+}
+
 
 
