@@ -21,21 +21,21 @@
 #include "gerror_exception.h"
 
 
-Gerror_exception::Gerror_exception(std::string msg, int error) throw()
-	: message(msg)
+Gerror_exception::Gerror_exception(std::string msg, int error) 
+	: message(msg) 
 {
-	
+	this->_code = error;
 }
 
 
-Gerror_exception::Gerror_exception(const GError* gerr) throw()
-	: message(gerr->message)
+Gerror_exception::Gerror_exception(const GError* gerr)
+	: message(gerr->message) 
 {
-	this->code = gerr->code;
+	this->_code = gerr->code;
 }
 
 
-Gerror_exception::~Gerror_exception() throw()
+Gerror_exception::~Gerror_exception()  throw() 
 {
 	
 }
@@ -44,3 +44,9 @@ Gerror_exception::~Gerror_exception() throw()
 const char* Gerror_exception::what() const throw(){
 	return message.c_str();
 }
+
+
+int Gerror_exception::code() const{
+	return this->_code;
+}
+

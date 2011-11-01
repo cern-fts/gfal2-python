@@ -75,6 +75,10 @@ int chmod(const std::string &, mode_t mode);
 
 int unlink(const std::string &);
 
+int mkdir(const std::string &, mode_t mode);
+
+int rmdir(const std::string &);
+
 
 
 }

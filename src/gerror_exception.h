@@ -29,14 +29,16 @@
 class Gerror_exception : public std::exception
 {
 	public:
-		Gerror_exception(std::string path, int error) throw();
-		Gerror_exception(const GError* gerr) throw();
+		Gerror_exception(std::string path, int error);
+		Gerror_exception(const GError* gerr) ;
 		
 		virtual ~Gerror_exception() throw();
 	
 		const char * what() const throw();
+		
+		int code() const;
 	private:
-		int code;
+		int _code;
 		std::string message;
 		/* add your private declarations */
 };

@@ -1,15 +1,15 @@
 
 
-python_version=2.6
+python_version=2.4
 
 defines= {'PYTHON_VERSION_MAJOR' : int(python_version), 'PYTHON_VERSION_MINOR': int(python_version*10)%10 }
 
 env = Environment(CPPDEFINES=defines)
 
 
-env.Append(CPPPATH=["/usr/include/python" + str(python_version) + "/"])
-env.Append(LIBS=["boost_python" ] )
-
+env.Append(CPPPATH=["/usr/include/boost141/", "/usr/include/python" + str(python_version) + "/"])
+env.Append(LIBS=["boost_python-mt"])
+env.Append(LIBPATH=["/usr/lib64/boost141/"])
 ## setups vars
 
 

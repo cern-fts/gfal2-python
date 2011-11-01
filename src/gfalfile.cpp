@@ -155,4 +155,27 @@ int Gfal::unlink(const std::string & path){
 }
 
 
+/**
+ * wrapper to gfal_mkdir function
+ * 
+ * */
+int Gfal::mkdir(const std::string & path, mode_t mode){
+	const int ret = gfal_mkdir(path.c_str(), mode);
+	if(ret <  0)
+		gfal_GError_to_exception();	
+	return 0;	
+}
+
+/**
+ * wrapper to gfal_mkdir function
+ * 
+ * */
+int Gfal::rmdir(const std::string & path){
+	const int ret = gfal_rmdir(path.c_str());
+	if(ret <  0)
+		gfal_GError_to_exception();	
+	return 0;	
+}
+
+
 

@@ -82,6 +82,10 @@ BOOST_PYTHON_MODULE(gfal2)
     def("chmod", &Gfal::chmod);
     
     def("unlink", &Gfal::unlink);
+    
+    def("mkdir", &Gfal::mkdir);
+    
+    def("rmdir", &Gfal::rmdir);
 
 }
 
