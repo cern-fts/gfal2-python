@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 ##
 # Example : open/read/close a file with gfal 2.0
 #

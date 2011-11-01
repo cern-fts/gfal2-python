@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 ##
 # Example : list the content of a directory with gfal 2.0
 #
