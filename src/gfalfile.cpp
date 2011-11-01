@@ -63,7 +63,6 @@ Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : p
  **/
 Gfal::GfalFile::~GfalFile() 
 {
-
 	int ret = gfal_close(fd);
 }
 

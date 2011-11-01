@@ -37,4 +37,5 @@ env.Depends(py24_main_lib, py24_headers)
 py24_main_sym = env.Symlink("gfal2.so", py24_main_lib)
 py24_main = [py24_main_lib + py24_main_sym ]
 
+
 Return("py24_main")

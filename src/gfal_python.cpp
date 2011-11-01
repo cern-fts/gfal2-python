@@ -31,10 +31,7 @@
 #include "gfal_stat.h"
 #include "gfalcpp.h"
 
-#if PYTHON_VERSION_MAJOR == 2 && PYTHON_VERSION_MINOR == 6 && ( __WORDSIZE == 64 )
-#include <python2.6/modsupport.h> // correct 2.6 include bug
 
-#endif
 
 using namespace boost::python;
 

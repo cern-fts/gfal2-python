@@ -22,7 +22,7 @@ class Testgfal2_listdir(unittest.TestCase):
 			res.append(tmp)
 		return res;
 		
-	def test_listdi_lfn(self):
+	def test_listdir_lfn(self):
 		p = self.get_valid_parent_dir("TEST_LFN_BASE")
 		gfal2.mkdir(p,0755)
 		res = gfal2.listdir(p)
