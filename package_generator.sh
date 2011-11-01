@@ -1,6 +1,6 @@
 #!/bin/bash
 
-package_list=(python_core python_devel)
+package_list=(python_core python_doc)
 
 if [ -z "$SCONS_EXE" ]
 then
