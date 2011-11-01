@@ -2,18 +2,27 @@
 
 python_version=2.4
 
+Import("*")
+
 defines= {'PYTHON_VERSION_MAJOR' : int(python_version), 'PYTHON_VERSION_MINOR': int(python_version*10)%10 }
 
-env = Environment(CPPDEFINES=defines)
 
 
+env.Append(CPPDEFINES=defines)
 env.Append(CPPPATH=["/usr/include/boost141/", "/usr/include/python" + str(python_version) + "/"])
 env.Append(LIBS=["boost_python-mt"])
 env.Append(LIBPATH=["/usr/lib64/boost141/"])
 ## setups vars
 
+py24_headers = [Glob("*.h") ]
 
 env.ParseConfig("pkg-config --cflags --libs libgfal2")
 env.ParseConfig("pkg-config --cflags --libs glib-2.0")
 
-libgfal_bindings = env.SharedLibrary("libgfal2_python", Glob("*.cpp"))
+py24_main_lib = env.SharedLibrary("libgfal2_python", Glob("*.cpp"))
+env.Depends(py24_main_lib, py24_headers)
+
+py24_main_sym = env.Symlink("gfal2.so", py24_main_lib)
+py24_main = [py24_main_lib + py24_main_sym ]
+
+Return("py24_main")
