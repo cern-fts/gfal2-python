@@ -85,6 +85,10 @@ BOOST_PYTHON_MODULE(gfal2)
     def("rmdir", &Gfal::rmdir);
     
     def("listdir", &Gfal::listdir);
+    
+    def("rename", &Gfal::rename);
+    
+    def("readlink", &Gfal::readlink);
 
 }
 

@@ -22,7 +22,7 @@ if ARGUMENTS.get('python_doc','no') =='yes':
 
 
 
-env = Environment(tools=['default', 'packaging'])
+env = Environment(tools=['default', 'packaging'], CPPFLAGS=["-Wall"])
 
 
 builder = Builder(action = "cd ${TARGET.dir} && ln -s ${SOURCE.file} ${TARGET.file}", chdir = False)

@@ -34,6 +34,7 @@
 	 int code = gfal_posix_code_error();
 	 if(code){
 		 std::string err_msg(gfal_posix_strerror_r(buffer, 2048));
+		 gfal_posix_clear_error();
 		 throw Gerror_exception(err_msg, code );
 	 }
  }

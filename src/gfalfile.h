@@ -82,6 +82,10 @@ int rmdir(const std::string &);
 
 boost::python::list listdir(const std::string &);
 
+int rename(const std::string & src, const std::string & dest);
+
+
+std::string readlink(const std::string & path);
 
 }
 #endif /* GFALFILE_H */ 

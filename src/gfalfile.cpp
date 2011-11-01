@@ -63,7 +63,7 @@ Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : p
  **/
 Gfal::GfalFile::~GfalFile() 
 {
-	int ret = gfal_close(fd);
+	const int ret = gfal_close(fd);
 }
 
 
@@ -194,6 +194,22 @@ boost::python::list Gfal::listdir(const std::string & path){
 		gfal_GError_to_exception();		
 	
 	return resu;
+}
+
+
+int Gfal::rename(const std::string & src, const std::string & dest){
+	int ret = gfal_rename(src.c_str(), dest.c_str());
+	if(ret != 0)
+		gfal_GError_to_exception();	
+	return 0;
+}
+
+std::string Gfal::readlink(const std::string & path){
+	char buffer[MAX_BUFFER_SIZE];
+	ssize_t ret = gfal_readlink(path.c_str(), buffer, MAX_BUFFER_SIZE);
+	if(ret < 0)
+		gfal_GError_to_exception();	
+	return buffer;		
 }
 
 
