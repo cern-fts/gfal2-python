@@ -196,7 +196,9 @@ boost::python::list Gfal::listdir(const std::string & path){
 	return resu;
 }
 
-
+/**
+ * wrapper to the gfal_rename func
+ **/
 int Gfal::rename(const std::string & src, const std::string & dest){
 	int ret = gfal_rename(src.c_str(), dest.c_str());
 	if(ret != 0)
@@ -204,6 +206,9 @@ int Gfal::rename(const std::string & src, const std::string & dest){
 	return 0;
 }
 
+/**
+ * wrapper to the gfal_readlink func
+ **/
 std::string Gfal::readlink(const std::string & path){
 	char buffer[MAX_BUFFER_SIZE];
 	ssize_t ret = gfal_readlink(path.c_str(), buffer, MAX_BUFFER_SIZE);
@@ -212,5 +217,12 @@ std::string Gfal::readlink(const std::string & path){
 	return buffer;		
 }
 
-
-
+/**
+ * wrapper to the gfal_symlink func
+ **/
+int Gfal::symlink(const std::string & oldpath, const std::string & newpath){
+	int ret = gfal_symlink(oldpath.c_str(), newpath.c_str());
+	if(ret != 0)
+		gfal_GError_to_exception();	
+	return 0;	
+}

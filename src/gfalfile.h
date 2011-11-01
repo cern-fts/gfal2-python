@@ -87,5 +87,7 @@ int rename(const std::string & src, const std::string & dest);
 
 std::string readlink(const std::string & path);
 
+int symlink(const std::string & oldpath, const std::string & newpath);
+
 }
 #endif /* GFALFILE_H */ 

@@ -89,6 +89,8 @@ BOOST_PYTHON_MODULE(gfal2)
     def("rename", &Gfal::rename);
     
     def("readlink", &Gfal::readlink);
+    
+    def("symlink", &Gfal::symlink);
 
 }
 
