@@ -21,6 +21,7 @@
 
 #include <gfal_api.h>
 #include <algorithm>
+#include <vector>
 #include <boost/python.hpp>
 #include <cstring>
 #include <unistd.h>
@@ -68,13 +69,13 @@ Gfal::GfalFile::~GfalFile()
 
 
 std::string Gfal::GfalFile::read(size_t count) {
-	char buf[count+1];
-	ssize_t ret = gfal_read(fd, buf, count);
+	std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
+	ssize_t ret = gfal_read(fd, &(buf->front()), count);
 	if(ret <  0)
 		gfal_GError_to_exception();
 	
-	buf[ret] ='\0';
-	return std::string(buf,ret);
+	(*buf)[ret] ='\0';
+	return std::string(&(buf->front()),ret);
 }
 
 
