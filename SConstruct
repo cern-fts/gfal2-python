@@ -33,7 +33,7 @@ env.Append(BUILDERS = {"Symlink" : builder})
 if ARGUMENTS.get('debug','0') =='yes':
 	print "DEBUG MODE"
 	debug_mode = True
-	env.Append(CFLAGS='-g')
+	env.Append(CPPFLAGS='-g')
 
 # profile mode
 if ARGUMENTS.get('profile','0') =='yes':

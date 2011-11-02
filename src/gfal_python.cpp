@@ -109,6 +109,12 @@ BOOST_PYTHON_MODULE(gfal2)
     def("readlink", &Gfal::readlink);
     
     def("symlink", &Gfal::symlink);
+    
+    def("getxattr", &Gfal::getxattr);
+    
+    def("setxattr", &Gfal::setxattr);
+    
+    def("listxattr", &Gfal::listxattr);
 
 }
 

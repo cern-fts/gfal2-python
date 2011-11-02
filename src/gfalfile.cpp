@@ -30,7 +30,7 @@
 
 #include "gfalfile.h"
 
-static const ssize_t MAX_BUFFER_SIZE=2048;
+static const ssize_t MAX_BUFFER_SIZE=4096;
 
 
 static int convert_open_flag_py_to_cpp(const std::string & str){
@@ -72,17 +72,16 @@ std::string Gfal::GfalFile::read(size_t count) {
 	ssize_t ret = gfal_read(fd, buf, count);
 	if(ret <  0)
 		gfal_GError_to_exception();
-	buf[ std::min<ssize_t>(ret, count) ] ='\0';
-	return std::string(buf);
+	
+	buf[ret] ='\0';
+	return std::string(buf,ret);
 }
 
 
 ssize_t Gfal::GfalFile::write(const std::string & str){
 	const size_t s_str = str.size();
-	char buf[s_str +1];
-	
-	*((char*) mempcpy(buf,str.c_str(), s_str)) = '\0';
-	ssize_t ret = gfal_write(fd, buf, s_str);
+
+	ssize_t ret = gfal_write(fd, str.c_str(), s_str);
 	if(ret <  0)
 		gfal_GError_to_exception();	
 	return ret;
@@ -225,4 +224,47 @@ int Gfal::symlink(const std::string & oldpath, const std::string & newpath){
 	if(ret != 0)
 		gfal_GError_to_exception();	
 	return 0;	
+}
+
+/**
+ * wrapper to the gfal get extended attributes
+ * 
+ */
+std::string Gfal::getxattr(std::string file, std::string key){
+	char buffer[MAX_BUFFER_SIZE];
+	const ssize_t ret = gfal_getxattr(file.c_str(), key.c_str(), buffer, MAX_BUFFER_SIZE);
+	if( ret < 0)
+		gfal_GError_to_exception();	
+	return std::string(buffer);	 
+}
+
+/**
+ * wrapper to the gfal set extended attributes
+ * 
+ */
+int Gfal::setxattr(std::string file, std::string key, std::string value, int flag){
+	const ssize_t ret = gfal_setxattr(file.c_str(), key.c_str(), value.c_str(), value.size()+1, flag);	
+	if( ret < 0)
+		gfal_GError_to_exception();	
+	return 0;		
+}
+
+/**
+ * wrapper to the gfal list extended attributes
+ * 
+ */
+boost::python::list Gfal::listxattr(std::string file ){
+	char buffer[MAX_BUFFER_SIZE];
+	const ssize_t ret = gfal_listxattr(file.c_str(), buffer, MAX_BUFFER_SIZE);	
+	if( ret < 0)
+		gfal_GError_to_exception();	
+		
+	boost::python::list resu;		
+	ssize_t current=0;
+	while(current < ret){
+		std::string tmp(buffer+current);
+		resu.append(tmp);
+		current += tmp.size()+1;	
+	}
+	return resu;		
 }

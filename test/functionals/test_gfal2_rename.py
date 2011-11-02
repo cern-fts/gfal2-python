@@ -3,6 +3,7 @@
 import sys
 import gfal2
 import time
+import errno
 
 import unittest
 from python_test_lib import *
@@ -20,6 +21,11 @@ class Testgfal2_rename_unlink(unittest.TestCase):
 		gfal2.mkdir(filename, 0755)
 		gfal2.lstat(filename); # test if exist
 		gfal2.rename(filename, filename2)
+		try:
+			gfal2.rename(filename, filename2)	# verify that a double rename fail
+			self.assertTrue(False, "must not be a valid rename")
+		except gfal2.GError, e:
+			self.assertTrue(e.code() == errno.ENOENT, "must not be a valid rename")	
 		gfal2.rmdir(filename2)	
 			
 	def test_rename_simple_srm(self):

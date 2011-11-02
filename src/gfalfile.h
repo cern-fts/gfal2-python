@@ -89,5 +89,14 @@ std::string readlink(const std::string & path);
 
 int symlink(const std::string & oldpath, const std::string & newpath);
 
+
+// extended attributes
+
+std::string getxattr(std::string file, std::string key);
+
+int setxattr(std::string file, std::string key, std::string value, int flag);
+
+boost::python::list listxattr(std::string file );
+
 }
 #endif /* GFALFILE_H */ 
