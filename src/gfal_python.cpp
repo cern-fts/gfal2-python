@@ -27,6 +27,7 @@
 #include <string>
 #include <limits.h>
 
+#include "gerror_exception.h"
 #include "gfalfile.h"
 #include "gfal_stat.h"
 #include "gfalcpp.h"
@@ -35,14 +36,31 @@
 
 using namespace boost::python;
 
+
+static PyObject *GErrorPyType = NULL;
+
+
 void gerror_exception_translator(const Gerror_exception  & x){
-    PyErr_SetString(PyExc_RuntimeError, x.what());
+	assert(GErrorPyType != NULL); // check if type init is valid
+	object pythonGErrorInstance(x);
+    PyErr_SetObject(GErrorPyType, pythonGErrorInstance.ptr());
 }
 
 
 
 BOOST_PYTHON_MODULE(gfal2)
 {
+	
+	// register exception first 
+	
+	class_<Gerror_exception> pyGErrorException("GError", init<const std::string &, int>()); 
+	pyGErrorException.def("message", &Gerror_exception::get_message);
+	pyGErrorException.def("code", &Gerror_exception::code);
+	pyGErrorException.def("__str__", &Gerror_exception::get_message);
+		
+
+
+	GErrorPyType = pyGErrorException.ptr();
 	// regsiter stat struct
 	class_<Gfal::Gstat>("stat")
 		.add_property("st_dev", &Gfal::Gstat::get_st_dev)

@@ -17,7 +17,9 @@
 //      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 //      MA 02110-1301, USA.
 
-
+#include <iostream>
+#include <sstream>
+#include <errno.h>
 #include "gerror_exception.h"
 
 
@@ -42,7 +44,15 @@ Gerror_exception::~Gerror_exception()  throw()
 
 
 const char* Gerror_exception::what() const throw(){
+	std::cout << " test" << message.c_str() << std::endl;
 	return message.c_str();
+}
+
+std::string Gerror_exception::get_message() const {
+	std::stringstream ss;
+	ss << "Error: "<< this->_code << " "<< strerror(this->_code) << 
+	"\n" << message << std::endl;
+	return ss.str();
 }
 
 

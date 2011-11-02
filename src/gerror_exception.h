@@ -36,6 +36,8 @@ class Gerror_exception : public std::exception
 	
 		const char * what() const throw();
 		
+		std::string get_message() const;
+		
 		int code() const;
 	private:
 		int _code;
