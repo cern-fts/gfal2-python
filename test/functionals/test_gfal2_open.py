@@ -2,6 +2,8 @@
 
 import sys
 import gfal2
+import time
+import os
 
 import unittest
 from python_test_lib import *
@@ -24,4 +26,30 @@ class Testgfal2_file(unittest.TestCase):
 		rs = a.read(500).strip();
 		var = get_val("TEST_FILE_CONTENT");
 		self.assertTrue(rs == var, "must be %s but is %s."%(var, rs));
-	
+		
+	def test_read_compare_local(self):
+		v = "file:///tmp/myfileread_" + str(time.time())	
+		f1 = gfal2.file(v,"w")
+		var = os.urandom(1000)
+		f1.write(var)
+		del f1
+		gfal2.chmod(v, 0755)
+		f2 = gfal2.file(v,"r")
+		var2 = f2.read(2000);
+		self.assertTrue(var == var2, " read must be the same than write first %s second %s"%(var,var2))
+		del f2
+		gfal2.unlink(v)
+		
+	def test_read_compare_srm(self):
+		v = "".join([get_val("TEST_SRM_BASE"), "test_read_content_" ,str(time.time())])	
+		f1 = gfal2.file(v,"w")
+		var = os.urandom(1000)
+		f1.write(var)
+		del f1
+		gfal2.chmod(v, 0755)
+		f2 = gfal2.file(v,"r")
+		var2 = f2.read(2000);
+		self.assertTrue(var == var2, " read must be the same than write first %s second %s"%(var,var2))
+		del f2
+		gfal2.unlink(v)
+		
