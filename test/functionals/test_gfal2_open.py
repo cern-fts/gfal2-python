@@ -41,7 +41,7 @@ class Testgfal2_file(unittest.TestCase):
 		gfal2.unlink(v)
 		
 	def test_read_compare_srm(self):
-		v = "".join([get_val("TEST_SRM_BASE"), "test_read_content_" ,str(time.time())])	
+		v = "".join([get_val("TEST_SRM_BASE"), "/test_read_content_" ,str(time.time())])	
 		f1 = gfal2.file(v,"w")
 		var = os.urandom(1000)
 		f1.write(var)

@@ -65,11 +65,18 @@ def define_rpm_install(opt):
 	return 'scons -j 8 '+ opt+ ' --install-sandbox="$RPM_BUILD_ROOT" install '
 
 if(python_core):
-	VariantDir('build', 'src')
-	py24_main= SConscript("build/SConscript", exports=['env'])
-	comp_list += [ py24_main ]
-	lib_main = env.Install('/usr/'+libdir+'/python2.4/site-packages/', py24_main)
-	install_list += [lib_main] 
+	VariantDir('build24', 'src')
+	VariantDir('build26', 'src')
+	env_py24 = env.Clone()
+	env_py26 = env.Clone()
+	env_py24["python_version"] = 2.4
+	env_py26["python_version"] = 2.6
+	py24_main = SConscript("build24/SConscript", exports={'env' : env_py24})
+	py26_main = SConscript("build26/SConscript", exports={'env' : env_py26})
+	comp_list += [ py24_main, py26_main ]
+	lib_main1 = env.Install('/usr/'+libdir+'/python2.4/site-packages/', py24_main)
+	lib_main2 = env.Install('/usr/'+libdir+'/python2.6/site-packages/', py26_main)
+	install_list += [lib_main1, lib_main2] 
 	x_rpm_install = define_rpm_install(arguments_to_str());
 	pack_list += env.Package( 
 			 NAME     = 'gfal2-python',
@@ -84,7 +91,7 @@ if(python_core):
 			 X_RPM_POSTINSTALL = "ldconfig",
 			 X_RPM_POSTUNINSTALL = "ldconfig",
 			 X_RPM_REQUIRES = 'python, gfal2-core',
-			 source= [lib_main] 
+			 source= [lib_main1, lib_main2] 
 			 )
 			 
 if(python_doc):
