@@ -2,7 +2,7 @@
 import os
 
 version= '2.0'
-package_version = '1.2_preview'
+package_version = '1.3_preview'
 license_type = "Apache Software License"
 
 
@@ -62,7 +62,7 @@ def arguments_to_str():
 	return ret
 
 def define_rpm_install(opt):
-	return 'scons -j 8 '+ opt+ ' --install-sandbox="$RPM_BUILD_ROOT" install '
+	return 'scons  '+ opt+ ' --install-sandbox="$RPM_BUILD_ROOT" install '
 
 if(python_core):
 	VariantDir('build24', 'src')

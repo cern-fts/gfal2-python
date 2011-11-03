@@ -11,7 +11,7 @@ fi
 mkdir -p RPMS
 for i in ${package_list[@]}
 do
-$SCONS_EXE -j 8 $i=yes "$@" package_generator
+$SCONS_EXE $i=yes "$@" package_generator
 if [ "$?" != "0" ]
   then
 	exit -1
