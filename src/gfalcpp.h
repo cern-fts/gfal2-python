@@ -20,8 +20,29 @@
 #ifndef GFALCPP_H
 #define GFALCPP_H
 
+#include "gfal_boost_include.hpp"
 
+void gfal_GError_to_exception();
+ 
+ 
+/**
+ * GIL unlocker, used on stack
+ */
+class Gfal_scopedGILRelease{
+	
+public:
+    inline Gfal_scopedGILRelease(){
+        m_thread_state = PyEval_SaveThread();
+    }
 
- void gfal_GError_to_exception();
+    inline ~Gfal_scopedGILRelease(){
+        PyEval_RestoreThread(m_thread_state);
+        m_thread_state = NULL;
+    }
+
+private:
+    PyThreadState * m_thread_state;
+    
+};
 
 #endif

@@ -50,7 +50,7 @@ static int convert_open_flag_py_to_cpp(const std::string & str){
  **/
 Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : path(path), flag(flag) 
 {
-
+	Gfal_scopedGILRelease unlock;
 	fd = gfal_open(path.c_str(), convert_open_flag_py_to_cpp(flag) );
 	if(fd <= 0)
 		gfal_GError_to_exception();
@@ -63,11 +63,14 @@ Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : p
  **/
 Gfal::GfalFile::~GfalFile() 
 {
+	Gfal_scopedGILRelease unlock;
 	const int ret = gfal_close(fd);
 }
 
 
 std::string Gfal::GfalFile::read(size_t count) {
+	Gfal_scopedGILRelease unlock;
+	
 	std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
 	ssize_t ret = gfal_read(fd, &(buf->front()), count);
 	if(ret <  0)
@@ -79,6 +82,8 @@ std::string Gfal::GfalFile::read(size_t count) {
 
 
 ssize_t Gfal::GfalFile::write(const std::string & str){
+	Gfal_scopedGILRelease unlock;
+	
 	const size_t s_str = str.size();
 
 	ssize_t ret = gfal_write(fd, str.c_str(), s_str);
@@ -88,6 +93,7 @@ ssize_t Gfal::GfalFile::write(const std::string & str){
 }
 
 off_t Gfal::GfalFile::lseek(off_t offset, int flag){
+	Gfal_scopedGILRelease unlock;
 	
 	off_t ret = gfal_lseek(fd, offset, flag);
 	if(ret ==  ((off_t)0)-1)
@@ -100,6 +106,8 @@ off_t Gfal::GfalFile::lseek(off_t offset, int flag){
  * wrapper to gfal_lstat function
  */
 Gfal::Gstat Gfal::lstat(const std::string & path) {
+	Gfal_scopedGILRelease unlock;
+	
 	Gstat st;
 	const int ret = gfal_lstat(path.c_str(), &st);
 	if(ret <  0)
@@ -111,6 +119,8 @@ Gfal::Gstat Gfal::lstat(const std::string & path) {
  * wrapper to gfal_stat function
  */
 Gfal::Gstat Gfal::stat_c(const std::string & path) {
+	Gfal_scopedGILRelease unlock;
+
 	Gstat st;
 	const int ret = gfal_stat(path.c_str(), &st);
 	if(ret <  0)
@@ -123,6 +133,8 @@ Gfal::Gstat Gfal::stat_c(const std::string & path) {
  * 
  * */
 int Gfal::access(const std::string & path, int flag){
+	Gfal_scopedGILRelease unlock;
+	
 	const int ret = gfal_access(path.c_str(), flag);
 	if(ret <  0)
 		gfal_GError_to_exception();	
@@ -134,6 +146,8 @@ int Gfal::access(const std::string & path, int flag){
  * 
  * */
 int Gfal::chmod(const std::string & path, mode_t mode){
+	Gfal_scopedGILRelease unlock;
+	
 	const int ret = gfal_chmod(path.c_str(), mode);
 	if(ret <  0)
 		gfal_GError_to_exception();	
@@ -146,6 +160,8 @@ int Gfal::chmod(const std::string & path, mode_t mode){
  * 
  * */
 int Gfal::unlink(const std::string & path){
+	Gfal_scopedGILRelease unlock;
+	
 	const int ret = gfal_unlink(path.c_str());
 	if(ret <  0)
 		gfal_GError_to_exception();	
@@ -158,6 +174,8 @@ int Gfal::unlink(const std::string & path){
  * 
  * */
 int Gfal::mkdir(const std::string & path, mode_t mode){
+	Gfal_scopedGILRelease unlock;
+	
 	const int ret = gfal_mkdir(path.c_str(), mode);
 	if(ret <  0)
 		gfal_GError_to_exception();	
@@ -169,6 +187,8 @@ int Gfal::mkdir(const std::string & path, mode_t mode){
  * 
  * */
 int Gfal::rmdir(const std::string & path){
+	Gfal_scopedGILRelease unlock;
+	
 	const int ret = gfal_rmdir(path.c_str());
 	if(ret <  0)
 		gfal_GError_to_exception();	
@@ -180,6 +200,8 @@ int Gfal::rmdir(const std::string & path){
  * 
  * */
 boost::python::list Gfal::listdir(const std::string & path){
+	Gfal_scopedGILRelease unlock;
+	
 	DIR* d = gfal_opendir(path.c_str());
 	if(d== NULL)
 		gfal_GError_to_exception();	
@@ -199,6 +221,8 @@ boost::python::list Gfal::listdir(const std::string & path){
  * wrapper to the gfal_rename func
  **/
 int Gfal::rename(const std::string & src, const std::string & dest){
+	Gfal_scopedGILRelease unlock;
+	
 	int ret = gfal_rename(src.c_str(), dest.c_str());
 	if(ret != 0)
 		gfal_GError_to_exception();	
@@ -209,6 +233,8 @@ int Gfal::rename(const std::string & src, const std::string & dest){
  * wrapper to the gfal_readlink func
  **/
 std::string Gfal::readlink(const std::string & path){
+	Gfal_scopedGILRelease unlock;
+		
 	char buffer[MAX_BUFFER_SIZE];
 	ssize_t ret = gfal_readlink(path.c_str(), buffer, MAX_BUFFER_SIZE);
 	if(ret < 0)
@@ -220,6 +246,8 @@ std::string Gfal::readlink(const std::string & path){
  * wrapper to the gfal_symlink func
  **/
 int Gfal::symlink(const std::string & oldpath, const std::string & newpath){
+	Gfal_scopedGILRelease unlock;
+	
 	int ret = gfal_symlink(oldpath.c_str(), newpath.c_str());
 	if(ret != 0)
 		gfal_GError_to_exception();	
@@ -231,6 +259,8 @@ int Gfal::symlink(const std::string & oldpath, const std::string & newpath){
  * 
  */
 std::string Gfal::getxattr(std::string file, std::string key){
+	Gfal_scopedGILRelease unlock;	
+	
 	char buffer[MAX_BUFFER_SIZE];
 	const ssize_t ret = gfal_getxattr(file.c_str(), key.c_str(), buffer, MAX_BUFFER_SIZE);
 	if( ret < 0)
@@ -243,6 +273,8 @@ std::string Gfal::getxattr(std::string file, std::string key){
  * 
  */
 int Gfal::setxattr(std::string file, std::string key, std::string value, int flag){
+	Gfal_scopedGILRelease unlock;	
+	
 	const ssize_t ret = gfal_setxattr(file.c_str(), key.c_str(), value.c_str(), value.size()+1, flag);	
 	if( ret < 0)
 		gfal_GError_to_exception();	
@@ -254,6 +286,8 @@ int Gfal::setxattr(std::string file, std::string key, std::string value, int fla
  * 
  */
 boost::python::list Gfal::listxattr(std::string file ){
+	Gfal_scopedGILRelease unlock;	
+	
 	char buffer[MAX_BUFFER_SIZE];
 	const ssize_t ret = gfal_listxattr(file.c_str(), buffer, MAX_BUFFER_SIZE);	
 	if( ret < 0)
