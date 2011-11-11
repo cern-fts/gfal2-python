@@ -15,6 +15,11 @@ class Testgfal2_file(unittest.TestCase):
 		a= gfal2.file(v,flags);
 		return a;		
 
+	def open_valid(self, url, flags): # same than file but with open func
+		v= get_val(url);
+		a= gfal2.open(v,flags);
+		return a;
+				
 	def test_read_simple_lfn(self):
 		a= self.file_valid("TEST_LFN_READ_VALID","r");
 		rs = a.read(500).strip();
@@ -35,6 +40,19 @@ class Testgfal2_file(unittest.TestCase):
 		del f1
 		gfal2.chmod(v, 0755)
 		f2 = gfal2.file(v,"r")
+		var2 = f2.read(2000);
+		self.assertTrue(var == var2, " read must be the same than write first %s second %s"%(var,var2))
+		del f2
+		gfal2.unlink(v)
+		
+	def test_read_compare_local_with_open(self):
+		v = "file:///tmp/myfileread_with_open_" + str(time.time())	
+		f1 = gfal2.open(v,"w")
+		var = os.urandom(1000)
+		f1.write(var)
+		del f1
+		gfal2.chmod(v, 0755)
+		f2 = gfal2.open(v,"r")
 		var2 = f2.read(2000);
 		self.assertTrue(var == var2, " read must be the same than write first %s second %s"%(var,var2))
 		del f2

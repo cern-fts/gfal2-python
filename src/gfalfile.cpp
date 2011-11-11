@@ -57,6 +57,9 @@ Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : p
 
 }
 
+
+
+
 /**
  * @brief destructor of a gfalFile object, close the file
  * 
@@ -301,4 +304,12 @@ boost::python::list Gfal::listxattr(std::string file ){
 		current += tmp.size()+1;	
 	}
 	return resu;		
+}
+
+
+/**
+ * Gfal file open
+ * */
+boost::shared_ptr<Gfal::GfalFile> Gfal::open(const std::string & path, const std::string &flag){
+	return boost::shared_ptr<Gfal::GfalFile>(new Gfal::GfalFile(path, flag));
 }

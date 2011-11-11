@@ -64,6 +64,9 @@ class GfalFile
 };
 
 
+boost::shared_ptr<Gfal::GfalFile> open(const std::string & path, const std::string &flag);
+
+
 struct _Gstat lstat(const std::string & path);
 
 struct _Gstat stat_c(const std::string & path);

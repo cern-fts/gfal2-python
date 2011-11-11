@@ -28,6 +28,16 @@ def gfal2_read(url):
 	f= gfal2.file(url,'r')
 	a= f.read(500)
 	print a
+	
+def gfal2_lstat(url):
+	f = gfal2.lstat(url)
+	print f
+	
+	
+def gfal1_lstat(url):
+	f = gfal.gfal_lstat(url)
+	print f
+	
 
 
 def gfal1_read(url):

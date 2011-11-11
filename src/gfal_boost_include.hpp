@@ -20,6 +20,8 @@
  #define _GFAL_BOOST_INCLUDE
  
 #include <boost/python.hpp>
+#include <boost/shared_ptr.hpp>
+
 
  
  /* 
