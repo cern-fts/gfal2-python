@@ -94,11 +94,23 @@ int symlink(const std::string & oldpath, const std::string & newpath);
 
 // extended attributes
 
-std::string getxattr(std::string file, std::string key);
+std::string getxattr(const std::string & file, const std::string & key);
 
-int setxattr(std::string file, std::string key, std::string value, int flag);
+int setxattr(const std::string & file, const std::string & key, const std::string & value, int flag);
 
-boost::python::list listxattr(std::string file );
+boost::python::list listxattr(const std::string & file );
+
+
+int set_parameter_string(const std::string & namespc, const std::string & key,  const std::string & str);
+
+int set_parameter_bool(const std::string & namespc, const std::string & key, const bool  b);
+
+bool get_parameter_bool(const std::string & namespc, const std::string & key);
+
+std::string get_parameter_string(const std::string & namespc, const std::string & key);
 
 }
+
+
+
 #endif /* GFALFILE_H */ 

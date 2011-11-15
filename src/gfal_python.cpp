@@ -119,6 +119,17 @@ BOOST_PYTHON_MODULE(gfal2)
     def("setxattr", &Gfal::setxattr);
     
     def("listxattr", &Gfal::listxattr);
+    
+    def("set_parameter_string", Gfal::set_parameter_string);
+    
+    def("set_parameter_boolean", Gfal::set_parameter_bool);
+    
+    def("get_parameter_string", &Gfal::get_parameter_string);
+    
+    def("get_parameter_boolean", Gfal::get_parameter_bool);
+    
+    
+   // def("setparameter", &Gfal::getparameter);
 
 }
 

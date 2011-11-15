@@ -261,7 +261,7 @@ int Gfal::symlink(const std::string & oldpath, const std::string & newpath){
  * wrapper to the gfal get extended attributes
  * 
  */
-std::string Gfal::getxattr(std::string file, std::string key){
+std::string Gfal::getxattr(const std::string & file, const std::string & key){
 	Gfal_scopedGILRelease unlock;	
 	
 	char buffer[MAX_BUFFER_SIZE];
@@ -275,7 +275,7 @@ std::string Gfal::getxattr(std::string file, std::string key){
  * wrapper to the gfal set extended attributes
  * 
  */
-int Gfal::setxattr(std::string file, std::string key, std::string value, int flag){
+int Gfal::setxattr(const std::string  & file, const std::string & key, const std::string & value, int flag){
 	Gfal_scopedGILRelease unlock;	
 	
 	const ssize_t ret = gfal_setxattr(file.c_str(), key.c_str(), value.c_str(), value.size()+1, flag);	
@@ -288,7 +288,7 @@ int Gfal::setxattr(std::string file, std::string key, std::string value, int fla
  * wrapper to the gfal list extended attributes
  * 
  */
-boost::python::list Gfal::listxattr(std::string file ){
+boost::python::list Gfal::listxattr(const std::string & file ){
 	Gfal_scopedGILRelease unlock;	
 	
 	char buffer[MAX_BUFFER_SIZE];
@@ -313,3 +313,53 @@ boost::python::list Gfal::listxattr(std::string file ){
 boost::shared_ptr<Gfal::GfalFile> Gfal::open(const std::string & path, const std::string &flag){
 	return boost::shared_ptr<Gfal::GfalFile>(new Gfal::GfalFile(path, flag));
 }
+
+/**
+ * Gfal set_parameter string
+ * 
+ */
+int Gfal::set_parameter_string(const std::string & namespc, const std::string & key, const std::string & str){
+	const int ret = gfal_set_parameter_string(namespc.c_str(), key.c_str(), str.c_str());
+	if(ret != 0)
+		gfal_GError_to_exception();	
+		
+	return ret;	
+}
+
+/**
+ * Gfal set_parameter bool
+ * 
+ */
+int Gfal::set_parameter_bool(const std::string & namespc, const std::string & key, const bool  b){
+	const int ret = gfal_set_parameter_boolean(namespc.c_str(), key.c_str(), b);
+	if(ret != 0)
+		gfal_GError_to_exception();	
+		
+	return ret;	
+}
+
+/**
+ * Gfal get_parameter bool
+ * 
+ */
+bool Gfal::get_parameter_bool(const std::string & namespc, const std::string & key){
+	const int ret = gfal_get_parameter_boolean(namespc.c_str(), key.c_str());
+	if(gfal_posix_code_error() != 0)
+		gfal_GError_to_exception();	
+		
+	return (bool)ret;	
+}
+
+/**
+ * Gfal get_parameter string
+ * 
+ */
+std::string Gfal::get_parameter_string(const std::string & namespc, const std::string & key){
+	char* value = gfal_get_parameter_string(namespc.c_str(), key.c_str());
+	if(value == NULL)
+		gfal_GError_to_exception();	
+	std::string ret(value);	
+	free(value);
+	return ret;	
+}
+
