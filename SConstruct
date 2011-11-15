@@ -2,7 +2,7 @@
 import os
 
 version= '2.0'
-package_version = '1.5_preview'
+package_version = '1.6_preview'
 license_type = "Apache Software License"
 
 
