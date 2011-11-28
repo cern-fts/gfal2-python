@@ -10,7 +10,7 @@ License: Apache-2.0
 Summary: File system for lcg storage system
 Version: %{version}
 Release: %{release}
-Requires: gfal2-python
+Requires: gfal2-python >= %{version}
 Group: Grid/lcg
 BuildRoot: %{_tmppath}/%{projectname}-%{version}-%{release}
 Source: %{projectname}-%{version}-%{release}.src.tar.gz
@@ -53,6 +53,7 @@ scons -j 2 python_core=yes production=yes build
 scons  -j 2 python_core=yes production=yes --install-sandbox="$RPM_BUILD_ROOT" install 
 
 %files -n gfal2-python
+%defattr (-,root,root)
 /usr/%{_lib}/python2.6/site-packages/gfal2.so
 /usr/%{_lib}/python2.6/site-packages/libgfal2_python.so 
 /usr/%{_lib}/python2.4/site-packages/gfal2.so
