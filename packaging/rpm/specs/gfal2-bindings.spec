@@ -22,8 +22,8 @@ meta package for gfal2 bindings install
 %package -n gfal2-python
 Summary: python bindings for gfal 2.0
 Group: grid/lcg
-BuildRequires: gfal2-devel, glib2-devel, fuse-devel
-Requires: gfal2, glib2, fuse
+BuildRequires: gfal2-devel, glib2-devel, fuse-devel, python-devel, python26-devel, boost141-devel
+Requires: gfal2, glib2, fuse, python, python26, boost141
 %description -n gfal2-python
 python bindings for gfal 2.0
 
