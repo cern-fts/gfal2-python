@@ -17,14 +17,17 @@ create_tmp_dir() {
 	mkdir -p $TMP_DIR
 }
 
-# var, value, specfile, try to do a recursive resolution ofa spec attribute
+# var, value, specfile, try to do a recursive resolution of a spec attribute
 do_rec_resolution(){
 	RES_VAR=""
 	local TMP_VAR="$(echo \"$2\" | grep % | sed -e 's@.*%{\(.*\)}.*@\1@g' )"
 	if [[ "$TMP_VAR" != "" ]]; then
-		local TMP_VAR2="$( grep "%define $TMP_VAR" $3 | sed "s@.*%define $TMP_VAR \(.*\)@\1@g" ) "
+		local TMP_VAR2="$( grep "%define $TMP_VAR" $3 | sed "s@.*%define $TMP_VAR \(.*\)@\1@g" )"
+		if [[ "x$TMP_VAR2" == "x" ]]; then
+			local TMP_VAR2="$( grep -i "$TMP_VAR" $3 | sed "s@$TMP_VAR\:[ \t]*\(.*\)@\1@I" ) "	
+		fi
 		do_rec_resolution $1 $TMP_VAR2 $3
-		export RES_VAR="$(echo $2 | sed "s/%{$TMP_VAR}/$RES_VAR/g" )"
+		export RES_VAR="$(echo $2 | sed "s@%{$TMP_VAR}@$RES_VAR@g" )"
 		do_rec_resolution $1 $RES_VAR $3
 	else
 		export RES_VAR=$2
@@ -47,9 +50,11 @@ create_tarball(){
 	create_tmp_dir
 	SRC_FOLDER="/$TMP_DIR/$PKG_NAME-$PKG_VERSION"
 	mkdir -p "$SRC_FOLDER"
+	echo "copy files..."
 	cp -r $1/* $SRC_FOLDER/
 	CURRENT_DIR=$PWD
 	cd $TMP_DIR
+	echo "copy files..."
 	eval "tar -cvzf $2 $TARBALL_FILTER $PKG_NAME-$PKG_VERSION"
 	echo "tarball result : $2 $TARBALL_FILTER "
 	cd $CURRENT_DIR

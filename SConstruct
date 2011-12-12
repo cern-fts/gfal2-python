@@ -1,7 +1,10 @@
 
 import os
 
-version= '2.0'
+version_major= '2'
+version_minor= '0'
+version_patch= '0'
+version = ".".join([version_major, version_minor, version_patch])
 package_version = '1.6_preview'
 license_type = "Apache Software License"
 
@@ -23,6 +26,10 @@ if ARGUMENTS.get('python_doc','no') =='yes':
 
 
 env = Environment(tools=['default', 'packaging'], CPPFLAGS=["-Wall"])
+print dir(env)
+
+
+
 
 
 builder = Builder(action = "cd ${TARGET.dir} && ln -s ${SOURCE.file} ${TARGET.file}", chdir = False)

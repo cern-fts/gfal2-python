@@ -1,65 +1,62 @@
-%define projectname gfal2-bindings
-%define version 1.0
-%define release 1.12_preview
+Name:				gfal2-bindings
+Version:			1.0.0
+Release:			1.13_preview
+Summary:			Python bindings for gfal 2.0
+Group:				Applications/Internet
+License:			ASL 2.0
+URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
+## source URL
+# svn export http://svn.cern.ch/guest/lcgutil/wlcggridfs/trunk gfalfs
+#
+Source:				%{name}-%{version}.src.tar.gz
+BuildRoot:			%{_tmppath}/%{name}-%{version}-%{release}
 
-
-%define debug_package %{nil}
-
-Name: %{projectname}
-License: Apache-2.0
-Summary: File system for lcg storage system
-Version: %{version}
-Release: %{release}
-Requires: gfal2-python >= %{version}
-Group: Grid/lcg
-BuildRoot: %{_tmppath}/%{projectname}-%{version}-%{release}
-Source: %{projectname}-%{version}-%{release}.src.tar.gz
-
-%description
-meta package for gfal2 bindings install
-
+BuildRequires:		scons
+BuildRequires:		glib2-devel%{?_isa}
+BuildRequires:		gfal2-devel%{?_isa}
+BuildRequires:		boost141-devel%{?_isa}
+BuildRequires:		python-devel%{?_isa}
+BuildRequires:		python26-devel%{?_isa}
 
 %package -n gfal2-python
-Summary: python bindings for gfal 2.0
-Group: grid/lcg
-BuildRequires: scons, gfal2-devel, glib2-devel, fuse-devel, python-devel, python26-devel, boost141-devel
-Requires: gfal2, glib2, fuse, python, python26, boost141
+Summary:			python bindings for gfal 2.0
+Group:				Applications/Internet
+Requires:			glib2%{?_isa}
+Requires:			gfal2-core%{?_isa}
+Requires:			python%{?_isa}
+Requires:			python26%{?_isa}
+Requires:			boost141%{?_isa}
+
 %description -n gfal2-python
 python bindings for gfal 2.0
-
-
-
-
-
 
 %post 
 
 %clean
-[ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf "$RPM_BUILD_ROOT";
-scons  python_core=yes production=yes -c build
+rm -rf "$RPM_BUILD_ROOT";
+scons python_core=yes production=yes -c build
 
 %prep
 %setup -q
 
 %build
-# 2 parallel build max, else compilation time bug with gcc
-scons -j 2 python_core=yes production=yes build
+scons python_core=yes production=yes build
 
 %postun
 
 
 %install
-[ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf "$RPM_BUILD_ROOT"; 
-scons  -j 2 python_core=yes production=yes --install-sandbox="$RPM_BUILD_ROOT" install 
+rm -rf "$RPM_BUILD_ROOT"; 
+scons python_core=yes production=yes \
+--install-sandbox="$RPM_BUILD_ROOT" install 
 
 %files -n gfal2-python
 %defattr (-,root,root)
-/usr/%{_lib}/python2.6/site-packages/gfal2.so
-/usr/%{_lib}/python2.6/site-packages/libgfal2_python.so 
-/usr/%{_lib}/python2.4/site-packages/gfal2.so
-/usr/%{_lib}/python2.4/site-packages/libgfal2_python.so	
+%{_libdir}/python2.6/site-packages/gfal2.so
+%{_libdir}/python2.6/site-packages/libgfal2_python.so 
+%{_libdir}/python2.4/site-packages/gfal2.so
+%{_libdir}/python2.4/site-packages/libgfal2_python.so	
  
-%files
 
 %changelog
 * Mon Nov 14 2011 adevress at cern.ch 
