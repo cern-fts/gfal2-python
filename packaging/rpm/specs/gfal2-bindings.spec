@@ -18,6 +18,9 @@ BuildRequires:		boost141-devel%{?_isa}
 BuildRequires:		python-devel%{?_isa}
 BuildRequires:		python26-devel%{?_isa}
 
+%description
+Aggregation of the bindings for GFAL 2.0
+
 %package -n gfal2-python
 Summary:			python bindings for gfal 2.0
 Group:				Applications/Internet
