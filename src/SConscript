@@ -24,7 +24,7 @@ if ARGUMENTS.get("gfal_path",'0') !='0':
 	env.Append(LIBS=["gfal2"  ])	
 	env.Append(LIBPATH=[tmp_path+"/lib64/", tmp_path+"/lib/"  ])	
 else:
-	env.ParseConfig("pkg-config --cflags --libs libgfal2")
+	env.ParseConfig("pkg-config --cflags --libs gfal2")
 
 
 
