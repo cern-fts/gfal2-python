@@ -1,22 +1,21 @@
+%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+
 Name:				gfal2-bindings
 Version:			1.0.0
-Release:			1.13_preview
+Release:			5beta1
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
 URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
-## source URL
 # svn export http://svn.cern.ch/guest/lcgutil/wlcggridfs/trunk gfalfs
-#
-Source:				%{name}-%{version}.src.tar.gz
-BuildRoot:			%{_tmppath}/%{name}-%{version}-%{release}
+Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz 
+BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-BuildRequires:		scons
-BuildRequires:		glib2-devel%{?_isa}
-BuildRequires:		gfal2-devel%{?_isa}
-BuildRequires:		boost141-devel%{?_isa}
-BuildRequires:		python-devel%{?_isa}
-BuildRequires:		python26-devel%{?_isa}
+BuildRequires:		cmake
+BuildRequires:		glib2-devel
+BuildRequires:		gfal2-devel
+BuildRequires:		boost-devel
+BuildRequires:		python-devel
 
 %description
 Aggregation of the bindings for GFAL 2.0
@@ -27,8 +26,7 @@ Group:				Applications/Internet
 Requires:			glib2%{?_isa}
 Requires:			gfal2-core%{?_isa}
 Requires:			python%{?_isa}
-Requires:			python26%{?_isa}
-Requires:			boost141%{?_isa}
+Requires:			boost%{?_isa}
 
 %description -n gfal2-python
 python bindings for gfal 2.0
@@ -37,28 +35,26 @@ python bindings for gfal 2.0
 
 %clean
 rm -rf "$RPM_BUILD_ROOT";
-scons python_core=yes production=yes -c build
+make clean
 
 %prep
 %setup -q
 
 %build
-scons python_core=yes production=yes build
+%cmake -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} .
+make %{?_smp_mflags}
 
 %postun
 
 
 %install
 rm -rf "$RPM_BUILD_ROOT"; 
-scons python_core=yes production=yes \
---install-sandbox="$RPM_BUILD_ROOT" install 
+make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 %files -n gfal2-python
 %defattr (-,root,root)
-%{_libdir}/python2.6/site-packages/gfal2.so
-%{_libdir}/python2.6/site-packages/libgfal2_python.so 
-%{_libdir}/python2.4/site-packages/gfal2.so
-%{_libdir}/python2.4/site-packages/libgfal2_python.so	
+%{python_sitearch}/gfal2.so
+
  
 
 %changelog

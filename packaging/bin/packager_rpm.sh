@@ -36,12 +36,11 @@ do_rec_resolution(){
 }
 
 get_attrs_spec(){
-	export SRC_NAME="$( grep "Source:" $1 | sed 's@Source:\(.*\)@\1@g' )"
 	export PKG_VERSION="$( grep "Version:" $1 | sed 's@Version:\(.*\)@\1@g' )"
 	export PKG_NAME="$( grep "Name:" $1 | sed 's@Name:\(.*\)@\1@g' )"
-	do_rec_resolution "SRC_NAME" $SRC_NAME $1
 	do_rec_resolution "PKG_VERSION" $PKG_VERSION $1
 	do_rec_resolution "PKG_NAME" $PKG_NAME $1
+	export SRC_NAME="$PKG_NAME-$PKG_VERSION.tar.gz"
 	echo "res : $SRC_NAME $PKG_VERSION $PKG_NAME"
 }
 
