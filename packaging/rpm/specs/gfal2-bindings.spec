@@ -8,7 +8,7 @@ Group:				Applications/Internet
 License:			ASL 2.0
 URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
 # svn export http://svn.cern.ch/guest/lcgutil/gfal2-bindings/trunk gfal2-bindings
-Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz 
+Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
@@ -21,15 +21,13 @@ BuildRequires:		python-devel
 Aggregation of the bindings for GFAL 2.0
 
 %package -n gfal2-python
-Summary:			python bindings for gfal 2.0
+Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
-Requires:			glib2%{?_isa}
-Requires:			gfal2-core%{?_isa}
 Requires:			python%{?_isa}
 Requires:			boost%{?_isa}
 
 %description -n gfal2-python
-python bindings for gfal 2.0
+Python bindings for gfal 2.0
 
 %post 
 

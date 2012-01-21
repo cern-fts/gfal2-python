@@ -18,7 +18,8 @@
 
 #include <iostream>
 #include <sstream>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 #include "gerror_exception.h"
 
 
