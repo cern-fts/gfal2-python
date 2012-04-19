@@ -1,0 +1,344 @@
+2012-01-21 18:04  adevress
+
+	* doc/build/html/examples.html, doc/build/html/files.html,
+	  doc/build/html/gerror__exception_8h-source.html,
+	  doc/build/html/gfal2__python__listdir_8py-example.html,
+	  doc/build/html/gfal2__python__read_8py-example.html,
+	  doc/build/html/gfal__stat_8h-source.html,
+	  doc/build/html/gfalcpp_8cpp.html,
+	  doc/build/html/gfalcpp_8h-source.html,
+	  doc/build/html/gfalfile_8h-source.html,
+	  doc/build/html/index.html, doc/build/latex/doxygen.sty,
+	  doc/build/latex/refman.tex, doc/build/man/man3/gfalcpp.cpp.3,
+	  packaging/rpm/specs/gfal2-bindings.spec,
+	  src/gerror_exception.cpp: -apply fix for strerror inclusion in
+	  EL6
+
+2012-01-21 00:45  adevress
+
+	* packaging/rpm/specs/gfal2-bindings.spec: add url for spec file
+
+2012-01-21 00:26  adevress
+
+	* CMakeLists.txt, cmake, cmake/modules,
+	  cmake/modules/CMakeGeneratePkgConfig.cmake,
+	  cmake/modules/CMakeMacroParseArguments.cmake,
+	  cmake/modules/CMakeStringHelpers.cmake,
+	  cmake/modules/DefineInstallationPaths.cmake,
+	  cmake/modules/FindCGSI_GSOAP.cmake, cmake/modules/FindDCAP.cmake,
+	  cmake/modules/FindDPM.cmake, cmake/modules/FindLFC.cmake,
+	  cmake/modules/FindPythonEasy.cmake,
+	  cmake/modules/FindgSOAP.cmake, cmake/modules/MacroCopyFile.cmake,
+	  cmake/modules/ReleaseDebugAutoFlags.cmake,
+	  packaging/bin/packager_rpm.sh,
+	  packaging/rpm/specs/gfal2-bindings.spec, src/CMakeLists.txt: -add
+	  cmake support
+
+2012-01-19 08:41  adevress
+
+	* src/SConscript: -correct pkgconfig name
+
+2011-12-12 17:38  adevress
+
+	* packaging/rpm/specs/gfal2-bindings.spec: - correct EPEL packaging
+
+2011-12-12 15:54  adevress
+
+	* SConstruct, packaging/bin/packager_rpm.sh,
+	  packaging/rpm/specs/gfal2-bindings.spec: -update the generator
+	  script
+	  - make the first version EPEL compliant of the spec file
+
+2011-11-28 14:10  adevress
+
+	* packaging/rpm/specs/gfal2-bindings.spec: -add missing dependency
+
+2011-11-28 13:11  adevress
+
+	* packaging/rpm/specs/gfal2-bindings.spec: -add missing
+	  dependencies to spec files
+
+2011-11-28 13:08  adevress
+
+	* packaging/rpm/specs/gfal2-bindings.spec: - improve spec file for
+	  epel packaging
+
+2011-11-25 17:03  adevress
+
+	* packaging, packaging/bin, packaging/bin/packager_rpm.sh,
+	  packaging/rpm, packaging/rpm/specs,
+	  packaging/rpm/specs/gfal2-bindings.spec: -add the spec file and
+	  build script
+
+2011-11-15 13:39  adevress
+
+	* SConstruct: -update the version number
+
+2011-11-15 13:39  adevress
+
+	* src/gfal_python.cpp, src/gfalfile.cpp, src/gfalfile.h: -add
+	  get/set parameter in the python API
+
+2011-11-11 13:16  adevress
+
+	* SConstruct: - update verson number
+
+2011-11-11 13:15  adevress
+
+	* src/gfal_boost_include.hpp, src/gfal_python.cpp,
+	  src/gfalfile.cpp, src/gfalfile.h,
+	  test/bench/test-gfal-threaded.py,
+	  test/functionals/python_test_lib.pyc,
+	  test/functionals/test_gfal2_link.pyc,
+	  test/functionals/test_gfal2_listdir.pyc,
+	  test/functionals/test_gfal2_lstat.pyc,
+	  test/functionals/test_gfal2_mkrmdir.pyc,
+	  test/functionals/test_gfal2_open.py,
+	  test/functionals/test_gfal2_open.pyc,
+	  test/functionals/test_gfal2_rename.pyc,
+	  test/functionals/test_gfal2_stat.pyc,
+	  test/functionals/test_gfal2_xattr.pyc: - add a open convenience
+	  function, include shared_ptr of boost and validate it with a new
+	  test
+
+2011-11-07 13:18  adevress
+
+	* SConstruct: -update package version
+
+2011-11-07 13:18  adevress
+
+	* src/gfalcpp.h, src/gfalfile.cpp, test/bench,
+	  test/bench/test-gfal-threaded.py,
+	  test/functionals/python_test_lib.pyc,
+	  test/functionals/test_gfal2_link.pyc,
+	  test/functionals/test_gfal2_listdir.pyc,
+	  test/functionals/test_gfal2_lstat.pyc,
+	  test/functionals/test_gfal2_mkrmdir.pyc,
+	  test/functionals/test_gfal2_open.pyc,
+	  test/functionals/test_gfal2_rename.pyc,
+	  test/functionals/test_gfal2_stat.pyc,
+	  test/functionals/test_gfal2_xattr.pyc: -add test bench for gfal1
+	  vs gfal2 python bindings
+	  - unlock the GIL to allow thread safety in GFAL 2.0 python
+	  bindings
+
+2011-11-03 19:59  adevress
+
+	* src/gfal_boost_include.hpp: -add missing include
+
+2011-11-03 17:22  adevress
+
+	* test/functionals/test-gfal2-all.py,
+	  test/functionals/test_gfal2_lstat.pyc,
+	  test/functionals/test_gfal2_xattr.py,
+	  test/functionals/test_gfal2_xattr.pyc: -add new test for getxattr
+
+2011-11-03 16:32  adevress
+
+	* SConstruct, package_generator.sh: - reduce compilation time
+	  - change package number for preview release
+
+2011-11-03 16:32  adevress
+
+	* SConstruct, src/SConscript, src/boost, src/boost/python,
+	  src/boost/python/object, src/boost/python/object/src,
+	  src/boost/python/object/src/converter,
+	  src/boost/python/object/src/converter/arg_to_python_base.cpp,
+	  src/boost/python/object/src/converter/builtin_converters.cpp,
+	  src/boost/python/object/src/converter/from_python.cpp,
+	  src/boost/python/object/src/converter/registry.cpp,
+	  src/boost/python/object/src/converter/type_id.cpp,
+	  src/boost/python/object/src/dict.cpp,
+	  src/boost/python/object/src/errors.cpp,
+	  src/boost/python/object/src/exec.cpp,
+	  src/boost/python/object/src/import.cpp,
+	  src/boost/python/object/src/list.cpp,
+	  src/boost/python/object/src/long.cpp,
+	  src/boost/python/object/src/module.cpp,
+	  src/boost/python/object/src/numeric.cpp,
+	  src/boost/python/object/src/object,
+	  src/boost/python/object/src/object/class.cpp,
+	  src/boost/python/object/src/object/enum.cpp,
+	  src/boost/python/object/src/object/function.cpp,
+	  src/boost/python/object/src/object/function_doc_signature.cpp,
+	  src/boost/python/object/src/object/inheritance.cpp,
+	  src/boost/python/object/src/object/iterator.cpp,
+	  src/boost/python/object/src/object/life_support.cpp,
+	  src/boost/python/object/src/object/pickle_support.cpp,
+	  src/boost/python/object/src/object/stl_iterator.cpp,
+	  src/boost/python/object/src/object_operators.cpp,
+	  src/boost/python/object/src/object_protocol.cpp,
+	  src/boost/python/object/src/slice.cpp,
+	  src/boost/python/object/src/str.cpp,
+	  src/boost/python/object/src/tuple.cpp,
+	  src/boost/python/object/src/wrapper.cpp,
+	  src/gerror_exception.cpp, src/gerror_exception.h,
+	  src/gfal_python.cpp, src/gfal_stat.cpp, src/gfal_stat.h,
+	  src/gfalcpp.h, src/gfalfile.cpp, src/gfalfile.h,
+	  test/functionals/test_gfal2_lstat.pyc,
+	  test/functionals/test_gfal2_open.py,
+	  test/functionals/test_gfal2_open.pyc: - static link to
+	  boost.python for py26 compliance on EPEL, waiting for the package
+	  maintainer
+
+2011-11-03 10:11  adevress
+
+	* test/functionals/test-gfal2-all.py,
+	  test/functionals/test_gfal2_open.py,
+	  test/functionals/test_gfal2_open.pyc: -add test for the content
+	  checking
+
+2011-11-02 17:41  adevress
+
+	* SConstruct, src/gfalfile.cpp: -update packaging number for new
+	  release
+	  - fix memory problem with read
+
+2011-11-02 16:35  adevress
+
+	* SConstruct, src/gfal_python.cpp, src/gfalfile.cpp,
+	  src/gfalfile.h, test/functionals/python_test_lib.py,
+	  test/functionals/python_test_lib.pyc,
+	  test/functionals/test-gfal2-all.py,
+	  test/functionals/test_gfal2_link.py,
+	  test/functionals/test_gfal2_link.pyc,
+	  test/functionals/test_gfal2_lstat.py,
+	  test/functionals/test_gfal2_lstat.pyc,
+	  test/functionals/test_gfal2_mkrmdir.py,
+	  test/functionals/test_gfal2_mkrmdir.pyc,
+	  test/functionals/test_gfal2_rename.py,
+	  test/functionals/test_gfal2_rename.pyc,
+	  test/functionals/test_gfal2_stat.py,
+	  test/functionals/test_gfal2_stat.pyc: -improve test with error
+	  handle
+	  - correct major bug in read/write
+
+2011-11-02 10:26  adevress
+
+	* src/gerror_exception.cpp, src/gerror_exception.h,
+	  src/gfal_python.cpp, test/functionals/python_test_lib.pyc,
+	  test/functionals/test_gfal2_listdir.pyc,
+	  test/functionals/test_gfal2_lstat.pyc,
+	  test/functionals/test_gfal2_mkrmdir.pyc,
+	  test/functionals/test_gfal2_open.pyc,
+	  test/functionals/test_gfal2_rename.pyc,
+	  test/functionals/test_gfal2_stat.pyc: -add the new error
+	  management
+
+2011-11-01 19:17  adevress
+
+	* package_generator.sh: -package g update
+
+2011-11-01 18:19  adevress
+
+	* package_generator.sh: -add the package generator
+
+2011-11-01 17:04  adevress
+
+	* src/gfal_python.cpp, src/gfalfile.cpp, src/gfalfile.h,
+	  test/functionals/test-gfal2-all.py,
+	  test/functionals/test_gfal2_rename.py: -add new test for rename
+	  and deletion
+
+2011-11-01 16:33  adevress
+
+	* SConstruct, src/gfal_python.cpp, src/gfalcpp.cpp,
+	  src/gfalfile.cpp, src/gfalfile.h: -correct a bug with the
+	  exception handle
+
+2011-11-01 15:13  adevress
+
+	* doc, doc/Doxyfile, doc/build, doc/build/html,
+	  doc/build/html/doxygen.css, doc/build/html/doxygen.png,
+	  doc/build/html/examples.html, doc/build/html/files.html,
+	  doc/build/html/gerror__exception_8h-source.html,
+	  doc/build/html/gfal2__python__listdir_8py-example.html,
+	  doc/build/html/gfal2__python__read_8py-example.html,
+	  doc/build/html/gfal__stat_8h-source.html,
+	  doc/build/html/gfalcpp_8cpp.html,
+	  doc/build/html/gfalcpp_8h-source.html,
+	  doc/build/html/gfalfile_8h-source.html,
+	  doc/build/html/index.html,
+	  doc/build/html/namespaceboost_1_1python.html,
+	  doc/build/html/namespaces.html, doc/build/html/tab_b.gif,
+	  doc/build/html/tab_l.gif, doc/build/html/tab_r.gif,
+	  doc/build/html/tabs.css, doc/build/latex,
+	  doc/build/latex/FreeSans.ttf, doc/build/latex/Makefile,
+	  doc/build/latex/doxygen.sty, doc/build/latex/examples.tex,
+	  doc/build/latex/files.tex,
+	  doc/build/latex/gfal2__python__listdir_8py-example.tex,
+	  doc/build/latex/gfal2__python__read_8py-example.tex,
+	  doc/build/latex/gfalcpp_8cpp.tex,
+	  doc/build/latex/namespaceboost_1_1python.tex,
+	  doc/build/latex/namespaces.tex, doc/build/latex/refman.tex,
+	  doc/build/man, doc/build/man/man3,
+	  doc/build/man/man3/boost_python.3,
+	  doc/build/man/man3/gfalcpp.cpp.3, doc/src, doc/src/example.c:
+	  -commit doc
+
+2011-11-01 14:54  adevress
+
+	* SConstruct, src/SConscript, src/gfal_python.cpp,
+	  src/gfalfile.cpp, test/functionals/test_gfal2_listdir.py: -add
+	  pyo/pyc and example
+
+2011-11-01 14:54  adevress
+
+	* example/python/gfal2_python_listdir.py,
+	  example/python/gfal2_python_listdir.pyc,
+	  example/python/gfal2_python_listdir.pyo,
+	  example/python/gfal2_python_read.py,
+	  example/python/gfal2_python_read.pyc,
+	  example/python/gfal2_python_read.pyo: -add pyc/pyo
+
+2011-11-01 14:54  adevress
+
+	* example, example/python, example/python/gfal2_python_listdir.py,
+	  example/python/gfal2_python_read.py: -add example to the bindings
+
+2011-11-01 14:54  adevress
+
+	* test/functionals/test-gfal2-all.py,
+	  test/functionals/test_gfal2_listdir.py: -add a new test for
+	  listdir/mkdir
+
+2011-11-01 13:02  adevress
+
+	* src/gfal_python.cpp, src/gfalfile.cpp, src/gfalfile.h: -add
+	  listdir function
+
+2011-11-01 10:53  adevress
+
+	* SConstruct, src/SConscript: -change build fiel for etics
+
+2011-11-01 10:21  adevress
+
+	* SConstruct, src/SConscript: -add the package generation and the
+	  prod mod
+
+2011-11-01 10:21  adevress
+
+	* src/SConscript, src/gerror_exception.cpp, src/gerror_exception.h,
+	  src/gfal_python.cpp, src/gfalfile.cpp, src/gfalfile.h,
+	  test/functionals/test-gfal2-all.py,
+	  test/functionals/test_gfal2_mkrmdir.py: -add the new rmdir/mkdir
+	  test
+
+2011-10-31 12:38  adevress
+
+	* SConstruct, src, src/SConscript, src/gerror_exception.cpp,
+	  src/gerror_exception.h, src/gfal_python.cpp, src/gfal_stat.cpp,
+	  src/gfal_stat.h, src/gfalcpp.cpp, src/gfalcpp.h,
+	  src/gfalfile.cpp, src/gfalfile.h, test, test/functionals,
+	  test/functionals/libtest.sh, test/functionals/python_test_lib.py,
+	  test/functionals/setup_env_test.sh,
+	  test/functionals/test-gfal2-all.py,
+	  test/functionals/test_gfal2_lstat.py,
+	  test/functionals/test_gfal2_open.py,
+	  test/functionals/test_gfal2_stat.py: Merge branch 'master' into
+	  main_trunk
+
+2011-10-31 12:32  adevress
+
+	* .: -add gfal2-bindings dir
+
