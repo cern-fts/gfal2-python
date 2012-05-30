@@ -2,7 +2,7 @@
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:				gfal2-bindings
-Version:			1.0.0
+Version:			1.0.1
 Release:			0.1.%{checkout_tag}%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
@@ -57,5 +57,5 @@ make DESTDIR=%{buildroot} install
  
 
 %changelog
-* Mon Nov 14 2011 Adrien Devresse <adevress at cern.ch> - 1.0.0-0.1.20120503010snap
- - Initial gfal 2.0 bindigns preview
+* Mon Nov 14 2011 Adrien Devresse <adevress at cern.ch> - 1.0.1-0.1.20120503010snap
+ - Initial gfal 2.0 bindigns preview with posix scope

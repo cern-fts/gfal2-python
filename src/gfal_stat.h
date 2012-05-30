@@ -21,38 +21,8 @@
 #define GFAL_STAT_H
 
 #include <string>
-#include <sys/stat.h>
-#include <unistd.h>
+
 
 #include "gfalfile.h"
 
-namespace Gfal{
-
-typedef struct _Gstat : stat {	
-	
-	dev_t get_st_dev();
-
-	ino_t get_st_ino();
-
-	mode_t get_st_mode();
-
-	nlink_t get_st_nlink();
-
-	uid_t get_st_uid();
-
-	gid_t get_st_gid();
-
-	off_t get_st_size();
-
-	time_t get_st_atime();
-
-	time_t get_st_mtime();
-
-	time_t get_st_ctime();
-
-	std::string string_rep();	
-
-} Gstat;
-	
-}
 #endif /* GFAL_STAT_H */ 

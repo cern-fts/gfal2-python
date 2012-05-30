@@ -18,6 +18,8 @@
 
 #include <iostream>
 #include <string>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "gfal_boost_include.hpp"
 
 
@@ -27,7 +29,37 @@
 #ifndef GFALFILE_H
 #define GFALFILE_H
 
-namespace Gfal{
+class Gfal{
+
+public:
+
+class Gstat : public stat {	
+public:	
+	dev_t get_st_dev();
+
+	ino_t get_st_ino();
+
+	mode_t get_st_mode();
+
+	nlink_t get_st_nlink();
+
+	uid_t get_st_uid();
+
+	gid_t get_st_gid();
+
+	off_t get_st_size();
+
+	time_t get_st_atime();
+
+	time_t get_st_mtime();
+
+	time_t get_st_ctime();
+
+	std::string string_rep();	
+
+} ;
+
+
 
 class GfalFile
 {
@@ -64,12 +96,12 @@ class GfalFile
 };
 
 
-boost::shared_ptr<Gfal::GfalFile> open(const std::string & path, const std::string &flag);
+boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);
 
 
-struct _Gstat lstat(const std::string & path);
+Gstat lstat(const std::string & path);
 
-struct _Gstat stat_c(const std::string & path);
+Gstat stat_c(const std::string & path);
 
 int access(const std::string &, int flag);
 
@@ -109,7 +141,7 @@ bool get_parameter_bool(const std::string & namespc, const std::string & key);
 
 std::string get_parameter_string(const std::string & namespc, const std::string & key);
 */
-}
+};
 
 
 

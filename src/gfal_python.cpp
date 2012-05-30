@@ -53,6 +53,7 @@ void gerror_exception_translator(const Gerror_exception  & x){
 BOOST_PYTHON_MODULE(gfal2)
 {
 	
+	
 	// register exception first 
 	
 	class_<Gerror_exception> pyGErrorException("GError", init<const std::string &, int>()); 
@@ -63,6 +64,42 @@ BOOST_PYTHON_MODULE(gfal2)
 
 
 	GErrorPyType = pyGErrorException.ptr();
+	
+	scope scope_posix =  class_<Gfal>("posix")
+	.def("open", &Gfal::open)
+	
+    .def("access", &Gfal::access)
+    
+    .def("lstat", &Gfal::lstat)
+    
+    .def("stat", &Gfal::stat_c)
+    
+    .def("chmod", &Gfal::chmod)
+    
+    .def("unlink", &Gfal::unlink)
+    
+    .def("mkdir", &Gfal::mkdir)
+    
+    .def("rmdir", &Gfal::rmdir)
+    
+    .def("listdir", &Gfal::listdir)
+    
+    .def("rename", &Gfal::rename)
+    
+    .def("readlink", &Gfal::readlink)
+    
+    .def("symlink", &Gfal::symlink)
+    
+    .def("getxattr", &Gfal::getxattr)
+    
+    .def("setxattr", &Gfal::setxattr)
+    
+    .def("listxattr", &Gfal::listxattr)
+    
+    ;
+    
+    
+	
 	// regsiter stat struct
 	class_<Gfal::Gstat>("stat")
 		.add_property("st_dev", &Gfal::Gstat::get_st_dev)
@@ -90,36 +127,7 @@ BOOST_PYTHON_MODULE(gfal2)
         
     ;
 
-	def("open", &Gfal::open);
-	
-    def("access", &Gfal::access);
-    
-    def("lstat", &Gfal::lstat);
-    
-    def("stat", &Gfal::stat_c);
-    
-    def("chmod", &Gfal::chmod);
-    
-    def("unlink", &Gfal::unlink);
-    
-    def("mkdir", &Gfal::mkdir);
-    
-    def("rmdir", &Gfal::rmdir);
-    
-    def("listdir", &Gfal::listdir);
-    
-    def("rename", &Gfal::rename);
-    
-    def("readlink", &Gfal::readlink);
-    
-    def("symlink", &Gfal::symlink);
-    
-    def("getxattr", &Gfal::getxattr);
-    
-    def("setxattr", &Gfal::setxattr);
-    
-    def("listxattr", &Gfal::listxattr);
-    
+
    /* def("set_parameter_string", Gfal::set_parameter_string);
     
     def("set_parameter_boolean", Gfal::set_parameter_bool);
