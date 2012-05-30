@@ -100,7 +100,7 @@ int setxattr(const std::string & file, const std::string & key, const std::strin
 
 boost::python::list listxattr(const std::string & file );
 
-
+/*
 int set_parameter_string(const std::string & namespc, const std::string & key,  const std::string & str);
 
 int set_parameter_bool(const std::string & namespc, const std::string & key, const bool  b);
@@ -108,7 +108,7 @@ int set_parameter_bool(const std::string & namespc, const std::string & key, con
 bool get_parameter_bool(const std::string & namespc, const std::string & key);
 
 std::string get_parameter_string(const std::string & namespc, const std::string & key);
-
+*/
 }
 
 

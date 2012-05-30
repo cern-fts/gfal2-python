@@ -1,14 +1,15 @@
+%global checkout_tag 20120503010snap
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:				gfal2-bindings
 Version:			1.0.0
-Release:			5beta1
+Release:			0.1.%{checkout_tag}%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
 URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
 # svn export http://svn.cern.ch/guest/lcgutil/gfal2-bindings/trunk gfal2-bindings
-Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz
+Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}-%{checkout_tag}.tar.gz 
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
@@ -32,7 +33,7 @@ Python bindings for gfal 2.0
 %post 
 
 %clean
-rm -rf "$RPM_BUILD_ROOT";
+rm -rf %{buildroot};
 make clean
 
 %prep
@@ -46,8 +47,8 @@ make %{?_smp_mflags}
 
 
 %install
-rm -rf "$RPM_BUILD_ROOT"; 
-make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+rm -rf %{buildroot}
+make DESTDIR=%{buildroot} install
 
 %files -n gfal2-python
 %defattr (-,root,root)
@@ -56,5 +57,5 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
  
 
 %changelog
-* Mon Nov 14 2011 adevress at cern.ch 
- - Initial gfal2-python bindings 1.0 preview release
+* Mon Nov 14 2011 Adrien Devresse <adevress at cern.ch> - 1.0.0-0.1.20120503010snap
+ - Initial gfal 2.0 bindigns preview

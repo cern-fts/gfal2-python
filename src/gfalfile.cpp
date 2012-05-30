@@ -314,10 +314,7 @@ boost::shared_ptr<Gfal::GfalFile> Gfal::open(const std::string & path, const std
 	return boost::shared_ptr<Gfal::GfalFile>(new Gfal::GfalFile(path, flag));
 }
 
-/**
- * Gfal set_parameter string
- * 
- */
+/*
 int Gfal::set_parameter_string(const std::string & namespc, const std::string & key, const std::string & str){
 	const int ret = gfal_set_parameter_string(namespc.c_str(), key.c_str(), str.c_str());
 	if(ret != 0)
@@ -326,10 +323,7 @@ int Gfal::set_parameter_string(const std::string & namespc, const std::string & 
 	return ret;	
 }
 
-/**
- * Gfal set_parameter bool
- * 
- */
+
 int Gfal::set_parameter_bool(const std::string & namespc, const std::string & key, const bool  b){
 	const int ret = gfal_set_parameter_boolean(namespc.c_str(), key.c_str(), b);
 	if(ret != 0)
@@ -338,10 +332,7 @@ int Gfal::set_parameter_bool(const std::string & namespc, const std::string & ke
 	return ret;	
 }
 
-/**
- * Gfal get_parameter bool
- * 
- */
+
 bool Gfal::get_parameter_bool(const std::string & namespc, const std::string & key){
 	const int ret = gfal_get_parameter_boolean(namespc.c_str(), key.c_str());
 	if(gfal_posix_code_error() != 0)
@@ -350,10 +341,7 @@ bool Gfal::get_parameter_bool(const std::string & namespc, const std::string & k
 	return (bool)ret;	
 }
 
-/**
- * Gfal get_parameter string
- * 
- */
+
 std::string Gfal::get_parameter_string(const std::string & namespc, const std::string & key){
 	char* value = gfal_get_parameter_string(namespc.c_str(), key.c_str());
 	if(value == NULL)
@@ -362,4 +350,4 @@ std::string Gfal::get_parameter_string(const std::string & namespc, const std::s
 	free(value);
 	return ret;	
 }
-
+*/
