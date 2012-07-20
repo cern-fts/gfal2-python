@@ -1,3 +1,7 @@
+%changelog
+* Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1
+ - initial 1.0 release for gfal 2.0 python bindings
+
 2012-01-21 18:04  adevress
 
 	* doc/build/html/examples.html, doc/build/html/files.html,
