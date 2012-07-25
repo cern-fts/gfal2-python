@@ -25,9 +25,6 @@
 #include <unistd.h>
 #include "gfal_boost_include.hpp"
 
-#include "gerror_exception.h"
-#include "gfalcpp.h"
-
 #include "gfalfile.h"
 
 static const ssize_t MAX_BUFFER_SIZE=4096;
@@ -313,6 +310,86 @@ boost::python::list Gfal::listxattr(const std::string & file ){
 boost::shared_ptr<Gfal::GfalFile> Gfal::open(const std::string & path, const std::string &flag){
 	return boost::shared_ptr<Gfal::GfalFile>(new Gfal::GfalFile(path, flag));
 }
+
+int Gfal::get_opt_integer(const std::string & nmspace, const std::string & key){
+    GError * tmp_err=NULL;
+     int ret = gfal2_get_opt_integer(cont, nmspace.c_str(), key.c_str(), &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
+
+std::string Gfal::get_opt_string(const std::string & nmspace, const std::string & key){
+    GError * tmp_err=NULL;
+    char* p = gfal2_get_opt_string(cont, nmspace.c_str(), key.c_str(), &tmp_err);
+    check_GError(&tmp_err);
+    return std::string(p);
+}
+
+boost::python::list Gfal::get_opt_string_list(const std::string & nmspace, const std::string & key){
+    GError * tmp_err=NULL;
+    gsize size=0;
+    boost::python::list result;
+    char** res =  gfal2_get_opt_string_list(cont, nmspace.c_str(), key.c_str(), &size, &tmp_err);
+    check_GError(&tmp_err);
+    if(res){
+        for(int i =0; i < size; i++)
+            result.append(std::string(res[i]));
+        g_strfreev(res);
+    }
+    return result;
+}
+
+bool Gfal::get_opt_boolean(const std::string & nmspace, const std::string & key){
+    GError * tmp_err=NULL;
+    const bool ret = gfal2_get_opt_boolean(cont, nmspace.c_str(), key.c_str(), &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
+
+int Gfal::set_opt_integer(const std::string & nmspace, const std::string & key, int value){
+    GError * tmp_err=NULL;
+    int ret = gfal2_set_opt_boolean(cont, nmspace.c_str(), key.c_str(), value, &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
+
+int Gfal::set_opt_string(const std::string & nmspace, const std::string & key, const std::string & value){
+    GError * tmp_err=NULL;
+    int ret = gfal2_set_opt_string(cont, nmspace.c_str(), key.c_str(), (char*)value.c_str(), &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
+
+int Gfal::set_opt_string_list(const std::string & nmspace, const std::string & key, const std::vector<std::string> & value){
+    GError * tmp_err=NULL;
+    const int size_list = value.size();
+    char* tab_ptr[size_list+1];
+    for(int i = 0; i < size_list; i++){
+        tab_ptr[i] = (char*) value[i].c_str();
+    }
+    tab_ptr[size_list] = NULL;
+
+    int ret = gfal2_set_opt_string_list(cont, nmspace.c_str(), key.c_str(), tab_ptr, size_list, &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
+
+int Gfal::set_opt_boolean(const std::string & nmspace, const std::string & key, bool val){
+    GError * tmp_err=NULL;
+    int ret = gfal2_set_opt_boolean(cont, nmspace.c_str(), key.c_str(), val, &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
+
+boost::shared_ptr<Gfal> create_instance(){
+    return boost::shared_ptr<Gfal>(new Gfal());
+}
+
+int gfal_set_verbose_enum(gfal_verbose_levels lvls)
+{
+    gfal_set_verbose((int) lvls);
+}
+
 
 /*
 int Gfal::set_parameter_string(const std::string & namespc, const std::string & key, const std::string & str){

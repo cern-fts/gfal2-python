@@ -1,4 +1,4 @@
-## cmake build script for srm-ifce
+## cmake build script for gfal2 bindings
 project (gfal2-bindings)
 cmake_minimum_required (VERSION 2.6)
 message("cmake source dir : ${CMAKE_SOURCE_DIR}")

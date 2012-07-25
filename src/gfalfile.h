@@ -20,18 +20,38 @@
 #include <string>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <vector>
+
+
+#include <gfal_api.h>
 #include "gfal_boost_include.hpp"
 
 
+#include "gfalcpp.h"
 #include "gfal_stat.h"
 #include "gerror_exception.h"
 
 #ifndef GFALFILE_H
 #define GFALFILE_H
 
+enum gfal_verbose_levels{
+    gfal_verbose_normal =GFAL_VERBOSE_NORMAL,
+    gfal_verbose_verbose = GFAL_VERBOSE_VERBOSE,
+    gfal_verbose_debug = GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG,
+    gfal_verbose_trace = GFAL_VERBOSE_TRACE | GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG
+};
+
+
 class Gfal{
+private:
+  gfal_context_t cont;
 
 public:
+    Gfal(){
+        cont = gfal_posix_get_context();
+        if(cont == NULL)
+            gfal_GError_to_exception();
+    }
 
 class Gstat : public stat {	
 public:	
@@ -132,17 +152,30 @@ int setxattr(const std::string & file, const std::string & key, const std::strin
 
 boost::python::list listxattr(const std::string & file );
 
-/*
-int set_parameter_string(const std::string & namespc, const std::string & key,  const std::string & str);
 
-int set_parameter_bool(const std::string & namespc, const std::string & key, const bool  b);
+// parameters
+int get_opt_integer(const std::string & nmspace, const std::string & key);
 
-bool get_parameter_bool(const std::string & namespc, const std::string & key);
+std::string get_opt_string(const std::string & nmspace, const std::string & key);
 
-std::string get_parameter_string(const std::string & namespc, const std::string & key);
-*/
+boost::python::list get_opt_string_list(const std::string & nmspace, const std::string & key);
+
+bool get_opt_boolean(const std::string & nmspace, const std::string & key);
+
+int set_opt_integer(const std::string & nmspace, const std::string & key, int value);
+
+int set_opt_string(const std::string & nmspace, const std::string & key, const std::string & value);
+
+int set_opt_string_list(const std::string & nmspace, const std::string & key, const std::vector<std::string>  & value);
+
+int set_opt_boolean(const std::string & nmspace, const std::string & key, bool val);
+
 };
 
+int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);
+
+
+boost::shared_ptr<Gfal> create_instance();
 
 
 #endif /* GFALFILE_H */ 

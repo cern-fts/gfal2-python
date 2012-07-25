@@ -1,4 +1,8 @@
-%changelog
+ - bug correction for set interger function
+ - map the new parameter system properly
+ - add verbose level management and new namespace to gfal python bindings
+
+
 * Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1
  - initial 1.0 release for gfal 2.0 python bindings
 

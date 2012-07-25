@@ -26,7 +26,7 @@
 #include <string>
 #include <limits.h>
 #include "gfal_boost_include.hpp"
-
+#include <gfal_api.h>
 
 #include "gerror_exception.h"
 #include "gfalfile.h"
@@ -52,10 +52,17 @@ void gerror_exception_translator(const Gerror_exception  & x){
 
 BOOST_PYTHON_MODULE(gfal2)
 {
-	
+    // global functions
+    def("set_verbose", &gfal_set_verbose_enum, "define the log level of gfal 2.0 ");
+
+    enum_<gfal_verbose_levels>("verbose_level")
+            .value("normal",gfal_verbose_normal)
+            .value("verbose", gfal_verbose_verbose)
+            .value("debug", gfal_verbose_debug)
+            .value("trace", gfal_verbose_trace)
+            ;
 	
 	// register exception first 
-	
 	class_<Gerror_exception> pyGErrorException("GError", init<const std::string &, int>()); 
 	pyGErrorException.def("message", &Gerror_exception::get_message);
 	pyGErrorException.def("code", &Gerror_exception::code);
@@ -65,7 +72,7 @@ BOOST_PYTHON_MODULE(gfal2)
 
 	GErrorPyType = pyGErrorException.ptr();
 	
-	scope scope_posix =  class_<Gfal>("posix")
+    scope scope_posix =  class_<Gfal>("creat_context")
 	.def("open", &Gfal::open)
 	
     .def("access", &Gfal::access)
@@ -95,7 +102,22 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("setxattr", &Gfal::setxattr)
     
     .def("listxattr", &Gfal::listxattr)
-    
+
+    .def("get_opt_integer", &Gfal::get_opt_integer)
+
+    .def("get_opt_boolean", &Gfal::get_opt_boolean)
+
+    .def("get_opt_string", &Gfal::get_opt_string)
+
+    .def("get_opt_string_list", &Gfal::get_opt_string_list)
+
+    .def("set_opt_string_list", &Gfal::set_opt_string_list)
+
+    .def("set_opt_string", &Gfal::set_opt_string)
+
+    .def("set_opt_boolean", &Gfal::set_opt_boolean)
+
+    .def("set_opt_integer", &Gfal::set_opt_integer)
     ;
     
     
@@ -126,11 +148,8 @@ BOOST_PYTHON_MODULE(gfal2)
         .def("lseek", &Gfal::GfalFile::lseek)
         
     ;
-
-
-   /* def("set_parameter_string", Gfal::set_parameter_string);
     
-    def("set_parameter_boolean", Gfal::set_parameter_bool);
+  /*  def("set_parameter_boolean", Gfal::set_parameter_bool);
     
     def("get_parameter_string", &Gfal::get_parameter_string);
     
