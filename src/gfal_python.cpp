@@ -31,6 +31,7 @@
 #include "gerror_exception.h"
 #include "gfalfile.h"
 #include "gfal_stat.h"
+#include "gfalt_params.h"
 #include "gfalcpp.h"
 
 
@@ -122,7 +123,7 @@ BOOST_PYTHON_MODULE(gfal2)
     
     
 	
-	// regsiter stat struct
+    // register stat struct
 	class_<Gfal::Gstat>("stat")
 		.add_property("st_dev", &Gfal::Gstat::get_st_dev)
 		.add_property("st_ino", &Gfal::Gstat::get_st_ino)
@@ -138,6 +139,11 @@ BOOST_PYTHON_MODULE(gfal2)
 		.def("__str__", &Gfal::Gstat::string_rep)
 		.def("__repr__", &Gfal::Gstat::string_rep)
 	;
+
+    class_<Gfalt_params>("TransferParams")
+           .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout)
+           .add_property("checksum_check", &Gfalt_params::set_checksum_check, &Gfalt_params::get_checksum_check)
+            ;
 	
     // register exception
     register_exception_translator<Gerror_exception>(&gerror_exception_translator);
@@ -149,14 +155,7 @@ BOOST_PYTHON_MODULE(gfal2)
         
     ;
     
-  /*  def("set_parameter_boolean", Gfal::set_parameter_bool);
-    
-    def("get_parameter_string", &Gfal::get_parameter_string);
-    
-    def("get_parameter_boolean", Gfal::get_parameter_bool);*/
-    
-    
-   // def("setparameter", &Gfal::getparameter);
+
 
 }
 

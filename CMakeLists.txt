@@ -39,7 +39,7 @@ pkg_check_modules(GLIB2_PKG REQUIRED glib-2.0)
 pkg_check_modules(GTHREAD2_PKG REQUIRED gthread-2.0)
 
 pkg_check_modules(GFAL2_PKG REQUIRED gfal2)
-
+pkg_check_modules(GFAL2_TRANSFER_PKG REQUIRED gfal_transfer)
 
 
 
