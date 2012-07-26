@@ -1,4 +1,10 @@
 
+%if 0%{?el5}
+%global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include/boost141 -DBOOST_LIBRARYDIR=%{_libdir}/boost141
+%else
+%global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include
+%endif
+
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:				gfal2-python
@@ -19,7 +25,11 @@ Officialy supported.
 BuildRequires:		cmake
 BuildRequires:		glib2-devel
 BuildRequires:		gfal2-devel
+%if 0%{?el5}
+BuildRequires:		boost141-devel
+%else
 BuildRequires:		boost-devel
+%endif
 BuildRequires:		python-devel
 
 Requires:			python%{?_isa}
@@ -32,7 +42,9 @@ Requires:			boost%{?_isa}
 %cmake \
 -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
 -DUNIT_TESTS=TRUE \
+%{boost_cmake_flags} \
 .
+
 make %{?_smp_mflags}
 
 %post
