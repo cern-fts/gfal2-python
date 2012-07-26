@@ -47,10 +47,8 @@ Requires:			boost%{?_isa}
 
 make %{?_smp_mflags}
 
-%post
-
-%postun
-
+%check
+ctest -V
 
 %install
 rm -rf %{buildroot}
@@ -59,9 +57,6 @@ make DESTDIR=%{buildroot} install
 %clean
 rm -rf %{buildroot};
 make clean
-
-%check
-ctest -V
 
 %files
 %defattr (-,root,root)
