@@ -18,10 +18,6 @@ URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
 Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz 
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-%description
-Python bindings for gfal 2.0
-Officialy supported.
-
 BuildRequires:		cmake
 BuildRequires:		glib2-devel
 BuildRequires:		gfal2-devel
@@ -35,12 +31,20 @@ BuildRequires:		python-devel
 Requires:			python%{?_isa}
 Requires:			boost%{?_isa}
 
+%description
+Python bindings for gfal 2.0.
+GFAL 2.0 offers an a single, simple and portable API
+for the file operations in grids and cloud environments.
+
+%clean
+rm -rf %{buildroot};
+make clean
+
 %prep
 %setup -q
 
 %build
-%cmake \
--DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
+%cmake -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
 -DUNIT_TESTS=TRUE \
 %{boost_cmake_flags} \
 .
@@ -48,15 +52,11 @@ Requires:			boost%{?_isa}
 make %{?_smp_mflags}
 
 %check
-ctest -V
+ctest -V .
 
 %install
 rm -rf %{buildroot}
 make DESTDIR=%{buildroot} install
-
-%clean
-rm -rf %{buildroot};
-make clean
 
 %files
 %defattr (-,root,root)
