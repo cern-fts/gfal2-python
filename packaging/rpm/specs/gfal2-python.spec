@@ -45,9 +45,10 @@ make clean
 
 %build
 %cmake -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
--DUNIT_TESTS=TRUE \
-%{boost_cmake_flags} \
-.
+ %{boost_cmake_flags} \
+ -DUNIT_TESTS=TRUE \ 
+ . 
+
 
 make %{?_smp_mflags}
 
