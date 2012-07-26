@@ -129,7 +129,7 @@ BOOST_PYTHON_MODULE(gfal2)
     
 	
     // register stat struct
-	class_<Gfal::Gstat>("stat")
+    class_<Gfal::Gstat>("st_stat")
 		.add_property("st_dev", &Gfal::Gstat::get_st_dev)
 		.add_property("st_ino", &Gfal::Gstat::get_st_ino)
 		.add_property("st_mode", &Gfal::Gstat::get_st_mode)
@@ -146,8 +146,14 @@ BOOST_PYTHON_MODULE(gfal2)
 	;
 
     class_<Gfalt_params >("transfer_parameters")
-           .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout)
-           .add_property("checksum_check", &Gfalt_params::set_checksum_check, &Gfalt_params::get_checksum_check)
+            .def("copy", &Gfalt_params::copy)
+            .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout)
+            .add_property("checksum_check", &Gfalt_params::get_checksum_check, &Gfalt_params::set_checksum_check)
+            .add_property("src_spacetoken", &Gfalt_params::get_src_spacetoken, &Gfalt_params::set_src_spacetoken)
+            .add_property("dst_spacetoken", &Gfalt_params::get_dst_spacetoken, &Gfalt_params::set_dst_spacetoken)
+
+            .def("set_user_defined_checksum", &Gfalt_params::set_user_defined_checksum)
+            .def("get_user_defined_checksum", &Gfalt_params::get_user_defined_checksum)
             ;
 	
     // register exception

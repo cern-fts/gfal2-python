@@ -30,7 +30,7 @@ private:
 public:
     Gfalt_params(){
         GError * tmp_err=NULL;
-        gfalt_params_handle_new(&tmp_err);
+        params = gfalt_params_handle_new(&tmp_err);
         check_GError(&tmp_err);
     }
 
@@ -40,12 +40,15 @@ public:
         check_GError(&tmp_err);
     }
 
+    Gfalt_params copy(){
+        return Gfalt_params(*this);
+    }
+
     virtual ~Gfalt_params(){
         gfalt_params_handle_delete(params,NULL);
     }
 
-    void set_timeout(){
-        guint64 timeout;
+    void set_timeout(guint64 timeout){
         GError * tmp_err=NULL;
         gfalt_set_timeout(params, timeout, &tmp_err);
         check_GError(&tmp_err);
@@ -71,6 +74,52 @@ public:
         check_GError(&tmp_err);
         return res;
     }
+
+    void set_src_spacetoken(const std::string & token){
+        GError * tmp_err=NULL;
+        gfalt_set_src_spacetoken(params, token.c_str(), &tmp_err);
+        check_GError(&tmp_err);
+    }
+
+
+    std::string get_src_spacetoken(){
+        GError * tmp_err=NULL;
+        gchar* res = gfalt_get_dst_spacetoken(params,  &tmp_err);
+        check_GError(&tmp_err);
+        return (res)?res:"";
+    }
+
+    void set_dst_spacetoken(const std::string & token){
+        GError * tmp_err=NULL;
+        gfalt_set_dst_spacetoken(params, token.c_str(), &tmp_err);
+        check_GError(&tmp_err);
+    }
+
+    std::string get_dst_spacetoken(){
+        GError * tmp_err=NULL;
+        gchar* res = gfalt_get_dst_spacetoken(params,  &tmp_err);
+        check_GError(&tmp_err);
+        return (res)?res:"";
+    }
+
+
+    void set_user_defined_checksum(const std::string & chk_type, const std::string & checksum){
+        GError * tmp_err=NULL;
+        gfalt_set_user_defined_checksum(params, chk_type.c_str(), checksum.c_str(),&tmp_err);
+        check_GError(&tmp_err);
+    }
+
+    boost::python::tuple get_user_defined_checksum(){
+        char buff_chktype[GFAL_URL_MAX_LEN];
+        char buff_chk[GFAL_URL_MAX_LEN];
+        GError * tmp_err=NULL;
+        gfalt_get_user_defined_checksum(params, buff_chktype, GFAL_URL_MAX_LEN,
+                                            buff_chk, GFAL_URL_MAX_LEN, &tmp_err);
+        check_GError(&tmp_err);
+        return boost::python::make_tuple<std::string,std::string>(buff_chktype, buff_chk);
+    }
+
+
 
     friend class Gfal;
 };
