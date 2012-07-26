@@ -1,7 +1,7 @@
 
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
-Name:				gfal2-bindings
+Name:				gfal2-python
 Version:			1.0.1
 Release:			1%{?dist}
 Summary:			Python bindings for gfal 2.0
@@ -12,36 +12,30 @@ URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
 Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz 
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
+%description
+Python bindings for gfal 2.0
+Officialy supported.
+
 BuildRequires:		cmake
 BuildRequires:		glib2-devel
 BuildRequires:		gfal2-devel
 BuildRequires:		boost-devel
 BuildRequires:		python-devel
 
-%description
-Aggregation of the bindings for GFAL 2.0
-
-%package -n gfal2-python
-Summary:			Python bindings for gfal 2.0
-Group:				Applications/Internet
 Requires:			python%{?_isa}
 Requires:			boost%{?_isa}
-
-%description -n gfal2-python
-Python bindings for gfal 2.0
-
-%post 
-
-%clean
-rm -rf %{buildroot};
-make clean
 
 %prep
 %setup -q
 
 %build
-%cmake -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} .
+%cmake \
+-DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
+-DUNIT_TESTS=TRUE \
+.
 make %{?_smp_mflags}
+
+%post
 
 %postun
 
@@ -50,11 +44,18 @@ make %{?_smp_mflags}
 rm -rf %{buildroot}
 make DESTDIR=%{buildroot} install
 
-%files -n gfal2-python
+%clean
+rm -rf %{buildroot};
+make clean
+
+%check
+ctest -V
+
+%files
 %defattr (-,root,root)
 %{python_sitearch}/gfal2.so
+%doc RELEASE-NOTES VERSION
 
- 
 
 %changelog
 * Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1
