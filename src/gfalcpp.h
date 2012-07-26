@@ -25,7 +25,16 @@
 void gfal_GError_to_exception();
 
 void check_GError(GError ** err);
- 
+
+// extract typed array from python array, throw type error in case of bad convertion
+template <typename T>
+std::vector<T> convert_python_list_to_typed_list(const boost::python::list & l){
+    std::vector<T> res;
+    for(int i =0; i < boost::python::len(l); ++i){
+        res.push_back(boost::python::extract<T>(l[i]));
+    }
+    return res;
+}
  
 /**
  * GIL unlocker, used on stack

@@ -24,11 +24,13 @@
 
 
 #include <gfal_api.h>
+#include <transfer/gfal_transfer.h>
 #include "gfal_boost_include.hpp"
 
 
 #include "gfalcpp.h"
 #include "gfal_stat.h"
+#include "gfalt_params.h"
 #include "gerror_exception.h"
 
 #ifndef GFALFILE_H
@@ -53,123 +55,126 @@ public:
             gfal_GError_to_exception();
     }
 
-class Gstat : public stat {	
-public:	
-	dev_t get_st_dev();
+    class Gstat : public stat {
+    public:
+        dev_t get_st_dev();
 
-	ino_t get_st_ino();
+        ino_t get_st_ino();
 
-	mode_t get_st_mode();
+        mode_t get_st_mode();
 
-	nlink_t get_st_nlink();
+        nlink_t get_st_nlink();
 
-	uid_t get_st_uid();
+        uid_t get_st_uid();
 
-	gid_t get_st_gid();
+        gid_t get_st_gid();
 
-	off_t get_st_size();
+        off_t get_st_size();
 
-	time_t get_st_atime();
+        time_t get_st_atime();
 
-	time_t get_st_mtime();
+        time_t get_st_mtime();
 
-	time_t get_st_ctime();
+        time_t get_st_ctime();
 
-	std::string string_rep();	
+        std::string string_rep();
 
-} ;
+    } ;
 
+    class GfalFile
+    {
+        public:
+            GfalFile(const std::string & path, const std::string &flag);
+            virtual ~GfalFile();
+            /**
+             * wrapper to the gfal_read call
+             */
+            std::string read(size_t count);
+            /**
+             * wrapper to the gfal_write call
+             */
+            ssize_t write(const std::string & str) ;
+            /**
+             * wrapper to the gfal_lseek call
+             */
+             off_t lseek(off_t offset, int flag=0);
 
+            // Static global function
 
-class GfalFile
-{
-	public:
-		GfalFile(const std::string & path, const std::string &flag);
-		virtual ~GfalFile();
-		/**
-		 * wrapper to the gfal_read call
-		 */
-		std::string read(size_t count);
-		/**
-		 * wrapper to the gfal_write call
-		 */
-		ssize_t write(const std::string & str) ;
-		/**
-		 * wrapper to the gfal_lseek call
-		 */
-		 off_t lseek(off_t offset, int flag=0);
-		
-		// Static global function
-		
-		/**
-		 * Wrap to the gfal_lstat call
-		 * */
+            /**
+             * Wrap to the gfal_lstat call
+             * */
 
 
-		
-	private:
-		/* add your private declarations */
-		std::string path;
-		std::string flag;
-		
-		int fd;
-};
+
+        private:
+            /* add your private declarations */
+            std::string path;
+            std::string flag;
+
+            int fd;
+    };
 
 
-boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);
+    boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);
+
+    Gstat lstat(const std::string & path);
+
+    Gstat stat_c(const std::string & path);
+
+    int access(const std::string &, int flag);
+
+    int chmod(const std::string &, mode_t mode);
+
+    int unlink(const std::string &);
+
+    int mkdir(const std::string &, mode_t mode);
+
+    int rmdir(const std::string &);
 
 
-Gstat lstat(const std::string & path);
+    boost::python::list listdir(const std::string &);
 
-Gstat stat_c(const std::string & path);
+    int rename(const std::string & src, const std::string & dest);
 
-int access(const std::string &, int flag);
+    std::string readlink(const std::string & path);
 
-int chmod(const std::string &, mode_t mode);
-
-int unlink(const std::string &);
-
-int mkdir(const std::string &, mode_t mode);
-
-int rmdir(const std::string &);
+    int symlink(const std::string & oldpath, const std::string & newpath);
 
 
-boost::python::list listdir(const std::string &);
+    // extended attributes
 
-int rename(const std::string & src, const std::string & dest);
+    std::string getxattr(const std::string & file, const std::string & key);
 
+    int setxattr(const std::string & file, const std::string & key, const std::string & value, int flag);
 
-std::string readlink(const std::string & path);
-
-int symlink(const std::string & oldpath, const std::string & newpath);
-
-
-// extended attributes
-
-std::string getxattr(const std::string & file, const std::string & key);
-
-int setxattr(const std::string & file, const std::string & key, const std::string & value, int flag);
-
-boost::python::list listxattr(const std::string & file );
+    boost::python::list listxattr(const std::string & file );
 
 
-// parameters
-int get_opt_integer(const std::string & nmspace, const std::string & key);
+    // parameters
+    int get_opt_integer(const std::string & nmspace, const std::string & key);
 
-std::string get_opt_string(const std::string & nmspace, const std::string & key);
+    std::string get_opt_string(const std::string & nmspace, const std::string & key);
 
-boost::python::list get_opt_string_list(const std::string & nmspace, const std::string & key);
+    boost::python::list get_opt_string_list(const std::string & nmspace, const std::string & key);
 
-bool get_opt_boolean(const std::string & nmspace, const std::string & key);
+    bool get_opt_boolean(const std::string & nmspace, const std::string & key);
 
-int set_opt_integer(const std::string & nmspace, const std::string & key, int value);
+    int set_opt_integer(const std::string & nmspace, const std::string & key, int value);
 
-int set_opt_string(const std::string & nmspace, const std::string & key, const std::string & value);
+    int set_opt_string(const std::string & nmspace, const std::string & key, const std::string & value);
 
-int set_opt_string_list(const std::string & nmspace, const std::string & key, const std::vector<std::string>  & value);
+    int set_opt_string_list(const std::string & nmspace, const std::string & key, const boost::python::list  & value);
 
-int set_opt_boolean(const std::string & nmspace, const std::string & key, bool val);
+    int set_opt_boolean(const std::string & nmspace, const std::string & key, bool val);
 
+
+    // transfer
+    int filecopy(const std::string & src, const std::string & dst);
+    // transfer
+    int filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst);
+
+ //   int filecopy(const Gfalt_params &params, const std::string & src, const std::string & dst);
 };
 
 int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);

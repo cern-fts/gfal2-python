@@ -44,7 +44,8 @@ public:
         gfalt_params_handle_delete(params,NULL);
     }
 
-    void set_timeout(guint64 timeout){
+    void set_timeout(){
+        guint64 timeout;
         GError * tmp_err=NULL;
         gfalt_set_timeout(params, timeout, &tmp_err);
         check_GError(&tmp_err);
@@ -71,6 +72,7 @@ public:
         return res;
     }
 
+    friend class Gfal;
 };
 
 #endif // GFALT_PARAMS_H

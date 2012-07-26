@@ -101,6 +101,20 @@ off_t Gfal::GfalFile::lseek(off_t offset, int flag){
 	return ret;
 }
 
+int Gfal::filecopy(const std::string &src, const std::string &dst){
+    GError * tmp_err=NULL;
+    int ret =gfalt_copy_file(cont, NULL, src.c_str(), dst.c_str(), &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
+
+
+int Gfal::filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst){
+    GError * tmp_err=NULL;
+    int ret = gfalt_copy_file(cont, p.params, src.c_str(), dst.c_str(), &tmp_err);
+    check_GError(&tmp_err);
+    return ret;
+}
 
 /**
  * wrapper to gfal_lstat function
@@ -360,7 +374,9 @@ int Gfal::set_opt_string(const std::string & nmspace, const std::string & key, c
     return ret;
 }
 
-int Gfal::set_opt_string_list(const std::string & nmspace, const std::string & key, const std::vector<std::string> & value){
+int Gfal::set_opt_string_list(const std::string & nmspace, const std::string & key, const boost::python::list  & py_value){
+    std::vector<std::string>  value = convert_python_list_to_typed_list<std::string>(py_value);
+
     GError * tmp_err=NULL;
     const int size_list = value.size();
     char* tab_ptr[size_list+1];
@@ -391,40 +407,4 @@ int gfal_set_verbose_enum(gfal_verbose_levels lvls)
 }
 
 
-/*
-int Gfal::set_parameter_string(const std::string & namespc, const std::string & key, const std::string & str){
-	const int ret = gfal_set_parameter_string(namespc.c_str(), key.c_str(), str.c_str());
-	if(ret != 0)
-		gfal_GError_to_exception();	
-		
-	return ret;	
-}
 
-
-int Gfal::set_parameter_bool(const std::string & namespc, const std::string & key, const bool  b){
-	const int ret = gfal_set_parameter_boolean(namespc.c_str(), key.c_str(), b);
-	if(ret != 0)
-		gfal_GError_to_exception();	
-		
-	return ret;	
-}
-
-
-bool Gfal::get_parameter_bool(const std::string & namespc, const std::string & key){
-	const int ret = gfal_get_parameter_boolean(namespc.c_str(), key.c_str());
-	if(gfal_posix_code_error() != 0)
-		gfal_GError_to_exception();	
-		
-	return (bool)ret;	
-}
-
-
-std::string Gfal::get_parameter_string(const std::string & namespc, const std::string & key){
-	char* value = gfal_get_parameter_string(namespc.c_str(), key.c_str());
-	if(value == NULL)
-		gfal_GError_to_exception();	
-	std::string ret(value);	
-	free(value);
-	return ret;	
-}
-*/

@@ -53,6 +53,7 @@ void gerror_exception_translator(const Gerror_exception  & x){
 
 BOOST_PYTHON_MODULE(gfal2)
 {
+
     // global functions
     def("set_verbose", &gfal_set_verbose_enum, "define the log level of gfal 2.0 ");
 
@@ -119,6 +120,10 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("set_opt_boolean", &Gfal::set_opt_boolean)
 
     .def("set_opt_integer", &Gfal::set_opt_integer)
+
+    .def("filecopy", static_cast<int (Gfal::*)(const std::string & src, const std::string & dst)>(&Gfal::filecopy))
+
+    .def("filecopy", static_cast<int (Gfal::*)(const Gfalt_params& p, const std::string & src, const std::string & dst)>(&Gfal::filecopy))
     ;
     
     
@@ -140,7 +145,7 @@ BOOST_PYTHON_MODULE(gfal2)
 		.def("__repr__", &Gfal::Gstat::string_rep)
 	;
 
-    class_<Gfalt_params>("TransferParams")
+    class_<Gfalt_params >("transfer_parameters")
            .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout)
            .add_property("checksum_check", &Gfalt_params::set_checksum_check, &Gfalt_params::get_checksum_check)
             ;
