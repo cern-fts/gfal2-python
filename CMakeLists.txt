@@ -33,7 +33,6 @@ set(VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 
 
-
 # libs checks
 pkg_check_modules(GLIB2_PKG REQUIRED glib-2.0)
 pkg_check_modules(GTHREAD2_PKG REQUIRED gthread-2.0)
@@ -48,4 +47,4 @@ pkg_check_modules(GFAL2_TRANSFER_PKG REQUIRED gfal_transfer)
 #			DESTINATION ${DOC_INSTALL_DIR})
 
 add_subdirectory (src)
-#add_subdirectory (test)
+add_subdirectory (test)

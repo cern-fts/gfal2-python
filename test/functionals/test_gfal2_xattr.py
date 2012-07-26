@@ -8,13 +8,16 @@ import unittest
 from python_test_lib import *
 
 class Testgfal2_xattr(unittest.TestCase):
+
+        def setUp(self):
+            self.context = gfal2.creat_context()
 	  
 	def getxattr_valid(self, url, key):
-		return gfal2.getxattr(url, key)
+                return self.context.getxattr(url, key)
 
 	def getxattr_enoent(self, url, key):
 		try:
-			gfal2.getxattr(url, key)
+                        self.context.getxattr(url, key)
 			self.assertTrue(False, " is a valdi stat, must not be");
 		except gfal2.GError, e:
 			self.assertTrue(e.code() == errno.ENOENT, " must be a non existing file");	
