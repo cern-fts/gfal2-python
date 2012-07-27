@@ -29,14 +29,22 @@
  #include "gerror_exception.h"
  
  void gfal_GError_to_exception(){
-	 char buffer[2048];
+     char buffer[4096];
 	 
 	 int code = gfal_posix_code_error();
 	 if(code){
-		 std::string err_msg(gfal_posix_strerror_r(buffer, 2048));
+         std::string err_msg(gfal_posix_strerror_r(buffer, 4096));
 		 gfal_posix_clear_error();
 		 throw Gerror_exception(err_msg, code );
 	 }
+ }
+
+
+ void check_GError(GError ** err){
+     if(err && *err){
+         throw Gerror_exception((*err)->message, (*err)->code);
+         g_clear_error(err);
+     }
  }
  
 

@@ -21,6 +21,8 @@
  
 #include <boost/python.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+
 
 
  

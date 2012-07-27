@@ -1,5 +1,7 @@
 #!/bin/bash
 
+##
+#
 
 export TEST_LFN_BASE="lfn:/grid/dteam/"
 

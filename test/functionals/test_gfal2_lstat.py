@@ -8,19 +8,22 @@ import errno
 from python_test_lib import *
 
 class Testgfal2_lstat(unittest.TestCase):
+
+        def setUp(self):
+            self.context = gfal2.creat_context()
 	  
 	def lstat_valid(self, url):
 		v= get_val(url);
-		a= gfal2.lstat(v);
+                a= self.context.lstat(v);
 		self.assertTrue(a.st_uid != 0 and a.st_gid != 0);
 
 	def lstat_enoent(self, url):
 		v= get_val(url);
 		noent= ''.join([v, "_enoent"]) # create non enxisting file
 		try:
-			a= gfal2.lstat(noent);
+                        a= self.context.lstat(noent);
 			self.assertTrue(False, " is a valdi stat, must not be");
-		except gfal2.GError, e:
+                except gfal2.GError, e:
 			self.assertTrue(e.code() == errno.ENOENT, " must be a non existing file");			
 
 	def test_lstat_lfn(self):
