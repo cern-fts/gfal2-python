@@ -36,7 +36,7 @@ static int convert_open_flag_py_to_cpp(const std::string & str){
 	if( str.compare("r") == 0)
 		return O_RDONLY ;
 	if( str.compare("w") == 0)
-		return O_WRONLY | O_CREAT;
+        return O_WRONLY | O_CREAT | O_TRUNC;
 	throw std::runtime_error("Invalid open flag, must be r, w, or rw");
 }
 
@@ -362,7 +362,7 @@ bool Gfal::get_opt_boolean(const std::string & nmspace, const std::string & key)
 
 int Gfal::set_opt_integer(const std::string & nmspace, const std::string & key, int value){
     GError * tmp_err=NULL;
-    int ret = gfal2_set_opt_boolean(cont, nmspace.c_str(), key.c_str(), value, &tmp_err);
+    int ret = gfal2_set_opt_integer(cont, nmspace.c_str(), key.c_str(), value, &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
