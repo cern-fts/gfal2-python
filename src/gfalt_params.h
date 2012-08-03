@@ -61,6 +61,19 @@ public:
         return res;
     }
 
+    void set_nbstream(guint nbstream){
+        GError * tmp_err=NULL;
+        gfalt_set_nbstreams(params, nbstream, &tmp_err);
+        check_GError(&tmp_err);
+    }
+
+    guint get_nbstream(){
+        GError * tmp_err=NULL;
+        guint res = gfalt_get_nbstreams(params, &tmp_err);
+        check_GError(&tmp_err);
+        return res;
+    }
+
     void set_checksum_check(bool checksum_check){
         GError * tmp_err=NULL;
         gfalt_set_checksum_check(params, checksum_check, &tmp_err);
