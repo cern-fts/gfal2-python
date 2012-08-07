@@ -1,3 +1,4 @@
+%global checkout_tag 20120907svn
 
 %if 0%{?el5}
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include/boost141 -DBOOST_LIBRARYDIR=%{_libdir}/boost141
@@ -9,13 +10,13 @@
 
 Name:				gfal2-python
 Version:			1.0.1
-Release:			1%{?dist}
+Release:			1.%{checkout_tag}%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
 URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
 # svn export http://svn.cern.ch/guest/lcgutil/gfal2-bindings/trunk gfal2-bindings
-Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz 
+Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}-%{checkout_tag}.tar.gz
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
