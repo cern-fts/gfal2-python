@@ -256,6 +256,21 @@ std::string Gfal::readlink(const std::string & path){
 	return buffer;		
 }
 
+
+std::string Gfal::checksum(const std::string & uri, const std::string & chk_type,
+                 off_t start_offset, size_t data_length){
+    char buffer[MAX_BUFFER_SIZE];
+    GError* tmp_err=NULL;
+    gfal2_checksum(cont, uri.c_str(), chk_type.c_str(), start_offset, data_length,
+                                    buffer, MAX_BUFFER_SIZE, &tmp_err);
+    check_GError(&tmp_err);
+    return buffer;
+}
+
+std::string Gfal::checksum(const std::string & uri, const std::string & chk_type){
+    return checksum(uri, chk_type, 0,0);
+}
+
 /**
  * wrapper to the gfal_symlink func
  **/
@@ -316,6 +331,7 @@ boost::python::list Gfal::listxattr(const std::string & file ){
 	}
 	return resu;		
 }
+
 
 
 /**

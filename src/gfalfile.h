@@ -141,6 +141,10 @@ public:
 
     int symlink(const std::string & oldpath, const std::string & newpath);
 
+    std::string checksum(const std::string & uri, const std::string & chk_type,
+                     off_t start_offset, size_t data_length);
+
+    std::string checksum(const std::string & uri, const std::string & chk_type);
 
     // extended attributes
 

@@ -98,7 +98,12 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("readlink", &Gfal::readlink)
     
     .def("symlink", &Gfal::symlink)
+
+    .def("checksum", static_cast<std::string (Gfal::*)(const std::string & uri, const std::string & chk_type,
+                                              off_t start_offset, size_t data_length)>(&Gfal::checksum))
     
+    .def("checksum", static_cast<std::string (Gfal::*)(const std::string & uri, const std::string & chk_type)>(&Gfal::checksum))
+
     .def("getxattr", &Gfal::getxattr)
     
     .def("setxattr", &Gfal::setxattr)
