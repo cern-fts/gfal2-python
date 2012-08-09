@@ -10,10 +10,12 @@ IF(MAIN_DOC)
 
 	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/build/html/")
         addEpydocGeneration("epydoc_config.in")
+
         SET( l_doc "${CMAKE_CURRENT_BINARY_DIR}/html/")
 
-	install(DIRECTORY ${l_doc}
-			DESTINATION ${DOC_INSTALL_DIR}/html/) # install examples 
+        install(DIRECTORY ${l_doc}
+                        DESTINATION ${DOC_INSTALL_DIR}/html/) # install examples
+
 
 ENDIF(MAIN_DOC)
 

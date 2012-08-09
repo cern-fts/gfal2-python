@@ -72,10 +72,10 @@ make DESTDIR=%{buildroot} install
 %files
 %defattr (-,root,root)
 %{python_sitearch}/gfal2.so
-%doc RELEASE-NOTES VERSION
 
 %files doc
 %defattr (-,root,root)
+%dir %{_docdir}/%{name}-%{version}/html
 %{_docdir}/%{name}-%{version}/html/*
 
 
