@@ -79,7 +79,7 @@ FIND_PROGRAM(PYTHON_EXECUTABLE_${_VERSION}
  
 		LIST(APPEND PYTHON_AVAILABLE_VERSIONS ${_VERSION})
  
-		EXECUTE_PROCESS( COMMAND ${PYTHON_EXECUTABLE_${_VERSION}} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(True)" 
+                EXECUTE_PROCESS( COMMAND ${PYTHON_EXECUTABLE_${_VERSION}} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(True))"
 						OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_${_VERSION} OUTPUT_STRIP_TRAILING_WHITESPACE)
  
 		#find libs

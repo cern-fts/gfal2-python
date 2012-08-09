@@ -12,6 +12,7 @@ include(DefineInstallationPaths REQUIRED)
 include(MacroCopyFile REQUIRED)
 include(ReleaseDebugAutoFlags REQUIRED)
 include(CMakeGeneratePkgConfig REQUIRED)
+include(MacroAddepydoc REQUIRED)
 
 find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED)
@@ -47,4 +48,5 @@ pkg_check_modules(GFAL2_TRANSFER_PKG REQUIRED gfal_transfer)
 #			DESTINATION ${DOC_INSTALL_DIR})
 
 add_subdirectory (src)
+add_subdirectory(doc)
 add_subdirectory (test)

@@ -14,7 +14,7 @@ Release:			1.%{checkout_tag}%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
-URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2
+URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python
 # svn export http://svn.cern.ch/guest/lcgutil/gfal2-bindings/trunk gfal2-bindings
 Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}-%{checkout_tag}.tar.gz
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -28,6 +28,7 @@ BuildRequires:		boost141-devel
 BuildRequires:		boost-devel
 %endif
 BuildRequires:		python-devel
+BuildRequires:          epydoc
 
 Requires:			python%{?_isa}
 Requires:			boost%{?_isa}
@@ -36,6 +37,14 @@ Requires:			boost%{?_isa}
 Python bindings for gfal 2.0.
 GFAL 2.0 offers an a single, simple and portable API
 for the file operations in grids and cloud environments.
+
+%package doc
+Summary:			Documentation for %{name}
+Group:				Applications/Internet
+Requires:			%{name}%{?_isa} = %{version}-%{release}
+
+%description doc
+documentation files  of %{name} .
 
 %clean
 rm -rf %{buildroot};
@@ -51,6 +60,7 @@ make clean
 
 
 make %{?_smp_mflags}
+make doc
 
 %check
 ctest -V .
@@ -63,6 +73,10 @@ make DESTDIR=%{buildroot} install
 %defattr (-,root,root)
 %{python_sitearch}/gfal2.so
 %doc RELEASE-NOTES VERSION
+
+%files doc
+%defattr (-,root,root)
+%{_docdir}/%{name}-%{version}/html/*
 
 
 %changelog
