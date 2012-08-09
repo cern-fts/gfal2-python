@@ -27,6 +27,8 @@ enable_testing()
 set(PROJECT_NAME_MAIN "gfal2-python")
 set(OUTPUT_NAME_MAIN "gfal2")
 
+set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/gfal2.so")
+
 set(VERSION_MAJOR 2)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
