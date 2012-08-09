@@ -3,6 +3,11 @@
 ## do a ""make doc" for the generation
 
 
+# for old version < 3.0 cmake variables replace config files ( not supported )  ( needed for EPEL 5 support )
+# EPYDOC_MODULE_PATH path of the module to configure
+# EPYDOC_MODULE_URL project url
+# EPYDOC_MODULE_NAME project name
+#
 
 
 macro(addEpydocGeneration EPYDOC_CONFIG_LOCATION)
@@ -35,7 +40,7 @@ macro(addEpydocGeneration EPYDOC_CONFIG_LOCATION)
         ELSE(${EPYDOC_VERSION} VERSION_GREATER  "3.0.0") # VERSION TOO OLD, NO CONFIG FILE MANAGEMENT
 
             add_custom_target(doc
-            epydoc --html ${EPYDOC_MODULE_PATH} -v -o ${CMAKE_CURRENT_BINARY_DIR}/html
+            epydoc --html  -u ${EPYDOC_MODULE_URL} -n ${EPYDOC_MODULE_NAME} -v -o ${CMAKE_CURRENT_BINARY_DIR}/html ${EPYDOC_MODULE_PATH}
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generate API documentation with epydoc" VERBATIM
             )

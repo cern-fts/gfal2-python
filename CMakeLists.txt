@@ -27,7 +27,11 @@ enable_testing()
 set(PROJECT_NAME_MAIN "gfal2-python")
 set(OUTPUT_NAME_MAIN "gfal2")
 
+
+# EPYDOC definition for EPEL5 support
 set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/gfal2.so")
+set(EPYDOC_MODULE_URL "https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python")
+set(EPYDOC_MODULE_NAME "gfal2")
 
 set(VERSION_MAJOR 2)
 set(VERSION_MINOR 0)
