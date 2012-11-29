@@ -3,9 +3,11 @@
 ##
 #
 
-export TEST_LFN_BASE="lfn:/grid/dteam/"
+export MY_VO="testers.eu-emi.eu"
 
-export TEST_SRM_BASE="srm://cvitbdpm1.cern.ch/dpm/cern.ch/home/dteam/gfal2-tests/"
+export TEST_LFN_BASE="lfn:/grid/${MY_VO}/"
+
+export TEST_SRM_BASE="srm://cvitbdpm1.cern.ch/dpm/cern.ch/home/${MY_VO}/gfal2-tests/"
 
 export TEST_FILE_CONTENT="Hello world" 
 export LCG_GFAL_INFOSYS=certtb-bdii-top.cern.ch:2170

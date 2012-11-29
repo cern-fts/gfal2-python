@@ -53,6 +53,8 @@ pkg_check_modules(GFAL2_TRANSFER_PKG REQUIRED gfal_transfer)
 #install(FILES "LICENSE" "README" "RELEASE-NOTES" "VERSION" "DESCRIPTION"
 #			DESTINATION ${DOC_INSTALL_DIR})
 
+add_definitions( -D_FILE_OFFSET_BITS=64 )
+
 add_subdirectory (src)
 add_subdirectory(doc)
 add_subdirectory (test)

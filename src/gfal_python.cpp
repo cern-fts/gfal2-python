@@ -43,6 +43,21 @@ using namespace boost::python;
 static PyObject *GErrorPyType = NULL;
 
 
+PyObject* createExceptionClass(const char* name, PyObject* baseTypeObj = PyExc_Exception)
+{
+    using std::string;
+    namespace bp = boost::python;
+
+    string scopeName = bp::extract<string>(bp::scope().attr("__name__"));
+    string qualifiedName0 = scopeName + "." + name;
+    char* qualifiedName1 = const_cast<char*>(qualifiedName0.c_str());
+
+    PyObject* typeObj = PyErr_NewException(qualifiedName1, baseTypeObj, 0);
+    if(!typeObj) bp::throw_error_already_set();
+    bp::scope().attr(name) = bp::handle<>(bp::borrowed(typeObj));
+    return typeObj;
+}
+
 void gerror_exception_translator(const Gerror_exception  & x){
 	assert(GErrorPyType != NULL); // check if type init is valid
 	object pythonGErrorInstance(x);
