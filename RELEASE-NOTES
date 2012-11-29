@@ -1,6 +1,9 @@
+* Thu Nov 29 2012 Adrien Devresse <adevress at cern.ch> - 1.1.0-0 
  - bug correction for set interger function
  - map the new parameter system properly
  - add verbose level management and new namespace to gfal python bindings
+ - add pydoc
+ - convert to off_t =64 bits on the 32 bits plateform
 
 
 * Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1

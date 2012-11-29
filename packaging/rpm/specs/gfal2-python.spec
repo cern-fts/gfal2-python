@@ -1,5 +1,3 @@
-%global checkout_tag 20120907svn
-
 %if 0%{?el5}
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include/boost141 -DBOOST_LIBRARYDIR=%{_libdir}/boost141
 %else
@@ -9,14 +7,14 @@
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:				gfal2-python
-Version:			1.0.1
-Release:			1.%{checkout_tag}%{?dist}
+Version:			1.1.0
+Release:			0{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
 URL:				https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python
 # svn export http://svn.cern.ch/guest/lcgutil/gfal2-bindings/trunk gfal2-bindings
-Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}-%{checkout_tag}.tar.gz
+Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
@@ -80,6 +78,13 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
+* Thu Nov 29 2012 Adrien Devresse <adevress at cern.ch> - 1.1.0-0
+ - bug correction for set interger function
+ - map the new parameter system properly
+ - add verbose level management and new namespace to gfal python bindings
+ - add pydoc
+ - convert to off_t =64 bits on the 32 bits plateform
+
 * Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1
  - initial 1.0 release for gfal 2.0 python bindings
  - minor refactory of the python API
