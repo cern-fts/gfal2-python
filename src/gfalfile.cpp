@@ -64,7 +64,7 @@ Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : p
 Gfal::GfalFile::~GfalFile() 
 {
 	Gfal_scopedGILRelease unlock;
-	const int ret = gfal_close(fd);
+    (void)gfal_close(fd);
 }
 
 
@@ -362,7 +362,7 @@ boost::python::list Gfal::get_opt_string_list(const std::string & nmspace, const
     char** res =  gfal2_get_opt_string_list(cont, nmspace.c_str(), key.c_str(), &size, &tmp_err);
     check_GError(&tmp_err);
     if(res){
-        for(int i =0; i < size; i++)
+        for(size_t i =0; i < size; i++)
             result.append(std::string(res[i]));
         g_strfreev(res);
     }
@@ -420,6 +420,7 @@ boost::shared_ptr<Gfal> create_instance(){
 int gfal_set_verbose_enum(gfal_verbose_levels lvls)
 {
     gfal_set_verbose((int) lvls);
+    return 0;
 }
 
 
