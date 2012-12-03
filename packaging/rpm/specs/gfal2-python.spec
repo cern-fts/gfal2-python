@@ -8,7 +8,7 @@
 
 Name:				gfal2-python
 Version:			1.1.0
-Release:			0{?dist}
+Release:			0%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
