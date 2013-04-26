@@ -70,6 +70,9 @@ make DESTDIR=%{buildroot} install
 %files
 %defattr (-,root,root)
 %{python_sitearch}/gfal2.so
+%{_docdir}/%{name}-%{version}/LICENSE
+%{_docdir}/%{name}-%{version}/RELEASE-NOTES
+%{_docdir}/%{name}-%{version}/README
 
 %files doc
 %defattr (-,root,root)
