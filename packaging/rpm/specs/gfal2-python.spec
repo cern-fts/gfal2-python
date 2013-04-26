@@ -7,7 +7,7 @@
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:				gfal2-python
-Version:			1.1.0
+Version:			1.2.0
 Release:			0%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
@@ -78,6 +78,13 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
+* Fri Apr 26 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-0
+ - include partial r/w operations (pread/pwrite)
+ - switch the internal api from old style posix to gfal2 file api
+ - switch the license from EGEE to EMI
+ - map the gfal2_cancel function
+ - initial compatible EPEL release
+
 * Thu Nov 29 2012 Adrien Devresse <adevress at cern.ch> - 1.1.0-0
  - bug correction for set interger function
  - map the new parameter system properly

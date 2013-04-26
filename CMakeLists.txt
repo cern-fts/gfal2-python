@@ -35,7 +35,7 @@ set(EPYDOC_MODULE_URL "https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python")
 set(EPYDOC_MODULE_NAME "gfal2")
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 1)
+set(VERSION_MINOR 2)
 set(VERSION_PATCH 0)
 set(VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
