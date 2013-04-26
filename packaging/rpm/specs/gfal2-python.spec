@@ -61,7 +61,7 @@ make %{?_smp_mflags}
 make doc
 
 %check
-ctest -V .
+ctest -V -T Test .
 
 %install
 rm -rf %{buildroot}
