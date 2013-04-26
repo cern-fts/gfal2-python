@@ -50,9 +50,14 @@ private:
 
 public:
     Gfal(){
-        cont = gfal_posix_get_context();
+        GError* tmp_err=NULL;
+        cont = gfal2_context_new(&tmp_err);
         if(cont == NULL)
-            gfal_GError_to_exception();
+            check_GError(&tmp_err);
+    }
+
+    virtual ~Gfal(){
+        gfal2_context_free(cont);
     }
 
     class Gstat : public stat {
@@ -84,7 +89,9 @@ public:
     class GfalFile
     {
         public:
-            GfalFile(const std::string & path, const std::string &flag);
+            GfalFile(const Gfal & context,
+                     const std::string & path,
+                     const std::string & flag);
             virtual ~GfalFile();
             /// wrapper to the gfal_read call
             std::string read(size_t count);
@@ -105,19 +112,21 @@ public:
             /**
              * Wrap to the gfal_lstat call
              * */
-
-
-
         private:
             /* add your private declarations */
+            gfal2_context_t cont;
             std::string path;
             std::string flag;
 
             int fd;
     };
 
+    gfal2_context_t getContext() const{
+        return cont;
+    }
 
     boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);
+    boost::shared_ptr<GfalFile> file(const std::string & path, const std::string &flag);
 
     Gstat lstat(const std::string & path);
 

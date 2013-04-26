@@ -27,6 +27,17 @@
  
  #include <string>
  #include "gerror_exception.h"
+
+
+void gfal_gerror_translator(GError** err){
+    if(err && *err){
+        std::string err_msg((*err)->message);
+        int code = (*err)->code;
+        g_clear_error(err);
+        throw Gerror_exception(err_msg, code );
+    }
+}
+
  
  void gfal_GError_to_exception(){
      char buffer[4096];
@@ -40,11 +51,9 @@
  }
 
 
+
  void check_GError(GError ** err){
-     if(err && *err){
-         throw Gerror_exception((*err)->message, (*err)->code);
-         g_clear_error(err);
-     }
+     gfal_gerror_translator(err);
  }
  
 

@@ -45,12 +45,18 @@ static int convert_open_flag_py_to_cpp(const std::string & str){
  * @param path : path to the file to open
  * @param flag : flag of the file
  **/
-Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : path(path), flag(flag) 
+Gfal::GfalFile::GfalFile(const Gfal & context,
+                         const std::string & path,
+                         const std::string & flag) :
+    cont(context.getContext()),
+    path(path),
+    flag(flag)
 {
 	Gfal_scopedGILRelease unlock;
-	fd = gfal_open(path.c_str(), convert_open_flag_py_to_cpp(flag) );
+    GError* tmp_err=NULL;
+    fd = gfal2_open(cont, path.c_str(), convert_open_flag_py_to_cpp(flag), &tmp_err);
 	if(fd <= 0)
-		gfal_GError_to_exception();
+        check_GError(&tmp_err);
 
 }
 
@@ -64,17 +70,17 @@ Gfal::GfalFile::GfalFile(const std::string & path, const std::string & flag) : p
 Gfal::GfalFile::~GfalFile() 
 {
 	Gfal_scopedGILRelease unlock;
-    (void)gfal_close(fd);
+    (void)gfal2_close(cont, fd, NULL);
 }
 
 
 std::string Gfal::GfalFile::read(size_t count) {
 	Gfal_scopedGILRelease unlock;
-	
+    GError* tmp_err=NULL;
 	std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
-	ssize_t ret = gfal_read(fd, &(buf->front()), count);
+    ssize_t ret = gfal2_read(cont, fd, &(buf->front()), count, &tmp_err);
 	if(ret <  0)
-		gfal_GError_to_exception();
+        check_GError(&tmp_err);
 	
 	(*buf)[ret] ='\0';
 	return std::string(&(buf->front()),ret);
@@ -83,11 +89,11 @@ std::string Gfal::GfalFile::read(size_t count) {
 
 std::string Gfal::GfalFile::pread(off_t offset, size_t count){
     Gfal_scopedGILRelease unlock;
-
+    GError* tmp_err=NULL;
     std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
-    ssize_t ret = gfal_pread(fd, &(buf->front()), count, offset);
+    ssize_t ret = gfal2_pread(cont, fd, &(buf->front()), count, offset, &tmp_err);
     if(ret <  0)
-        gfal_GError_to_exception();
+        check_GError(&tmp_err);
 
     (*buf)[ret] ='\0';
     return std::string(&(buf->front()),ret);
@@ -95,33 +101,33 @@ std::string Gfal::GfalFile::pread(off_t offset, size_t count){
 
 ssize_t Gfal::GfalFile::write(const std::string & str){
 	Gfal_scopedGILRelease unlock;
-	
+    GError* tmp_err=NULL;
 	const size_t s_str = str.size();
 
-	ssize_t ret = gfal_write(fd, str.c_str(), s_str);
+    ssize_t ret = gfal2_write(cont, fd, str.c_str(), s_str, &tmp_err);
 	if(ret <  0)
-		gfal_GError_to_exception();	
+        check_GError(&tmp_err);
 	return ret;
 }
 
 ssize_t Gfal::GfalFile::pwrite(const std::string & str, off_t offset){
     Gfal_scopedGILRelease unlock;
-
+    GError* tmp_err=NULL;
     const size_t s_str = str.size();
 
-    ssize_t ret = gfal_pwrite(fd, str.c_str(), s_str, offset);
+    ssize_t ret = gfal2_pwrite(cont, fd, str.c_str(), s_str, offset, &tmp_err);
     if(ret <  0)
-        gfal_GError_to_exception();
+        check_GError(&tmp_err);
     return ret;
 }
 
 
 off_t Gfal::GfalFile::lseek(off_t offset, int flag){
 	Gfal_scopedGILRelease unlock;
-	
-	off_t ret = gfal_lseek(fd, offset, flag);
+    GError* tmp_err=NULL;
+    off_t ret = gfal2_lseek(cont,fd, offset, flag, &tmp_err);
 	if(ret ==  ((off_t)0)-1)
-		gfal_GError_to_exception();	
+        check_GError(&tmp_err);
 	return ret;
 }
 
@@ -362,7 +368,11 @@ boost::python::list Gfal::listxattr(const std::string & file ){
  * Gfal file open
  * */
 boost::shared_ptr<Gfal::GfalFile> Gfal::open(const std::string & path, const std::string &flag){
-	return boost::shared_ptr<Gfal::GfalFile>(new Gfal::GfalFile(path, flag));
+    return boost::shared_ptr<Gfal::GfalFile>(new Gfal::GfalFile(*this, path, flag));
+}
+
+boost::shared_ptr<Gfal::GfalFile> Gfal::file(const std::string & path, const std::string &flag){
+    return open(path, flag);
 }
 
 int Gfal::get_opt_integer(const std::string & nmspace, const std::string & key){

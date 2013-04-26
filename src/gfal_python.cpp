@@ -91,6 +91,8 @@ BOOST_PYTHON_MODULE(gfal2)
 	
     scope scope_posix =  class_<Gfal>("creat_context")
 	.def("open", &Gfal::open)
+
+    .def("file", &Gfal::file)
 	
     .def("access", &Gfal::access)
     
@@ -180,9 +182,11 @@ BOOST_PYTHON_MODULE(gfal2)
     // register exception
     register_exception_translator<Gerror_exception>(&gerror_exception_translator);
     // Create the Python type object for our extension class and define __init__ function.
-    class_<Gfal::GfalFile, boost::shared_ptr<Gfal::GfalFile> >("file",  init<const std::string &, const std::string &>())
+    class_<Gfal::GfalFile, boost::shared_ptr<Gfal::GfalFile> >("FileType",  init<Gfal, const std::string &, const std::string &>())
         .def("read", &Gfal::GfalFile::read)  // Add a regular member function.
+        .def("pread", &Gfal::GfalFile::pread)
         .def("write", &Gfal::GfalFile::write)  
+        .def("pwrite", &Gfal::GfalFile::pwrite)
         .def("lseek", &Gfal::GfalFile::lseek)
         
     ;
