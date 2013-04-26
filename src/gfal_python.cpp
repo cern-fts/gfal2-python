@@ -146,6 +146,8 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("filecopy", static_cast<int (Gfal::*)(const std::string & src, const std::string & dst)>(&Gfal::filecopy))
 
     .def("filecopy", static_cast<int (Gfal::*)(const Gfalt_params& p, const std::string & src, const std::string & dst)>(&Gfal::filecopy))
+
+    .def("cancel", &Gfal::cancel);
     ;
     
     
