@@ -1,3 +1,10 @@
+Trunk:
+ - include partial r/w
+ - switch the internal api from old style posix to gfal2 file api
+ - switch the license from EGEE to EMI
+ - map the cancel call
+
+
 * Thu Nov 29 2012 Adrien Devresse <adevress at cern.ch> - 1.1.0-0 
  - bug correction for set interger function
  - map the new parameter system properly
