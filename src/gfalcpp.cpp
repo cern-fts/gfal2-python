@@ -39,18 +39,6 @@ void gfal_gerror_translator(GError** err){
 }
 
  
- void gfal_GError_to_exception(){
-     char buffer[4096];
-	 
-	 int code = gfal_posix_code_error();
-	 if(code){
-         std::string err_msg(gfal_posix_strerror_r(buffer, 4096));
-		 gfal_posix_clear_error();
-		 throw Gerror_exception(err_msg, code );
-	 }
- }
-
-
 
  void check_GError(GError ** err){
      gfal_gerror_translator(err);

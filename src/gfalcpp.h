@@ -21,7 +21,6 @@
 
 #include "gfal_boost_include.hpp"
 
-void gfal_GError_to_exception();
 
 void check_GError(GError ** err);
 

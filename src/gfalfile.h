@@ -125,6 +125,11 @@ public:
         return cont;
     }
 
+
+    int cancel(){
+        return gfal2_cancel(cont);
+    }
+
     boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);
     boost::shared_ptr<GfalFile> file(const std::string & path, const std::string &flag);
 
