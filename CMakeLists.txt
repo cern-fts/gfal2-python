@@ -51,7 +51,7 @@ pkg_check_modules(GFAL2_TRANSFER_PKG REQUIRED gfal_transfer)
 
 
 #install doc license
-#install(FILES "LICENSE" "README" "RELEASE-NOTES" "VERSION" "DESCRIPTION"
+install(FILES "LICENSE" "RELEASE-NOTES" "README"
 #			DESTINATION ${DOC_INSTALL_DIR})
 
 add_definitions( -D_FILE_OFFSET_BITS=64 )
