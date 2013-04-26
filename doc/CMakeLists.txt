@@ -8,7 +8,7 @@ SET(MAIN_DOC TRUE
 #
 IF(MAIN_DOC)
 
-	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/build/html/")
+        file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/")
         addEpydocGeneration("epydoc_config.in")
 
         SET( l_doc "${CMAKE_CURRENT_BINARY_DIR}/html/")
