@@ -86,14 +86,15 @@ public:
         public:
             GfalFile(const std::string & path, const std::string &flag);
             virtual ~GfalFile();
-            /**
-             * wrapper to the gfal_read call
-             */
+            /// wrapper to the gfal_read call
             std::string read(size_t count);
-            /**
-             * wrapper to the gfal_write call
-             */
-            ssize_t write(const std::string & str) ;
+            /// position independant read call
+            std::string pread(off_t offset, size_t count);
+            /// wrapper to the gfal_write call
+            ssize_t write(const std::string & str);
+            /// position independant write call
+            ssize_t pwrite(const std::string & str, off_t offset);
+
             /**
              * wrapper to the gfal_lseek call
              */

@@ -81,6 +81,18 @@ std::string Gfal::GfalFile::read(size_t count) {
 }
 
 
+std::string Gfal::GfalFile::pread(off_t offset, size_t count){
+    Gfal_scopedGILRelease unlock;
+
+    std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
+    ssize_t ret = gfal_pread(fd, &(buf->front()), count, offset);
+    if(ret <  0)
+        gfal_GError_to_exception();
+
+    (*buf)[ret] ='\0';
+    return std::string(&(buf->front()),ret);
+}
+
 ssize_t Gfal::GfalFile::write(const std::string & str){
 	Gfal_scopedGILRelease unlock;
 	
@@ -91,6 +103,18 @@ ssize_t Gfal::GfalFile::write(const std::string & str){
 		gfal_GError_to_exception();	
 	return ret;
 }
+
+ssize_t Gfal::GfalFile::pwrite(const std::string & str, off_t offset){
+    Gfal_scopedGILRelease unlock;
+
+    const size_t s_str = str.size();
+
+    ssize_t ret = gfal_pwrite(fd, str.c_str(), s_str, offset);
+    if(ret <  0)
+        gfal_GError_to_exception();
+    return ret;
+}
+
 
 off_t Gfal::GfalFile::lseek(off_t offset, int flag){
 	Gfal_scopedGILRelease unlock;
