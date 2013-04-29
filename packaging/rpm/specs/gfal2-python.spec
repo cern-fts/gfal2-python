@@ -26,7 +26,7 @@ BuildRequires:		boost141-devel
 BuildRequires:		boost-devel
 %endif
 BuildRequires:		python-devel
-BuildRequires:          epydoc
+BuildRequires:		epydoc
 
 Requires:			python%{?_isa}
 Requires:			boost%{?_isa}
