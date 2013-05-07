@@ -18,7 +18,6 @@ Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
-BuildRequires:		glib2-devel
 BuildRequires:		gfal2-devel
 %if 0%{?el5}
 BuildRequires:		boost141-devel
@@ -28,9 +27,6 @@ BuildRequires:		boost-devel
 BuildRequires:		python-devel
 BuildRequires:		epydoc
 
-Requires:			python%{?_isa}
-Requires:			boost%{?_isa}
-
 %description
 Python bindings for gfal 2.0.
 GFAL 2.0 offers an a single, simple and portable API
@@ -39,7 +35,8 @@ for the file operations in grids and cloud environments.
 %package doc
 Summary:			Documentation for %{name}
 Group:				Applications/Internet
-Requires:			%{name}%{?_isa} = %{version}-%{release}
+BuildArch:                      noarch
+Requires:			%{name} = %{version}-%{release}
 
 %description doc
 documentation files  of %{name} .
@@ -95,9 +92,4 @@ make DESTDIR=%{buildroot} install
  - add pydoc
  - convert to off_t =64 bits on the 32 bits plateform
 
-* Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1
- - initial 1.0 release for gfal 2.0 python bindings
- - minor refactory of the python API
 
-* Mon Nov 14 2011 Adrien Devresse <adevress at cern.ch> - 1.0.1-0.1.20120503010snap
- - Initial gfal 2.0 bindigns preview with posix scope
