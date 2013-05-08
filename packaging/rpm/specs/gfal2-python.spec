@@ -6,7 +6,7 @@
 
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
-%global __provides_exclude ^gfal2\\.so.*$
+%global __provides_exclude gfal2.so
 
 Name:				gfal2-python
 Version:			1.2.0
