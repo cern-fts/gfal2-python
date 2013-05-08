@@ -6,9 +6,11 @@
 
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
+%global __provides_exclude ^gfal2\\.so.*$
+
 Name:				gfal2-python
 Version:			1.2.0
-Release:			0%{?dist}
+Release:			1%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
@@ -24,7 +26,7 @@ BuildRequires:		boost141-devel
 %else
 BuildRequires:		boost-devel
 %endif
-BuildRequires:		python-devel
+BuildRequires:		python2-devel
 BuildRequires:		epydoc
 
 %description
@@ -35,8 +37,7 @@ for the file operations in grids and cloud environments.
 %package doc
 Summary:			Documentation for %{name}
 Group:				Applications/Internet
-BuildArch:                      noarch
-Requires:			%{name} = %{version}-%{release}
+Requires:			%{name}%{?_isa} = %{version}-%{release}
 
 %description doc
 documentation files  of %{name} .
@@ -52,7 +53,6 @@ make clean
 %cmake -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
  %{boost_cmake_flags} \
  -DUNIT_TESTS=TRUE . 
-
 
 make %{?_smp_mflags}
 make doc
@@ -78,6 +78,9 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
+* Wed May 08 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-1 
+ - 
+
 * Fri Apr 26 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-0
  - include partial r/w operations (pread/pwrite)
  - switch the internal api from old style posix to gfal2 file api
