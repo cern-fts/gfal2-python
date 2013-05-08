@@ -79,20 +79,7 @@ make DESTDIR=%{buildroot} install
 
 %changelog
 * Wed May 08 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-1 
- - 
+ - First release compatible for EPEL.
 
-* Fri Apr 26 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-0
- - include partial r/w operations (pread/pwrite)
- - switch the internal api from old style posix to gfal2 file api
- - switch the license from EGEE to EMI
- - map the gfal2_cancel function
- - initial compatible EPEL release
-
-* Thu Nov 29 2012 Adrien Devresse <adevress at cern.ch> - 1.1.0-0
- - bug correction for set interger function
- - map the new parameter system properly
- - add verbose level management and new namespace to gfal python bindings
- - add pydoc
- - convert to off_t =64 bits on the 32 bits plateform
 
 
