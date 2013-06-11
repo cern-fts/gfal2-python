@@ -54,7 +54,7 @@ Gfal::GfalFile::GfalFile(const Gfal & context,
 {
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    fd = gfal2_open(cont, path.c_str(), convert_open_flag_py_to_cpp(flag), &tmp_err);
+    fd = gfal2_open(cont->context, path.c_str(), convert_open_flag_py_to_cpp(flag), &tmp_err);
 	if(fd <= 0)
         check_GError(&tmp_err);
 
@@ -70,7 +70,7 @@ Gfal::GfalFile::GfalFile(const Gfal & context,
 Gfal::GfalFile::~GfalFile() 
 {
 	Gfal_scopedGILRelease unlock;
-    (void)gfal2_close(cont, fd, NULL);
+    (void)gfal2_close(cont->context, fd, NULL);
 }
 
 
@@ -78,7 +78,7 @@ std::string Gfal::GfalFile::read(size_t count) {
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
 	std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
-    ssize_t ret = gfal2_read(cont, fd, &(buf->front()), count, &tmp_err);
+    ssize_t ret = gfal2_read(cont->context, fd, &(buf->front()), count, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	
@@ -91,7 +91,7 @@ std::string Gfal::GfalFile::pread(off_t offset, size_t count){
     Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
     std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
-    ssize_t ret = gfal2_pread(cont, fd, &(buf->front()), count, offset, &tmp_err);
+    ssize_t ret = gfal2_pread(cont->context, fd, &(buf->front()), count, offset, &tmp_err);
     if(ret <  0)
         check_GError(&tmp_err);
 
@@ -104,7 +104,7 @@ ssize_t Gfal::GfalFile::write(const std::string & str){
     GError* tmp_err=NULL;
 	const size_t s_str = str.size();
 
-    ssize_t ret = gfal2_write(cont, fd, str.c_str(), s_str, &tmp_err);
+    ssize_t ret = gfal2_write(cont->context, fd, str.c_str(), s_str, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return ret;
@@ -115,7 +115,7 @@ ssize_t Gfal::GfalFile::pwrite(const std::string & str, off_t offset){
     GError* tmp_err=NULL;
     const size_t s_str = str.size();
 
-    ssize_t ret = gfal2_pwrite(cont, fd, str.c_str(), s_str, offset, &tmp_err);
+    ssize_t ret = gfal2_pwrite(cont->context, fd, str.c_str(), s_str, offset, &tmp_err);
     if(ret <  0)
         check_GError(&tmp_err);
     return ret;
@@ -125,7 +125,7 @@ ssize_t Gfal::GfalFile::pwrite(const std::string & str, off_t offset){
 off_t Gfal::GfalFile::lseek(off_t offset, int flag){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    off_t ret = gfal2_lseek(cont,fd, offset, flag, &tmp_err);
+    off_t ret = gfal2_lseek(cont->context,fd, offset, flag, &tmp_err);
 	if(ret ==  ((off_t)0)-1)
         check_GError(&tmp_err);
 	return ret;
@@ -133,7 +133,7 @@ off_t Gfal::GfalFile::lseek(off_t offset, int flag){
 
 int Gfal::filecopy(const std::string &src, const std::string &dst){
     GError * tmp_err=NULL;
-    int ret =gfalt_copy_file(cont, NULL, src.c_str(), dst.c_str(), &tmp_err);
+    int ret =gfalt_copy_file(cont->context, NULL, src.c_str(), dst.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
@@ -141,7 +141,7 @@ int Gfal::filecopy(const std::string &src, const std::string &dst){
 
 int Gfal::filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst){
     GError * tmp_err=NULL;
-    int ret = gfalt_copy_file(cont, p.params, src.c_str(), dst.c_str(), &tmp_err);
+    int ret = gfalt_copy_file(cont->context, p.params, src.c_str(), dst.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
@@ -153,7 +153,7 @@ Gfal::Gstat Gfal::lstat(const std::string & path) {
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
 	Gstat st;
-    const int ret = gfal2_lstat(cont, path.c_str(), &st, &tmp_err);
+    const int ret = gfal2_lstat(cont->context, path.c_str(), &st, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return st;	
@@ -166,7 +166,7 @@ Gfal::Gstat Gfal::stat_c(const std::string & path) {
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
 	Gstat st;
-    const int ret = gfal2_stat(cont, path.c_str(), &st, &tmp_err);
+    const int ret = gfal2_stat(cont->context, path.c_str(), &st, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return st;	
@@ -179,7 +179,7 @@ Gfal::Gstat Gfal::stat_c(const std::string & path) {
 int Gfal::access(const std::string & path, int flag){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    const int ret = gfal2_access(cont, path.c_str(), flag, &tmp_err);
+    const int ret = gfal2_access(cont->context, path.c_str(), flag, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return ret;
@@ -192,7 +192,7 @@ int Gfal::access(const std::string & path, int flag){
 int Gfal::chmod(const std::string & path, mode_t mode){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    const int ret = gfal2_chmod(cont, path.c_str(), mode, &tmp_err);
+    const int ret = gfal2_chmod(cont->context, path.c_str(), mode, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return 0;
@@ -206,7 +206,7 @@ int Gfal::chmod(const std::string & path, mode_t mode){
 int Gfal::unlink(const std::string & path){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    const int ret = gfal2_unlink(cont, path.c_str(), &tmp_err);
+    const int ret = gfal2_unlink(cont->context, path.c_str(), &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return 0;	
@@ -220,7 +220,7 @@ int Gfal::unlink(const std::string & path){
 int Gfal::mkdir(const std::string & path, mode_t mode){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    const int ret = gfal2_mkdir(cont, path.c_str(), mode, &tmp_err);
+    const int ret = gfal2_mkdir(cont->context, path.c_str(), mode, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return 0;	
@@ -233,7 +233,7 @@ int Gfal::mkdir(const std::string & path, mode_t mode){
 int Gfal::rmdir(const std::string & path){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    const int ret = gfal2_rmdir(cont, path.c_str(), &tmp_err);
+    const int ret = gfal2_rmdir(cont->context, path.c_str(), &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return 0;	
@@ -246,12 +246,12 @@ int Gfal::rmdir(const std::string & path){
 boost::python::list Gfal::listdir(const std::string & path){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    DIR* d = gfal2_opendir(cont, path.c_str(), &tmp_err);
+    DIR* d = gfal2_opendir(cont->context, path.c_str(), &tmp_err);
     if(d== NULL)
         check_GError(&tmp_err);
 	boost::python::list resu;
 	struct dirent* st;
-    while( (st= gfal2_readdir(cont, d, &tmp_err) ) != NULL){
+    while( (st= gfal2_readdir(cont->context, d, &tmp_err) ) != NULL){
 		resu.append<std::string>(std::string(st->d_name));
 	}
 	gfal_closedir(d);
@@ -266,7 +266,7 @@ boost::python::list Gfal::listdir(const std::string & path){
 int Gfal::rename(const std::string & src, const std::string & dest){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    int ret = gfal2_rename(cont, src.c_str(), dest.c_str(), &tmp_err);
+    int ret = gfal2_rename(cont->context, src.c_str(), dest.c_str(), &tmp_err);
 	if(ret != 0)
         check_GError(&tmp_err);
 	return 0;
@@ -279,7 +279,7 @@ std::string Gfal::readlink(const std::string & path){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
 	char buffer[MAX_BUFFER_SIZE];
-    ssize_t ret = gfal2_readlink(cont, path.c_str(), buffer, MAX_BUFFER_SIZE, &tmp_err);
+    ssize_t ret = gfal2_readlink(cont->context, path.c_str(), buffer, MAX_BUFFER_SIZE, &tmp_err);
 	if(ret < 0)
         check_GError(&tmp_err);
 	return buffer;		
@@ -290,7 +290,7 @@ std::string Gfal::checksum(const std::string & uri, const std::string & chk_type
                  off_t start_offset, size_t data_length){
     char buffer[MAX_BUFFER_SIZE];
     GError* tmp_err=NULL;
-    gfal2_checksum(cont, uri.c_str(), chk_type.c_str(), start_offset, data_length,
+    gfal2_checksum(cont->context, uri.c_str(), chk_type.c_str(), start_offset, data_length,
                                     buffer, MAX_BUFFER_SIZE, &tmp_err);
     check_GError(&tmp_err);
     return buffer;
@@ -306,7 +306,7 @@ std::string Gfal::checksum(const std::string & uri, const std::string & chk_type
 int Gfal::symlink(const std::string & oldpath, const std::string & newpath){
 	Gfal_scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    int ret = gfal2_symlink(cont, oldpath.c_str(), newpath.c_str(), &tmp_err);
+    int ret = gfal2_symlink(cont->context, oldpath.c_str(), newpath.c_str(), &tmp_err);
 	if(ret != 0)
         check_GError(&tmp_err);
 	return 0;	
@@ -320,7 +320,7 @@ std::string Gfal::getxattr(const std::string & file, const std::string & key){
 	Gfal_scopedGILRelease unlock;	
     GError* tmp_err=NULL;
 	char buffer[MAX_BUFFER_SIZE];
-    const ssize_t ret = gfal2_getxattr(cont, file.c_str(), key.c_str(), buffer, MAX_BUFFER_SIZE, &tmp_err);
+    const ssize_t ret = gfal2_getxattr(cont->context, file.c_str(), key.c_str(), buffer, MAX_BUFFER_SIZE, &tmp_err);
 	if( ret < 0)
         check_GError(&tmp_err);
 	return std::string(buffer);	 
@@ -333,7 +333,7 @@ std::string Gfal::getxattr(const std::string & file, const std::string & key){
 int Gfal::setxattr(const std::string  & file, const std::string & key, const std::string & value, int flag){
 	Gfal_scopedGILRelease unlock;	
     GError* tmp_err=NULL;
-    const ssize_t ret = gfal2_setxattr(cont, file.c_str(), key.c_str(), value.c_str(), value.size()+1, flag, &tmp_err);
+    const ssize_t ret = gfal2_setxattr(cont->context, file.c_str(), key.c_str(), value.c_str(), value.size()+1, flag, &tmp_err);
 	if( ret < 0)
         check_GError(&tmp_err);
     return 0;
@@ -347,7 +347,7 @@ boost::python::list Gfal::listxattr(const std::string & file ){
 	Gfal_scopedGILRelease unlock;	
     GError* tmp_err=NULL;
 	char buffer[MAX_BUFFER_SIZE];
-    const ssize_t ret = gfal2_listxattr(cont, file.c_str(), buffer, MAX_BUFFER_SIZE, &tmp_err);
+    const ssize_t ret = gfal2_listxattr(cont->context, file.c_str(), buffer, MAX_BUFFER_SIZE, &tmp_err);
 	if( ret < 0)
         check_GError(&tmp_err);
 		
@@ -376,14 +376,14 @@ boost::shared_ptr<Gfal::GfalFile> Gfal::file(const std::string & path, const std
 
 int Gfal::get_opt_integer(const std::string & nmspace, const std::string & key){
     GError * tmp_err=NULL;
-     int ret = gfal2_get_opt_integer(cont, nmspace.c_str(), key.c_str(), &tmp_err);
+     int ret = gfal2_get_opt_integer(cont->context, nmspace.c_str(), key.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
 
 std::string Gfal::get_opt_string(const std::string & nmspace, const std::string & key){
     GError * tmp_err=NULL;
-    char* p = gfal2_get_opt_string(cont, nmspace.c_str(), key.c_str(), &tmp_err);
+    char* p = gfal2_get_opt_string(cont->context, nmspace.c_str(), key.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return std::string(p);
 }
@@ -392,7 +392,7 @@ boost::python::list Gfal::get_opt_string_list(const std::string & nmspace, const
     GError * tmp_err=NULL;
     gsize size=0;
     boost::python::list result;
-    char** res =  gfal2_get_opt_string_list(cont, nmspace.c_str(), key.c_str(), &size, &tmp_err);
+    char** res =  gfal2_get_opt_string_list(cont->context, nmspace.c_str(), key.c_str(), &size, &tmp_err);
     check_GError(&tmp_err);
     if(res){
         for(size_t i =0; i < size; i++)
@@ -404,21 +404,21 @@ boost::python::list Gfal::get_opt_string_list(const std::string & nmspace, const
 
 bool Gfal::get_opt_boolean(const std::string & nmspace, const std::string & key){
     GError * tmp_err=NULL;
-    const bool ret = gfal2_get_opt_boolean(cont, nmspace.c_str(), key.c_str(), &tmp_err);
+    const bool ret = gfal2_get_opt_boolean(cont->context, nmspace.c_str(), key.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
 
 int Gfal::set_opt_integer(const std::string & nmspace, const std::string & key, int value){
     GError * tmp_err=NULL;
-    int ret = gfal2_set_opt_integer(cont, nmspace.c_str(), key.c_str(), value, &tmp_err);
+    int ret = gfal2_set_opt_integer(cont->context, nmspace.c_str(), key.c_str(), value, &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
 
 int Gfal::set_opt_string(const std::string & nmspace, const std::string & key, const std::string & value){
     GError * tmp_err=NULL;
-    int ret = gfal2_set_opt_string(cont, nmspace.c_str(), key.c_str(), (char*)value.c_str(), &tmp_err);
+    int ret = gfal2_set_opt_string(cont->context, nmspace.c_str(), key.c_str(), (char*)value.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
@@ -434,14 +434,14 @@ int Gfal::set_opt_string_list(const std::string & nmspace, const std::string & k
     }
     tab_ptr[size_list] = NULL;
 
-    int ret = gfal2_set_opt_string_list(cont, nmspace.c_str(), key.c_str(), tab_ptr, size_list, &tmp_err);
+    int ret = gfal2_set_opt_string_list(cont->context, nmspace.c_str(), key.c_str(), tab_ptr, size_list, &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
 
 int Gfal::set_opt_boolean(const std::string & nmspace, const std::string & key, bool val){
     GError * tmp_err=NULL;
-    int ret = gfal2_set_opt_boolean(cont, nmspace.c_str(), key.c_str(), val, &tmp_err);
+    int ret = gfal2_set_opt_boolean(cont->context, nmspace.c_str(), key.c_str(), val, &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }

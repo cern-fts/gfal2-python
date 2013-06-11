@@ -43,22 +43,30 @@ enum gfal_verbose_levels{
     gfal_verbose_trace = GFAL_VERBOSE_TRACE | GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG
 };
 
-
 class Gfal{
 private:
-  gfal_context_t cont;
+
+    class GfalContextWrapper {
+    public:
+        gfal_context_t context;
+
+        GfalContextWrapper() {
+            GError* tmp_err=NULL;
+            context = gfal2_context_new(&tmp_err);
+            if(context == NULL)
+                check_GError(&tmp_err);
+        }
+        ~GfalContextWrapper() {
+            gfal2_context_free(context);
+        }
+    };
+
+    boost::shared_ptr<GfalContextWrapper> cont;
 
 public:
-    Gfal(){
-        GError* tmp_err=NULL;
-        cont = gfal2_context_new(&tmp_err);
-        if(cont == NULL)
-            check_GError(&tmp_err);
-    }
+    Gfal(): cont(new GfalContextWrapper()) {}
 
-    virtual ~Gfal(){
-        gfal2_context_free(cont);
-    }
+    virtual ~Gfal(){}
 
     class Gstat : public stat {
     public:
@@ -114,20 +122,20 @@ public:
              * */
         private:
             /* add your private declarations */
-            gfal2_context_t cont;
+            boost::shared_ptr<GfalContextWrapper> cont;
             std::string path;
             std::string flag;
 
             int fd;
     };
 
-    gfal2_context_t getContext() const{
-        return cont;
+    boost::shared_ptr<GfalContextWrapper> getContext() const {
+        return cont ;
     }
 
 
     int cancel(){
-        return gfal2_cancel(cont);
+        return gfal2_cancel(cont->context);
     }
 
     boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);

@@ -39,7 +39,7 @@ mode_t Gfal::Gstat::get_st_mode(){
 }
 
 nlink_t Gfal::Gstat::get_st_nlink(){
-	struct stat * st = this;	
+	struct stat * st = this;
 	return st->st_nlink;
 }
 
