@@ -22,15 +22,12 @@
 #include <unistd.h>
 #include <vector>
 
-
 #include <gfal_api.h>
 #include <transfer/gfal_transfer.h>
+
 #include "gfal_boost_include.hpp"
-
-
-#include "gfalcpp.h"
 #include "gfalt_params.h"
-#include "gerror_exception.h"
+
 
 #ifndef GFALFILE_H
 #define GFALFILE_H

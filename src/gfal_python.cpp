@@ -28,12 +28,10 @@
 #include "gfal_boost_include.hpp"
 #include <gfal_api.h>
 
-#include "gerror_exception.h"
+#include "GErrorWrapper.h"
 #include "gfalfile.h"
 #include "gfalt_params.h"
 #include "gfalcpp.h"
-
-
 
 
 using namespace boost::python;
@@ -42,25 +40,10 @@ using namespace boost::python;
 static PyObject *GErrorPyType = NULL;
 
 
-PyObject* createExceptionClass(const char* name, PyObject* baseTypeObj = PyExc_Exception)
-{
-    using std::string;
-    namespace bp = boost::python;
 
-    string scopeName = bp::extract<string>(bp::scope().attr("__name__"));
-    string qualifiedName0 = scopeName + "." + name;
-    char* qualifiedName1 = const_cast<char*>(qualifiedName0.c_str());
-
-    PyObject* typeObj = PyErr_NewException(qualifiedName1, baseTypeObj, 0);
-    if(!typeObj) bp::throw_error_already_set();
-    bp::scope().attr(name) = bp::handle<>(bp::borrowed(typeObj));
-    return typeObj;
-}
-
-void gerror_exception_translator(const Gerror_exception  & x){
+void gerror_exception_translator(const GErrorWrapper  & x){
 	assert(GErrorPyType != NULL); // check if type init is valid
-	object pythonGErrorInstance(x);
-    PyErr_SetObject(GErrorPyType, pythonGErrorInstance.ptr());
+    PyErr_SetObject(GErrorPyType, Py_BuildValue("si", x.what(), x.code()));
 }
 
 
@@ -78,16 +61,10 @@ BOOST_PYTHON_MODULE(gfal2)
             .value("trace", gfal_verbose_trace)
             ;
 	
-	// register exception first 
-	class_<Gerror_exception> pyGErrorException("GError", init<const std::string &, int>()); 
-	pyGErrorException.def("message", &Gerror_exception::get_message);
-	pyGErrorException.def("code", &Gerror_exception::code);
-	pyGErrorException.def("__str__", &Gerror_exception::get_message);
-		
-
-
-	GErrorPyType = pyGErrorException.ptr();
+	// register exception
+	GErrorPyType = createGErrorException();
 	
+
     scope scope_posix =  class_<Gfal>("creat_context")
 	.def("open", &Gfal::open)
 
@@ -181,7 +158,8 @@ BOOST_PYTHON_MODULE(gfal2)
             ;
 	
     // register exception
-    register_exception_translator<Gerror_exception>(&gerror_exception_translator);
+    register_exception_translator<GErrorWrapper>(&gerror_exception_translator);
+
     // Create the Python type object for our extension class and define __init__ function.
     class_<Gfal::GfalFile, boost::shared_ptr<Gfal::GfalFile> >("FileType",  init<Gfal, const std::string &, const std::string &>())
         .def("read", &Gfal::GfalFile::read)  // Add a regular member function.

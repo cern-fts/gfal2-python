@@ -1,5 +1,5 @@
 /*
-* Copyright @ Members of the EMI Collaboration, 2010.
+* Copyright @ Members of the EMI Collaboration, 2013.
 * See www.eu-emi.eu for details on the copyright holders.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,31 +17,37 @@
  
 
 
-#ifndef GERROR_EXCEPTION_H
-#define GERROR_EXCEPTION_H
+#ifndef GERRORWRAPPER_EXCEPTION_H
+#define GERRORWRAPPER_EXCEPTION_H
 
-#include <stdexcept>
+#include <boost/python.hpp>
 #include <exception>
-#include <typeinfo>
 #include <glib.h>
+#include <stdexcept>
+#include <typeinfo>
 
-class Gerror_exception : public std::exception
+/**
+ * Exception to be thrown by the wrapper code
+ */
+class GErrorWrapper : public std::exception
 {
 	public:
-		Gerror_exception(std::string path, int error);
-		Gerror_exception(const GError* gerr) ;
+        GErrorWrapper(const std::string &msg, int error);
+        GErrorWrapper(const GError* gerr);
 		
-		virtual ~Gerror_exception() throw();
+		virtual ~GErrorWrapper() throw();
 	
 		const char * what() const throw();
-		
-		std::string get_message() const;
-		
 		int code() const;
+
 	private:
+		std::string _message;
 		int _code;
-		std::string message;
-		/* add your private declarations */
 };
 
-#endif /* GERROR_EXCEPTION_H */ 
+/**
+ * Create GErrorException (inherits from Python's Exception)
+ */
+PyObject* createGErrorException();
+
+#endif /* GERRORWRAPPER_EXCEPTION_H */
