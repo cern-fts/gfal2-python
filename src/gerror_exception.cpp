@@ -44,7 +44,6 @@ Gerror_exception::~Gerror_exception()  throw()
 
 
 const char* Gerror_exception::what() const throw(){
-	std::cout << " test" << message.c_str() << std::endl;
 	return message.c_str();
 }
 
