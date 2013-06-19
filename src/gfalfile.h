@@ -29,7 +29,6 @@
 
 
 #include "gfalcpp.h"
-#include "gfal_stat.h"
 #include "gfalt_params.h"
 #include "gerror_exception.h"
 

@@ -30,7 +30,6 @@
 
 #include "gerror_exception.h"
 #include "gfalfile.h"
-#include "gfal_stat.h"
 #include "gfalt_params.h"
 #include "gfalcpp.h"
 

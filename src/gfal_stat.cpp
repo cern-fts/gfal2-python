@@ -19,7 +19,7 @@
 #include <cstring>
 #include <sstream>
 
-#include "gfal_stat.h"
+#include "gfalfile.h"
 
 
 	
