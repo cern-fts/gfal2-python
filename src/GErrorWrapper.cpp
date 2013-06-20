@@ -118,7 +118,7 @@ static PyMethodDef GError_str_def = {
 
 
 
-static int add_method_to_dict(PyObject* dict, PyMethodDef* methodDef)
+static int add_method_to_dict(PyObject* klass, PyObject* dict, PyMethodDef* methodDef)
 {
     PyObject* func   = NULL;
     PyObject* method = NULL;
@@ -126,7 +126,7 @@ static int add_method_to_dict(PyObject* dict, PyMethodDef* methodDef)
     if (!(func = PyCFunction_NewEx(methodDef, NULL, NULL)))
         goto exception;
 
-    if (!(method = PyMethod_New(func, NULL, NULL)))
+    if (!(method = PyMethod_New(func, NULL, klass)))
         goto exception;
 
     if (PyDict_SetItemString(dict, methodDef->ml_name, method) < 0)
@@ -144,15 +144,17 @@ exception:
 
 
 
-PyObject* createGErrorException()
+PyObject* createGErrorException(boost::python::scope& scop)
 {
     namespace bp = boost::python;
 
     PyObject* typeObj = NULL;
     PyObject* attrs   = NULL;
 
+    bp::object scope;
+
     // Get name
-    std::string scopeName = bp::extract<std::string>(bp::scope().attr("__name__"));
+    std::string scopeName = bp::extract<std::string>(scop.attr("__name__"));
     std::string qualifiedName = scopeName + ".GError";
 
     // Initialize class attributes
@@ -162,9 +164,10 @@ PyObject* createGErrorException()
     PyDict_SetItemString(attrs, "code", PyInt_FromLong(0));
     PyDict_SetItemString(attrs, "message", PyString_FromString(""));
 
-    if (add_method_to_dict(attrs, &GError_init_def) < 0)
+    // Add methods
+    if (add_method_to_dict(GErrorParent, attrs, &GError_init_def) < 0)
         goto exception;
-    if (add_method_to_dict(attrs, &GError_str_def) < 0)
+    if (add_method_to_dict(GErrorParent, attrs, &GError_str_def) < 0)
         goto exception;
 
     // Create exception
@@ -173,7 +176,8 @@ PyObject* createGErrorException()
         goto exception;
 
     Py_DECREF(attrs);
-    bp::scope().attr("GError") = bp::handle<>(bp::borrowed(typeObj));
+
+    scop.attr("GError") = bp::borrowed(typeObj);
     return typeObj;
 
 exception:

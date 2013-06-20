@@ -48,6 +48,6 @@ class GErrorWrapper : public std::exception
 /**
  * Create GErrorException (inherits from Python's Exception)
  */
-PyObject* createGErrorException();
+PyObject* createGErrorException(boost::python::scope&);
 
 #endif /* GERRORWRAPPER_EXCEPTION_H */

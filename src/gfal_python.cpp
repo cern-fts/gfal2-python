@@ -50,6 +50,7 @@ void gerror_exception_translator(const GErrorWrapper  & x){
 
 BOOST_PYTHON_MODULE(gfal2)
 {
+    scope gfal2Scope = scope();
 
     // global functions
     def("set_verbose", &gfal_set_verbose_enum, "define the log level of gfal 2.0 ");
@@ -62,8 +63,7 @@ BOOST_PYTHON_MODULE(gfal2)
             ;
 	
 	// register exception
-	GErrorPyType = createGErrorException();
-	
+	GErrorPyType = createGErrorException(gfal2Scope);
 
     scope scope_posix =  class_<Gfal>("creat_context")
 	.def("open", &Gfal::open)
