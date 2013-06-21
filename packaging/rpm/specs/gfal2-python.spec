@@ -1,10 +1,23 @@
+# include boost  > 141 for EL5
 %if 0%{?el5}
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include/boost141 -DBOOST_LIBRARYDIR=%{_libdir}/boost141
 %else
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include
 %endif
 
+# python path discovery
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+
+# python modules filtering
+%if 0%{?el6} || 0%{?el5}
+%{?filter_setup:
+%filter_provides_in %{python_sitearch}/.*\.so$ 
+%filter_setup
+}
+%else
+%global __provides_exclude_from ^(%{python_sitearch}/.*\\.so)$
+%endif
+	
 
 Name:				gfal2-python
 Version:			1.2.0
@@ -35,7 +48,9 @@ for the file operations in grids and cloud environments.
 %package doc
 Summary:			Documentation for %{name}
 Group:				Applications/Internet
-Requires:			%{name}%{?_isa} = %{version}-%{release}
+%if 0%{?fedora} > 10 || 0%{?rhel}>5
+BuildArch:	noarch
+%endif
 
 %description doc
 documentation files  of %{name} .
