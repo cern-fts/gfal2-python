@@ -17,7 +17,6 @@
 %else
 %global __provides_exclude_from ^(%{python_sitearch}/.*\\.so)$
 %endif
-	
 
 Name:				gfal2-python
 Version:			1.2.1
@@ -49,7 +48,7 @@ for the file operations in grids and cloud environments.
 Summary:			Documentation for %{name}
 Group:				Applications/Internet
 %if 0%{?fedora} > 10 || 0%{?rhel}>5
-BuildArch:	noarch
+BuildArch:			noarch
 %endif
 
 %description doc
