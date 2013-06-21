@@ -1,4 +1,5 @@
 Trunk
+ - Correct a GError to python exception translation problem
 
 * Fri Apr 26 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-0
  - include partial r/w operations (pread/pwrite)

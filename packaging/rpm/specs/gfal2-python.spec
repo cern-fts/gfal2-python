@@ -20,7 +20,7 @@
 	
 
 Name:				gfal2-python
-Version:			1.2.0
+Version:			1.2.1
 Release:			1%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
@@ -91,7 +91,7 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
-* Wed May 08 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-1 
+* Wed May 08 2013 Adrien Devresse <adevress at cern.ch> - 1.2.1-1 
  - First release compatible for EPEL
 
 
