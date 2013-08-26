@@ -21,6 +21,8 @@ INCLUDE(FindPackageHandleStandardArgs)
  # main version executable
  FIND_PROGRAM(PYTHON_EXECUTABLE
   NAMES python
+  HINTS
+  ${ALT_PYTHON_LOCATION}/bin
   PATHS
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.4\\InstallPath]
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.3\\InstallPath]
@@ -55,6 +57,8 @@ FOREACH(_VERSION ${L_PYTHON_VERSIONS})
 
 FIND_PROGRAM(PYTHON_EXECUTABLE_${_VERSION}
   NAMES python${_VERSION}
+  HINTS
+	${ALT_PYTHON_LOCATION}/bin/
   PATHS
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.4\\InstallPath]
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.3\\InstallPath]
@@ -85,6 +89,8 @@ FIND_PROGRAM(PYTHON_EXECUTABLE_${_VERSION}
 		#find libs
 		FIND_LIBRARY(PYTHON_LIBRARY_${_VERSION}
 			NAMES python${_VERSION_NO_DOTS} python${_VERSION}
+            HINTS
+				${ALT_PYTHON_LOCATION}/lib/
 			PATHS
 			[HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\${_VERSION}\\InstallPath]/libs
 			PATH_SUFFIXES
@@ -96,6 +102,8 @@ FIND_PROGRAM(PYTHON_EXECUTABLE_${_VERSION}
 	 # find path
 	  FIND_PATH(PYTHON_INCLUDE_PATH_${_VERSION}
 		NAMES Python.h
+		HINTS
+			${ALT_PYTHON_LOCATION}/include/python${_VERSION}/
 		PATHS
 		  [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\${_VERSION}\\InstallPath]/include
 		PATH_SUFFIXES
