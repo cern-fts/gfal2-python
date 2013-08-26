@@ -132,6 +132,19 @@ public:
         return boost::python::make_tuple<std::string,std::string>(buff_chktype, buff_chk);
     }
 
+    void set_overwrite(bool overwrite) {
+        GError * tmp_err = NULL;
+        gfalt_set_replace_existing_file(params, overwrite, &tmp_err);
+        check_GError(&tmp_err);
+    }
+
+    bool get_overwrite(void) {
+        GError * tmp_err = NULL;
+        gboolean overwrite = gfalt_get_replace_existing_file(params, &tmp_err);
+        check_GError(&tmp_err);
+        return overwrite;
+    }
+
 
 
     friend class Gfal;

@@ -152,6 +152,7 @@ BOOST_PYTHON_MODULE(gfal2)
             .add_property("src_spacetoken", &Gfalt_params::get_src_spacetoken, &Gfalt_params::set_src_spacetoken)
             .add_property("dst_spacetoken", &Gfalt_params::get_dst_spacetoken, &Gfalt_params::set_dst_spacetoken)
             .add_property("nbstreams", &Gfalt_params::get_nbstream, &Gfalt_params::set_nbstream)
+            .add_property("overwrite", &Gfalt_params::get_overwrite, &Gfalt_params::set_overwrite)
 
             .def("set_user_defined_checksum", &Gfalt_params::set_user_defined_checksum)
             .def("get_user_defined_checksum", &Gfalt_params::get_user_defined_checksum)
