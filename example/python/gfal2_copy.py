@@ -36,8 +36,8 @@ if __name__ == '__main__':
 	params = ctx.transfer_parameters()
 
 	if options.overwrite:
-		# Not implemented yet!
-		pass
+		params.overwrite = True
+		print "Enabled overwrite"
 
 	if options.validate or options.checksum:
 		params.checksum_check = True
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 	# and gfal2 will deal with it
 	# (i.e. source can be file:/// and destination gsiftp://)
 	try:
-		r = ctx.filecopy(source, dest)
+		r = ctx.filecopy(params, source, dest)
 		print "Copy succeeded!"
 	except Exception, e:
 		print "Copy failed: %s" % str(e)
