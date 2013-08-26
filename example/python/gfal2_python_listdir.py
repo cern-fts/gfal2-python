@@ -17,11 +17,9 @@ if __name__ == '__main__':
 		print "    Example: %s lfn:/grid/dteam/ "%(sys.argv[0])
 		print "             %s srm://myserver.com/myhome/ \n"%(sys.argv[0])
 		os._exit(1)
-		
-	#  do everything in one call
-	my_dir = gfal2.listdir(sys.argv[1])
 
-	#print the content of the dir
+	ctx = gfal2.creat_context()		
+	my_dir = ctx.listdir(sys.argv[1])
 	for d in my_dir:
 		print d
 	
