@@ -33,8 +33,9 @@ BuildRequires:		boost141-devel
 %else
 BuildRequires:		boost-devel
 %endif
-BuildRequires:		python2-devel
+#BuildRequires:		python2-devel
 BuildRequires:		epydoc
+BuildRequires:      wget
 
 %description
 Python bindings for gfal 2.0.
