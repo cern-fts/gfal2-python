@@ -13,7 +13,6 @@ include(DefineInstallationPaths REQUIRED)
 include(MacroCopyFile REQUIRED)
 include(ReleaseDebugAutoFlags REQUIRED)
 include(CMakeGeneratePkgConfig REQUIRED)
-include(MacroAddepydoc REQUIRED)
 
 find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED)
@@ -30,9 +29,13 @@ set(OUTPUT_NAME_MAIN "gfal2")
 
 
 # EPYDOC definition for EPEL5 support
-set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/gfal2.so")
-set(EPYDOC_MODULE_URL "https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python")
-set(EPYDOC_MODULE_NAME "gfal2")
+if (!SKIP_DOC)
+    set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/gfal2.so")
+    set(EPYDOC_MODULE_URL "https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python")
+    set(EPYDOC_MODULE_NAME "gfal2")
+
+    include(MacroAddepydoc REQUIRED)
+endif (SKIP_DOC)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 2)
@@ -57,5 +60,9 @@ install(FILES "LICENSE" "RELEASE-NOTES" "README"
 add_definitions( -D_FILE_OFFSET_BITS=64 )
 
 add_subdirectory (src)
-add_subdirectory(doc)
 add_subdirectory (test)
+
+if (!SKIP_DOC)
+	add_subdirectory(doc)
+endif (!SKIP_DOC)
+

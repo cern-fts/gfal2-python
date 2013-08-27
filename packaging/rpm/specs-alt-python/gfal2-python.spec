@@ -33,24 +33,12 @@ BuildRequires:		boost141-devel
 %else
 BuildRequires:		boost-devel
 %endif
-#BuildRequires:		python2-devel
-BuildRequires:		epydoc
 BuildRequires:      wget
 
 %description
 Python bindings for gfal 2.0.
 GFAL 2.0 offers an a single, simple and portable API
 for the file operations in grids and cloud environments.
-
-%package doc
-Summary:			Documentation for %{name}
-Group:				Applications/Internet
-%if 0%{?fedora} > 10 || 0%{?rhel}>5
-BuildArch:			noarch
-%endif
-
-%description doc
-documentation files  of %{name} .
 
 %clean
 rm -rf %{buildroot};
@@ -78,10 +66,10 @@ PYVER=%{_alt_python_version}
  -DUNIT_TESTS=TRUE \
  -DALT_PYTHON_LOCATION=$WD/altpython/ \
  -DPYTHON_SITE_PACKAGES=%{_libdir}/python${PYVER:0:3}/site-packages/ \
+ -DSKIP_DOC=YES \
  .
 
 make %{?_smp_mflags}
-make doc
 
 %check
 ctest -V -T Test .
@@ -96,12 +84,6 @@ make DESTDIR=%{buildroot} install
 %{_docdir}/%{name}-%{version}/LICENSE
 %{_docdir}/%{name}-%{version}/RELEASE-NOTES
 %{_docdir}/%{name}-%{version}/README
-
-%files doc
-%defattr (-,root,root)
-%dir %{_docdir}/%{name}-%{version}/html
-%{_docdir}/%{name}-%{version}/html/*
-
 
 %changelog
 * Wed May 08 2013 Adrien Devresse <adevress at cern.ch> - 1.2.1-1 
