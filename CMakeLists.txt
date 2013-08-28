@@ -29,7 +29,7 @@ set(OUTPUT_NAME_MAIN "gfal2")
 
 
 # EPYDOC definition for EPEL5 support
-if (!SKIP_DOC)
+if (NOT SKIP_DOC)
     set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/gfal2.so")
     set(EPYDOC_MODULE_URL "https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python")
     set(EPYDOC_MODULE_NAME "gfal2")
@@ -62,7 +62,7 @@ add_definitions( -D_FILE_OFFSET_BITS=64 )
 add_subdirectory (src)
 add_subdirectory (test)
 
-if (!SKIP_DOC)
+if (NOT SKIP_DOC)
 	add_subdirectory(doc)
-endif (!SKIP_DOC)
+endif (NOT SKIP_DOC)
 
