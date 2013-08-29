@@ -19,14 +19,73 @@
 #define GFALT_PARAMS_H
 
 #include <gfal_api.h>
+#include <sstream>
 #include <transfer/gfal_transfer.h>
 
 #include "gfalcpp.h"
 
+// Convenience wrapper for gfal_event_t
+class Gfalt_event {
+public:
+    int         side;
+    gint64      timestamp;
+    std::string stage;
+    std::string domain;
+    std::string description;
+
+    Gfalt_event(): side(0), timestamp(0) {
+    }
+
+    Gfalt_event(gfalt_event_t e): side(e->side), timestamp(e->timestamp),
+            description(e->description)
+    {
+        stage  = g_quark_to_string(e->stage);
+        domain = g_quark_to_string(e->domain);
+    }
+
+    std::string __str__(void) const {
+        std::ostringstream stream;
+
+        stream << '[' << timestamp << "] ";
+
+        switch (side) {
+        case GFAL_EVENT_SOURCE:
+            stream << "SOURCE ";
+            break;
+        case GFAL_EVENT_DESTINATION:
+            stream << "DEST   ";
+            break;
+        default:
+            stream << "BOTH   ";
+            break;
+        }
+
+        stream << domain << '\t'
+               << stage << '\t'
+               << description;
+
+        return stream.str();
+    }
+
+};
+
+// Event callback
+void event_callback_wrapper(const gfalt_event_t e, gpointer user_data);
+
+// Calback objects
+// Only one, since the user data is shared between event and monitoring callbacks
+struct CallbackObjs {
+    boost::python::object event_callback;
+    boost::python::object monitor_callback;
+};
+
+// Wrapper for gfalt_params_t
 class Gfalt_params
 {
 private:
     gfalt_params_t params;
+    CallbackObjs callback_objs;
+
 public:
     Gfalt_params(){
         GError * tmp_err=NULL;
@@ -145,6 +204,16 @@ public:
         return overwrite;
     }
 
+    // Callbacks
+    void set_event_callback(PyObject* callable) {
+        callback_objs.event_callback = boost::python::object(boost::python::handle<>(callable));
+        gfalt_set_event_callback(params, event_callback_wrapper, NULL);
+        gfalt_set_user_data(params, &callback_objs, NULL);
+    }
+
+    PyObject* get_event_callback(void) {
+        return callback_objs.event_callback.ptr();
+    }
 
 
     friend class Gfal;

@@ -4,6 +4,10 @@ import logging
 import optparse
 import sys
 
+def event_callback(event):
+	print event
+	#print "[%s] %s %s %s" % (event.timestamp, event.domain, event.stage, event.description)
+
 if __name__ == '__main__':
 	# Parse arguments
 	parser = optparse.OptionParser(usage = 'usage: %prog [options] source destination')
@@ -34,6 +38,7 @@ if __name__ == '__main__':
 
 	# Set transfer parameters
 	params = ctx.transfer_parameters()
+	params.event_callback = event_callback
 
 	if options.overwrite:
 		params.overwrite = True

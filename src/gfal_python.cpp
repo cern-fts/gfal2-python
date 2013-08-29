@@ -47,7 +47,6 @@ void gerror_exception_translator(const GErrorWrapper  & x){
 }
 
 
-
 BOOST_PYTHON_MODULE(gfal2)
 {
     scope gfal2Scope = scope();
@@ -125,9 +124,7 @@ BOOST_PYTHON_MODULE(gfal2)
 
     .def("cancel", &Gfal::cancel);
     ;
-    
-    
-	
+
     // register stat struct
     class_<Gfal::Gstat>("st_stat")
 		.add_property("st_dev", &Gfal::Gstat::get_st_dev)
@@ -145,18 +142,38 @@ BOOST_PYTHON_MODULE(gfal2)
 		.def("__repr__", &Gfal::Gstat::string_rep)
 	;
 
+    // Transfer parameters
     class_<Gfalt_params >("transfer_parameters")
-            .def("copy", &Gfalt_params::copy)
-            .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout)
-            .add_property("checksum_check", &Gfalt_params::get_checksum_check, &Gfalt_params::set_checksum_check)
-            .add_property("src_spacetoken", &Gfalt_params::get_src_spacetoken, &Gfalt_params::set_src_spacetoken)
-            .add_property("dst_spacetoken", &Gfalt_params::get_dst_spacetoken, &Gfalt_params::set_dst_spacetoken)
-            .add_property("nbstreams", &Gfalt_params::get_nbstream, &Gfalt_params::set_nbstream)
-            .add_property("overwrite", &Gfalt_params::get_overwrite, &Gfalt_params::set_overwrite)
+        .def("copy", &Gfalt_params::copy)
+        .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout)
+        .add_property("checksum_check", &Gfalt_params::get_checksum_check, &Gfalt_params::set_checksum_check)
+        .add_property("src_spacetoken", &Gfalt_params::get_src_spacetoken, &Gfalt_params::set_src_spacetoken)
+        .add_property("dst_spacetoken", &Gfalt_params::get_dst_spacetoken, &Gfalt_params::set_dst_spacetoken)
+        .add_property("nbstreams", &Gfalt_params::get_nbstream, &Gfalt_params::set_nbstream)
+        .add_property("overwrite", &Gfalt_params::get_overwrite, &Gfalt_params::set_overwrite)
+        .add_property("event_callback", &Gfalt_params::get_event_callback, &Gfalt_params::set_event_callback)
 
-            .def("set_user_defined_checksum", &Gfalt_params::set_user_defined_checksum)
-            .def("get_user_defined_checksum", &Gfalt_params::get_user_defined_checksum)
-            ;
+        .def("set_user_defined_checksum", &Gfalt_params::set_user_defined_checksum)
+        .def("get_user_defined_checksum", &Gfalt_params::get_user_defined_checksum)
+        ;
+
+    // Callback types
+    enum_<gfal_event_side_t>("event_side")
+        .value("event_source", GFAL_EVENT_SOURCE)
+        .value("event_destination", GFAL_EVENT_DESTINATION)
+        .value("event_none", GFAL_EVENT_NONE)
+        ;
+
+    class_<Gfalt_event>("gfalt_event")
+        .add_property("side", &Gfalt_event::side)
+        .add_property("timestamp", &Gfalt_event::timestamp)
+        .add_property("stage", &Gfalt_event::stage)
+        .add_property("domain", &Gfalt_event::domain)
+        .add_property("description", &Gfalt_event::description)
+
+        .def("__str__", &Gfalt_event::__str__)
+        .def("__repr__", &Gfalt_event::__str__)
+        ;
 	
     // register exception
     register_exception_translator<GErrorWrapper>(&gerror_exception_translator);
@@ -168,10 +185,7 @@ BOOST_PYTHON_MODULE(gfal2)
         .def("write", &Gfal::GfalFile::write)  
         .def("pwrite", &Gfal::GfalFile::pwrite)
         .def("lseek", &Gfal::GfalFile::lseek)
-        
     ;
-    
-
 
 }
 
