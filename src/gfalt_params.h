@@ -72,6 +72,9 @@ public:
 // Event callback
 void event_callback_wrapper(const gfalt_event_t e, gpointer user_data);
 
+// Monitor callback
+void monitor_callback_wrapper(gfalt_transfer_status_t h, const char* src, const char* dst, gpointer user_data);
+
 // Calback objects
 // Only one, since the user data is shared between event and monitoring callbacks
 struct CallbackObjs {
@@ -215,6 +218,15 @@ public:
         return callback_objs.event_callback.ptr();
     }
 
+    void set_monitor_callback(PyObject* callable) {
+        callback_objs.monitor_callback = boost::python::object(boost::python::handle<>(callable));
+        gfalt_set_monitor_callback(params, monitor_callback_wrapper, NULL);
+        gfalt_set_user_data(params, &callback_objs, NULL);
+    }
+
+    PyObject* get_monitor_callback(void) {
+        return callback_objs.monitor_callback.ptr();
+    }
 
     friend class Gfal;
 };

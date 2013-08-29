@@ -152,6 +152,7 @@ BOOST_PYTHON_MODULE(gfal2)
         .add_property("nbstreams", &Gfalt_params::get_nbstream, &Gfalt_params::set_nbstream)
         .add_property("overwrite", &Gfalt_params::get_overwrite, &Gfalt_params::set_overwrite)
         .add_property("event_callback", &Gfalt_params::get_event_callback, &Gfalt_params::set_event_callback)
+        .add_property("monitor_callback", &Gfalt_params::get_monitor_callback, &Gfalt_params::set_monitor_callback)
 
         .def("set_user_defined_checksum", &Gfalt_params::set_user_defined_checksum)
         .def("get_user_defined_checksum", &Gfalt_params::get_user_defined_checksum)

@@ -4,9 +4,14 @@ import logging
 import optparse
 import sys
 
+
 def event_callback(event):
-	print event
-	#print "[%s] %s %s %s" % (event.timestamp, event.domain, event.stage, event.description)
+	#print event
+	print "[%s] %s %s %s" % (event.timestamp, event.domain, event.stage, event.description)
+
+def monitor_callback(src, dst, average, instant, transferred, elapsed):
+	print "[%4d] %.2fMB (%.2fKB/s)\r" % (elapsed, transferred / 1048576, average / 1024),
+	sys.stdout.flush()
 
 if __name__ == '__main__':
 	# Parse arguments
@@ -38,7 +43,8 @@ if __name__ == '__main__':
 
 	# Set transfer parameters
 	params = ctx.transfer_parameters()
-	params.event_callback = event_callback
+	params.event_callback   = event_callback
+	params.monitor_callback = monitor_callback
 
 	if options.overwrite:
 		params.overwrite = True
