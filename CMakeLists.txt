@@ -35,7 +35,7 @@ if (NOT SKIP_DOC)
     set(EPYDOC_MODULE_NAME "gfal2")
 
     include(MacroAddepydoc REQUIRED)
-endif (SKIP_DOC)
+endif (NOT SKIP_DOC)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 2)
