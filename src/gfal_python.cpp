@@ -49,6 +49,9 @@ void gerror_exception_translator(const GErrorWrapper  & x){
 
 BOOST_PYTHON_MODULE(gfal2)
 {
+	// initialize multi-threading 
+	PyEval_InitThreads();
+	
     scope gfal2Scope = scope();
 
     // global functions

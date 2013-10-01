@@ -34,17 +34,19 @@ std::vector<T> convert_python_list_to_typed_list(const boost::python::list & l){
     return res;
 }
  
+namespace GfalPy{ 
+ 
 /**
  * GIL unlocker, used on stack
  */
-class Gfal_scopedGILRelease{
+class scopedGILRelease{
 	
 public:
-    inline Gfal_scopedGILRelease(){
+    inline scopedGILRelease(){
         m_thread_state = PyEval_SaveThread();
     }
 
-    inline ~Gfal_scopedGILRelease(){
+    inline ~scopedGILRelease(){
         PyEval_RestoreThread(m_thread_state);
         m_thread_state = NULL;
     }
@@ -53,5 +55,32 @@ private:
     PyThreadState * m_thread_state;
     
 };
+
+
+
+/**
+ * GIL locker, used on stack
+ */
+class scopedGILLocker{
+	
+public:
+    inline scopedGILLocker(){
+        gil_state = PyGILState_Ensure();
+    }
+
+    inline ~scopedGILLocker(){
+        PyGILState_Release(gil_state);
+    }
+
+private:
+    PyGILState_STATE gil_state;
+    
+};
+
+}
+
+typedef GfalPy::scopedGILRelease Gfal_scopedGILRelease;
+typedef GfalPy::scopedGILLocker Gfal_scopedGILLocker;
+
 
 #endif
