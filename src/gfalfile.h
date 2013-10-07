@@ -19,6 +19,8 @@
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
+#include <dirent.h>
+
 #include <unistd.h>
 #include <vector>
 
@@ -64,6 +66,15 @@ public:
 
     virtual ~Gfal(){}
 
+    class Gdirent : public dirent {
+    public:
+        ino_t          get_d_ino();       /* inode number */
+        off_t          get_d_off();       /* offset to the next dirent */
+        unsigned short get_d_reclen();    /* length of this record */
+        unsigned char  get_d_type();      /* type of file; not supported by all file system types */
+        std::string     get_d_name(); /* filename */
+    };
+
     class Gstat : public stat {
     public:
         dev_t get_st_dev();
@@ -99,11 +110,11 @@ public:
             virtual ~GfalFile();
             /// wrapper to the gfal_read call
             std::string read(size_t count);
-            /// position independant read call
+            /// position independent read call
             std::string pread(off_t offset, size_t count);
             /// wrapper to the gfal_write call
             ssize_t write(const std::string & str);
-            /// position independant write call
+            /// position independent write call
             ssize_t pwrite(const std::string & str, off_t offset);
 
             /**
@@ -125,6 +136,25 @@ public:
             int fd;
     };
 
+    class GfalDirectory
+    {
+    	public:
+    		GfalDirectory(const Gfal & context,
+    					const std::string & path);
+    		virtual ~GfalDirectory();
+    		// wrapper to the gfal_readdirpp call
+    		Gdirent readpp(Gstat & stat);
+    		// wrapper to the gfal_readdir call
+    		Gdirent read();
+
+		private:
+			/* add your private declarations */
+			boost::shared_ptr<GfalContextWrapper> cont;
+			std::string path;
+
+			DIR* d;
+    };
+
     boost::shared_ptr<GfalContextWrapper> getContext() const {
         return cont ;
     }
@@ -134,6 +164,9 @@ public:
 
     boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);
     boost::shared_ptr<GfalFile> file(const std::string & path, const std::string &flag);
+
+    boost::shared_ptr<GfalDirectory> opendir(const std::string & path);
+    boost::shared_ptr<GfalDirectory> directory(const std::string & path);
 
     Gstat lstat(const std::string & path);
 

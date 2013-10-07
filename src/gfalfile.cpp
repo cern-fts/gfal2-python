@@ -61,8 +61,6 @@ Gfal::GfalFile::GfalFile(const Gfal & context,
 }
 
 
-
-
 /**
  * @brief destructor of a gfalFile object, close the file
  * 
@@ -110,7 +108,7 @@ ssize_t Gfal::GfalFile::write(const std::string & str){
 	return ret;
 }
 
-ssize_t Gfal::GfalFile::pwrite(const std::string & str, off_t offset){
+ssize_t Gfal::GfalFile::pwrite(const std::string & str, off_t offset) {
     GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
     const size_t s_str = str.size();
@@ -122,7 +120,7 @@ ssize_t Gfal::GfalFile::pwrite(const std::string & str, off_t offset){
 }
 
 
-off_t Gfal::GfalFile::lseek(off_t offset, int flag){
+off_t Gfal::GfalFile::lseek(off_t offset, int flag) {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
     off_t ret = gfal2_lseek(cont->context,fd, offset, flag, &tmp_err);
@@ -131,7 +129,59 @@ off_t Gfal::GfalFile::lseek(off_t offset, int flag){
 	return ret;
 }
 
-int Gfal::filecopy(const std::string &src, const std::string &dst){
+/**
+ *********** GFAL DIRECTORY
+ */
+
+Gfal::GfalDirectory::GfalDirectory(const Gfal & context, const std::string & path) :
+    cont(context.getContext()),
+    path(path)
+ {
+	GfalPy::scopedGILRelease unlock;
+    GError* tmp_err=NULL;
+    d = gfal2_opendir(cont->context, path.c_str(), &tmp_err);
+	if(d == NULL)
+        check_GError(&tmp_err);
+ }
+
+Gfal::GfalDirectory::~GfalDirectory() {
+    	GfalPy::scopedGILRelease unlock;
+        (void) gfal2_closedir(cont->context, d, NULL);
+ }
+
+Gfal::Gdirent Gfal::GfalDirectory::readpp(Gstat & stat) {
+	GfalPy::scopedGILRelease unlock;
+    GError* tmp_err=NULL;
+    Gdirent* dirent;
+
+    dirent = static_cast<Gdirent*>(gfal2_readdirpp(cont->context, d, &stat, &tmp_err));
+    if(dirent == NULL)
+    	check_GError(&tmp_err);
+
+    return *dirent;
+}
+
+Gfal::Gdirent Gfal::GfalDirectory::read() {
+	GfalPy::scopedGILRelease unlock;
+    GError* tmp_err=NULL;
+    Gdirent* dirent;
+
+    dirent = static_cast<Gdirent*>(gfal2_readdir(cont->context, d, &tmp_err));
+    if(dirent == NULL)
+    	check_GError(&tmp_err);
+
+    return *dirent;
+}
+
+
+
+
+
+/*******************
+ *
+ */
+
+int Gfal::filecopy(const std::string &src, const std::string &dst) {
 	GfalPy::scopedGILRelease unlock;	
     GError * tmp_err=NULL;
     int ret =gfalt_copy_file(cont->context, NULL, src.c_str(), dst.c_str(), &tmp_err);
@@ -140,7 +190,7 @@ int Gfal::filecopy(const std::string &src, const std::string &dst){
 }
 
 
-int Gfal::filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst){
+int Gfal::filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst) {
 	GfalPy::scopedGILRelease unlock;	
     GError * tmp_err=NULL;
     int ret = gfalt_copy_file(cont->context, p.params, src.c_str(), dst.c_str(), &tmp_err);
@@ -374,6 +424,14 @@ boost::shared_ptr<Gfal::GfalFile> Gfal::open(const std::string & path, const std
 
 boost::shared_ptr<Gfal::GfalFile> Gfal::file(const std::string & path, const std::string &flag){
     return open(path, flag);
+}
+
+boost::shared_ptr<Gfal::GfalDirectory> Gfal::opendir(const std::string & path) {
+	return boost::shared_ptr<Gfal::GfalDirectory>(new Gfal::GfalDirectory(*this, path));
+}
+
+boost::shared_ptr<Gfal::GfalDirectory> Gfal::directory(const std::string & path) {
+	return opendir(path);
 }
 
 int Gfal::get_opt_integer(const std::string & nmspace, const std::string & key){

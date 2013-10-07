@@ -68,65 +68,37 @@ BOOST_PYTHON_MODULE(gfal2)
 	GErrorPyType = createGErrorException(gfal2Scope);
 
     scope scope_posix =  class_<Gfal>("creat_context")
-	.def("open", &Gfal::open)
-
+    .def("open", &Gfal::open)
     .def("file", &Gfal::file)
-	
+    .def("opendir", &Gfal::opendir)
+    .def("directory", &Gfal::directory)
     .def("access", &Gfal::access)
-    
     .def("lstat", &Gfal::lstat)
-    
     .def("stat", &Gfal::stat_c)
-    
     .def("chmod", &Gfal::chmod)
-    
     .def("unlink", &Gfal::unlink)
-    
     .def("mkdir", &Gfal::mkdir)
-    
     .def("rmdir", &Gfal::rmdir)
-    
     .def("listdir", &Gfal::listdir)
-    
     .def("rename", &Gfal::rename)
-    
     .def("readlink", &Gfal::readlink)
-    
     .def("symlink", &Gfal::symlink)
-
-    .def("checksum", static_cast<std::string (Gfal::*)(const std::string & uri, const std::string & chk_type,
-                                              off_t start_offset, size_t data_length)>(&Gfal::checksum))
-    
+    .def("checksum", static_cast<std::string (Gfal::*)(const std::string & uri, const std::string & chk_type,off_t start_offset, size_t data_length)>(&Gfal::checksum))
     .def("checksum", static_cast<std::string (Gfal::*)(const std::string & uri, const std::string & chk_type)>(&Gfal::checksum))
-
     .def("getxattr", &Gfal::getxattr)
-    
     .def("setxattr", &Gfal::setxattr)
-    
     .def("listxattr", &Gfal::listxattr)
-
     .def("get_opt_integer", &Gfal::get_opt_integer)
-
     .def("get_opt_boolean", &Gfal::get_opt_boolean)
-
     .def("get_opt_string", &Gfal::get_opt_string)
-
     .def("get_opt_string_list", &Gfal::get_opt_string_list)
-
     .def("set_opt_string_list", &Gfal::set_opt_string_list)
-
     .def("set_opt_string", &Gfal::set_opt_string)
-
     .def("set_opt_boolean", &Gfal::set_opt_boolean)
-
     .def("set_opt_integer", &Gfal::set_opt_integer)
-
     .def("filecopy", static_cast<int (Gfal::*)(const std::string & src, const std::string & dst)>(&Gfal::filecopy))
-
     .def("filecopy", static_cast<int (Gfal::*)(const Gfalt_params& p, const std::string & src, const std::string & dst)>(&Gfal::filecopy))
-
     .def("cancel", &Gfal::cancel);
-    ;
 
     // register stat struct
     class_<Gfal::Gstat>("st_stat")
@@ -189,6 +161,11 @@ BOOST_PYTHON_MODULE(gfal2)
         .def("write", &Gfal::GfalFile::write)  
         .def("pwrite", &Gfal::GfalFile::pwrite)
         .def("lseek", &Gfal::GfalFile::lseek)
+    ;
+    
+    class_<Gfal::GfalDirectory, boost::shared_ptr<Gfal::GfalDirectory> >("DirectoryType",  init<Gfal, const std::string &>())
+        .def("read", &Gfal::GfalDirectory::read)
+        .def("readpp", &Gfal::GfalDirectory::readpp)
     ;
 
 }
