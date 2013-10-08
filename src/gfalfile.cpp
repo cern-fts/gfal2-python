@@ -279,6 +279,19 @@ int Gfal::mkdir(const std::string & path, mode_t mode){
 }
 
 /**
+ * wrapper to gfal_mkdir_rec function
+ *
+ * */
+int Gfal::mkdir_rec(const std::string & path, mode_t mode){
+	GfalPy::scopedGILRelease unlock;
+    GError* tmp_err=NULL;
+    const int ret = gfal2_mkdir_rec(cont->context, path.c_str(), mode, &tmp_err);
+	if(ret <  0)
+        check_GError(&tmp_err);
+	return 0;
+}
+
+/**
  * wrapper to gfal_mkdir function
  * 
  * */

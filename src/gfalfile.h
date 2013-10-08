@@ -180,6 +180,8 @@ public:
 
     int mkdir(const std::string &, mode_t mode);
 
+    int mkdir_rec(const std::string &, mode_t mode);
+
     int rmdir(const std::string &);
 
 
