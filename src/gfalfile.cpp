@@ -426,6 +426,43 @@ boost::python::list Gfal::listxattr(const std::string & file ){
 	return resu;		
 }
 
+/**
+ * wrapper for bring online and family
+ */
+boost::python::tuple Gfal::bring_online(const std::string& path, time_t pintime,
+                         time_t timeout, bool async)
+{
+    GError* tmp_err = NULL;
+    char token[128] = {0};
+    int ret = gfal2_bring_online(cont->context, path.c_str(),
+                                 pintime, timeout,
+                                 token, sizeof(token),
+                                 async, &tmp_err);
+
+    if (ret < 0)
+        check_GError(&tmp_err);
+
+    return boost::python::make_tuple(ret, std::string(token));
+}
+
+int Gfal::bring_online_poll(const std::string& path, const std::string& token)
+{
+    GError* tmp_err = NULL;
+    int ret = gfal2_bring_online_poll(cont->context, path.c_str(), token.c_str(), &tmp_err);
+    if (ret < 0)
+        check_GError(&tmp_err);
+    return ret;
+}
+
+
+int Gfal::release(const std::string& path, const std::string& token)
+{
+    GError* tmp_err = NULL;
+    int ret = gfal2_release_file(cont->context, path.c_str(), token.c_str(), &tmp_err);
+    if (ret < 0)
+        check_GError(&tmp_err);
+    return ret;
+}
 
 
 /**

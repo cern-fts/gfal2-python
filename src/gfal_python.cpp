@@ -99,7 +99,11 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("set_opt_integer", &Gfal::set_opt_integer)
     .def("filecopy", static_cast<int (Gfal::*)(const std::string & src, const std::string & dst)>(&Gfal::filecopy))
     .def("filecopy", static_cast<int (Gfal::*)(const Gfalt_params& p, const std::string & src, const std::string & dst)>(&Gfal::filecopy))
-    .def("cancel", &Gfal::cancel);
+    .def("cancel", &Gfal::cancel)
+    .def("bring_online", &Gfal::bring_online)
+    .def("bring_online_poll", &Gfal::bring_online_poll)
+    .def("release", &Gfal::release);
+
 
     // register stat struct
     class_<Gfal::Gstat>("st_stat")

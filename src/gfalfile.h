@@ -231,6 +231,15 @@ public:
     int filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst);
 
  //   int filecopy(const Gfalt_params &params, const std::string & src, const std::string & dst);
+
+    // bring online and related
+    boost::python::tuple bring_online(const std::string& path, time_t pintime,
+                             time_t timeout, bool async);
+
+    int bring_online_poll(const std::string& path, const std::string& token);
+
+
+    int release(const std::string& path, const std::string& token);
 };
 
 int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);
