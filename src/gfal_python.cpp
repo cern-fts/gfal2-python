@@ -121,9 +121,18 @@ BOOST_PYTHON_MODULE(gfal2)
 		.def("__str__", &Gfal::Gstat::string_rep)
 		.def("__repr__", &Gfal::Gstat::string_rep)
 	;
+	
+	// register dirent struct
+    class_<Gfal::Gdirent>("st_dirent")
+    	.add_property("d_ino", &Gfal::Gdirent::get_d_ino)
+    	.add_property("d_off", &Gfal::Gdirent::get_d_off)
+    	.add_property("d_reclen", &Gfal::Gdirent::get_d_ino)
+    	.add_property("d_type", &Gfal::Gdirent::get_d_type)
+    	.add_property("d_name", &Gfal::Gdirent::get_d_name)
+	;
 
     // Transfer parameters
-    class_<Gfalt_params >("transfer_parameters")
+    class_<Gfalt_params>("transfer_parameters")
         .def("copy", &Gfalt_params::copy)
         .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout)
         .add_property("checksum_check", &Gfalt_params::get_checksum_check, &Gfalt_params::set_checksum_check)

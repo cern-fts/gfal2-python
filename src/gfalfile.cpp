@@ -25,10 +25,10 @@
 #include <unistd.h>
 #include "gfal_boost_include.hpp"
 
+
 #include "gfalfile.h"
 
 static const ssize_t MAX_BUFFER_SIZE=4096;
-
 
 static int convert_open_flag_py_to_cpp(const std::string & str){
 	if( str.compare("rw") == 0 || str.compare("rw") == 0)
@@ -149,16 +149,17 @@ Gfal::GfalDirectory::~GfalDirectory() {
         (void) gfal2_closedir(cont->context, d, NULL);
  }
 
-Gfal::Gdirent Gfal::GfalDirectory::readpp(Gstat & stat) {
+boost::python::tuple Gfal::GfalDirectory::readpp() {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
     Gdirent* dirent;
+    Gstat stat;
 
     dirent = static_cast<Gdirent*>(gfal2_readdirpp(cont->context, d, &stat, &tmp_err));
     if(dirent == NULL)
     	check_GError(&tmp_err);
 
-    return *dirent;
+    return boost::python::make_tuple<Gdirent, Gstat>(*dirent, stat);
 }
 
 Gfal::Gdirent Gfal::GfalDirectory::read() {
@@ -172,7 +173,6 @@ Gfal::Gdirent Gfal::GfalDirectory::read() {
 
     return *dirent;
 }
-
 
 
 

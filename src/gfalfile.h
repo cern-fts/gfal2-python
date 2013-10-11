@@ -68,11 +68,12 @@ public:
 
     class Gdirent : public dirent {
     public:
-        ino_t          get_d_ino();       /* inode number */
-        off_t          get_d_off();       /* offset to the next dirent */
-        unsigned short get_d_reclen();    /* length of this record */
-        unsigned char  get_d_type();      /* type of file; not supported by all file system types */
-        std::string     get_d_name(); /* filename */
+        ino_t          		get_d_ino();       /* inode number */
+        off_t          		get_d_off();       /* offset to the next dirent */
+        unsigned short 	get_d_reclen();    /* length of this record */
+        unsigned char  	get_d_type();      /* type of file; not supported by all file system types */
+        std::string     	get_d_name(); /* filename */
+        std::string 		string_rep();
     };
 
     class Gstat : public stat {
@@ -143,7 +144,7 @@ public:
     					const std::string & path);
     		virtual ~GfalDirectory();
     		// wrapper to the gfal_readdirpp call
-    		Gdirent readpp(Gstat & stat);
+    		boost::python::tuple readpp();
     		// wrapper to the gfal_readdir call
     		Gdirent read();
 

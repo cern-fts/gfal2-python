@@ -49,3 +49,15 @@ std::string Gfal::Gdirent::get_d_name() {
         return ent->d_name;
 }
 
+std::string Gfal::Gdirent::string_rep() {
+    struct dirent * ent = this;
+	std::ostringstream res;
+	res << "inode: " << ent->d_ino << std::endl;
+	res << "offset: " << ent->d_off << std::endl;
+	res << "length: " << ent->d_reclen << std::endl;
+	res << "type: " << ent->d_type << std::endl;
+	res << "name: " << ent->d_name << std::endl;
+
+	return res.str();
+}
+
