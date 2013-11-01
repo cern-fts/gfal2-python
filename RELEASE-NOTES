@@ -1,5 +1,13 @@
 Trunk
+
+* 1.3.0-1 : 
  - Correct a GError to python exception translation problem
+ - implement callback for transfer ( performance marker )
+ - correct bug concerning verbose level
+ - add calls needed by LHCb ( stating )
+ - several bug fixes related to gfal2-utils
+ - implement partial list directory content ( readdir / readdirpp )
+ - First release compatible with gfal2-utils
 
 * Fri Apr 26 2013 Adrien Devresse <adevress at cern.ch> - 1.2.0-0
  - include partial r/w operations (pread/pwrite)
