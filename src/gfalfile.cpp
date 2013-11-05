@@ -149,15 +149,17 @@ Gfal::GfalDirectory::~GfalDirectory() {
         (void) gfal2_closedir(cont->context, d, NULL);
  }
 
-boost::python::tuple Gfal::GfalDirectory::readpp() {
+boost::python::object Gfal::GfalDirectory::readpp() {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
     Gdirent* dirent;
     Gstat stat;
 
     dirent = static_cast<Gdirent*>(gfal2_readdirpp(cont->context, d, &stat, &tmp_err));
-    if(dirent == NULL)
+    if(dirent == NULL) {
     	check_GError(&tmp_err);
+    	return boost::python::object();
+    }
 
     return boost::python::make_tuple<Gdirent, Gstat>(*dirent, stat);
 }
@@ -165,13 +167,12 @@ boost::python::tuple Gfal::GfalDirectory::readpp() {
 Gfal::Gdirent Gfal::GfalDirectory::read() {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    Gdirent* dirent;
 
-    dirent = static_cast<Gdirent*>(gfal2_readdir(cont->context, d, &tmp_err));
-    if(dirent == NULL)
+    struct dirent* entry = gfal2_readdir(cont->context, d, &tmp_err);
+    if(entry == NULL)
     	check_GError(&tmp_err);
 
-    return *dirent;
+    return Gdirent(entry);
 }
 
 

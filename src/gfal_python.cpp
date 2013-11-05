@@ -129,6 +129,7 @@ BOOST_PYTHON_MODULE(gfal2)
     	.add_property("d_reclen", &Gfal::Gdirent::get_d_ino)
     	.add_property("d_type", &Gfal::Gdirent::get_d_type)
     	.add_property("d_name", &Gfal::Gdirent::get_d_name)
+    	.def("__nonzero__", &Gfal::Gdirent::isValid)
 	;
 
     // Transfer parameters

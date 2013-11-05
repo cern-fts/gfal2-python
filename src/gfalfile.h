@@ -74,6 +74,23 @@ public:
         unsigned char  	get_d_type();      /* type of file; not supported by all file system types */
         std::string     	get_d_name(); /* filename */
         std::string 		string_rep();
+
+        bool _end_of_directory;
+        bool isValid() { return !_end_of_directory; }
+
+        Gdirent(): _end_of_directory(true) {
+        }
+
+        Gdirent(struct dirent* entry) {
+            _end_of_directory = (entry == NULL);
+            if (!_end_of_directory) {
+                d_ino    = entry->d_ino;
+                d_off    = entry->d_off;
+                d_reclen = entry->d_reclen;
+                d_type   = entry->d_type;
+                strncpy(d_name, entry->d_name, sizeof(d_name));
+            }
+        }
     };
 
     class Gstat : public stat {
@@ -144,7 +161,7 @@ public:
     					const std::string & path);
     		virtual ~GfalDirectory();
     		// wrapper to the gfal_readdirpp call
-    		boost::python::tuple readpp();
+    		boost::python::object readpp();
     		// wrapper to the gfal_readdir call
     		Gdirent read();
 
