@@ -157,8 +157,8 @@ boost::python::object Gfal::GfalDirectory::readpp() {
 
     dirent = static_cast<Gdirent*>(gfal2_readdirpp(cont->context, d, &stat, &tmp_err));
     if(dirent == NULL) {
-    	check_GError(&tmp_err);
-    	return boost::python::object();
+        check_GError(&tmp_err);
+        return boost::python::make_tuple<boost::python::object, boost::python::object>(boost::python::object(), boost::python::object());
     }
 
     return boost::python::make_tuple<Gdirent, Gstat>(*dirent, stat);
