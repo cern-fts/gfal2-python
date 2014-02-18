@@ -153,15 +153,15 @@ boost::python::object Gfal::GfalDirectory::readpp() {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
     Gdirent* dirent;
-    Gstat stat;
+    GStat stat;
 
-    dirent = static_cast<Gdirent*>(gfal2_readdirpp(cont->context, d, &stat, &tmp_err));
+    dirent = static_cast<Gdirent*>(gfal2_readdirpp(cont->context, d, &stat._st, &tmp_err));
     if(dirent == NULL) {
         check_GError(&tmp_err);
         return boost::python::make_tuple<boost::python::object, boost::python::object>(boost::python::object(), boost::python::object());
     }
 
-    return boost::python::make_tuple<Gdirent, Gstat>(*dirent, stat);
+    return boost::python::make_tuple<Gdirent, GStat>(*dirent, stat);
 }
 
 Gfal::Gdirent Gfal::GfalDirectory::read() {
@@ -202,24 +202,24 @@ int Gfal::filecopy(const Gfalt_params & p, const std::string & src, const std::s
 /**
  * wrapper to gfal_lstat function
  */
-Gfal::Gstat Gfal::lstat(const std::string & path) {
+Gfal::GStat Gfal::lstat(const std::string & path) {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
-	Gstat st;
-    const int ret = gfal2_lstat(cont->context, path.c_str(), &st, &tmp_err);
+    GStat st;
+    const int ret = gfal2_lstat(cont->context, path.c_str(), &st._st, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
-	return st;	
+    return st;
 }
 
 /**
  * wrapper to gfal_stat function
  */
-Gfal::Gstat Gfal::stat_c(const std::string & path) {
+Gfal::GStat Gfal::stat_c(const std::string & path) {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
-	Gstat st;
-    const int ret = gfal2_stat(cont->context, path.c_str(), &st, &tmp_err);
+    GStat st;
+    const int ret = gfal2_stat(cont->context, path.c_str(), &st._st, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 	return st;	

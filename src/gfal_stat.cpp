@@ -22,69 +22,75 @@
 #include "gfalfile.h"
 
 
+Gfal::GStat::GStat(){
+    memset(&_st,0, sizeof(struct stat));
+}
+
+Gfal::GStat::GStat(const GStat & orig){
+    memcpy(&_st, &(orig._st), sizeof(struct stat));
+}
+
+
 	
-dev_t Gfal::Gstat::get_st_dev(){
-	struct stat * st = this;	
-	return st->st_dev;
+dev_t Gfal::GStat::get_st_dev(){
+    return _st.st_dev;
 }
 
-ino_t Gfal::Gstat::get_st_ino(){
-	struct stat * st = this;	
-	return st->st_ino;
+ino_t Gfal::GStat::get_st_ino(){
+
+    return _st.st_ino;
 }
 
-mode_t Gfal::Gstat::get_st_mode(){
-	struct stat * st = this;	
-	return st->st_mode;
+mode_t Gfal::GStat::get_st_mode(){
+
+    return _st.st_mode;
 }
 
-nlink_t Gfal::Gstat::get_st_nlink(){
-	struct stat * st = this;
-	return st->st_nlink;
+nlink_t Gfal::GStat::get_st_nlink(){
+    return _st.st_nlink;
 }
 
-uid_t Gfal::Gstat::get_st_uid(){
-	struct stat * st = this;	
-	return st->st_uid;
+uid_t Gfal::GStat::get_st_uid(){
+
+    return _st.st_uid;
 }
 
-gid_t Gfal::Gstat::get_st_gid(){
-	struct stat * st = this;	
-	return st->st_gid;
+gid_t Gfal::GStat::get_st_gid(){
+
+    return _st.st_gid;
 }
 
-off_t Gfal::Gstat::get_st_size(){
-	struct stat * st = this;	
-	return st->st_size;
+off_t Gfal::GStat::get_st_size(){
+
+    return _st.st_size;
 }
 
-time_t Gfal::Gstat::get_st_atime(){
-	struct stat * st = this;	
-	return st->st_atime;
+time_t Gfal::GStat::get_st_atime(){
+
+    return _st.st_atime;
 }
 
-time_t Gfal::Gstat::get_st_mtime(){
-	struct stat * st = this;	
-	return st->st_mtime;
+time_t Gfal::GStat::get_st_mtime(){
+
+    return _st.st_mtime;
 }
 
-time_t Gfal::Gstat::get_st_ctime(){
-	struct stat * st = this;	
-	return st->st_ctime;
+time_t Gfal::GStat::get_st_ctime(){
+
+    return _st.st_ctime;
 }
 
-std::string Gfal::Gstat::string_rep() {
-	struct stat * st = this;
+std::string Gfal::GStat::string_rep() {
 	std::ostringstream res;
-	res << "uid: " << st->st_uid << std::endl;
-	res << "gid: " << st->st_gid << std::endl;
-	res << "mode: " << std::oct << st->st_mode << std::endl;
-	res << "size: " << st->st_size << std::endl;
-	res << "nlink: " << st->st_nlink << std::endl;
-	res << "ino: " << st->st_ino << std::endl;
-	res << "ctime: " << st->st_ctime << std::endl;
-	res << "atime: " << st->st_atime << std::endl;
-	res << "mtime: " << st->st_mtime << std::endl;
+    res << "uid: " << _st.st_uid << std::endl;
+    res << "gid: " << _st.st_gid << std::endl;
+    res << "mode: " << std::oct << _st.st_mode << std::endl;
+    res << "size: " << _st.st_size << std::endl;
+    res << "nlink: " << _st.st_nlink << std::endl;
+    res << "ino: " << _st.st_ino << std::endl;
+    res << "ctime: " << _st.st_ctime << std::endl;
+    res << "atime: " << _st.st_atime << std::endl;
+    res << "mtime: " << _st.st_mtime << std::endl;
 
 	return res.str();
 }

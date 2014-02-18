@@ -81,6 +81,7 @@ public:
         Gdirent(): _end_of_directory(true) {
         }
 
+
         Gdirent(struct dirent* entry) {
             _end_of_directory = (entry == NULL);
             if (!_end_of_directory) {
@@ -91,10 +92,15 @@ public:
                 strncpy(d_name, entry->d_name, sizeof(d_name));
             }
         }
+
     };
 
-    class Gstat : public stat {
+    class GStat{
     public:
+        GStat();
+
+        GStat(const GStat & orig);
+
         dev_t get_st_dev();
 
         ino_t get_st_ino();
@@ -116,6 +122,8 @@ public:
         time_t get_st_ctime();
 
         std::string string_rep();
+
+        struct stat _st;
 
     } ;
 
@@ -161,7 +169,7 @@ public:
     					const std::string & path);
     		virtual ~GfalDirectory();
     		// wrapper to the gfal_readdirpp call
-    		boost::python::object readpp();
+            boost::python::object readpp();
     		// wrapper to the gfal_readdir call
     		Gdirent read();
 
@@ -186,9 +194,9 @@ public:
     boost::shared_ptr<GfalDirectory> opendir(const std::string & path);
     boost::shared_ptr<GfalDirectory> directory(const std::string & path);
 
-    Gstat lstat(const std::string & path);
+    GStat lstat(const std::string & path);
 
-    Gstat stat_c(const std::string & path);
+    GStat stat_c(const std::string & path);
 
     int access(const std::string &, int flag);
 

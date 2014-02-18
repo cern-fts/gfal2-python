@@ -106,20 +106,20 @@ BOOST_PYTHON_MODULE(gfal2)
 
 
     // register stat struct
-    class_<Gfal::Gstat>("st_stat")
-		.add_property("st_dev", &Gfal::Gstat::get_st_dev)
-		.add_property("st_ino", &Gfal::Gstat::get_st_ino)
-		.add_property("st_mode", &Gfal::Gstat::get_st_mode)
-		.add_property("st_nlink", &Gfal::Gstat::get_st_nlink)
-		.add_property("st_atime", &Gfal::Gstat::get_st_atime)
-		.add_property("st_mtime", &Gfal::Gstat::get_st_mtime)
-		.add_property("st_ctime", &Gfal::Gstat::get_st_ctime)
-		.add_property("st_gid", &Gfal::Gstat::get_st_gid)
-		.add_property("st_uid", &Gfal::Gstat::get_st_uid)
-		.add_property("st_size", &Gfal::Gstat::get_st_size)
+    class_<Gfal::GStat>("st_stat")
+        .add_property("st_dev", &Gfal::GStat::get_st_dev)
+        .add_property("st_ino", &Gfal::GStat::get_st_ino)
+        .add_property("st_mode", &Gfal::GStat::get_st_mode)
+        .add_property("st_nlink", &Gfal::GStat::get_st_nlink)
+        .add_property("st_atime", &Gfal::GStat::get_st_atime)
+        .add_property("st_mtime", &Gfal::GStat::get_st_mtime)
+        .add_property("st_ctime", &Gfal::GStat::get_st_ctime)
+        .add_property("st_gid", &Gfal::GStat::get_st_gid)
+        .add_property("st_uid", &Gfal::GStat::get_st_uid)
+        .add_property("st_size", &Gfal::GStat::get_st_size)
 		
-		.def("__str__", &Gfal::Gstat::string_rep)
-		.def("__repr__", &Gfal::Gstat::string_rep)
+        .def("__str__", &Gfal::GStat::string_rep)
+        .def("__repr__", &Gfal::GStat::string_rep)
 	;
 	
 	// register dirent struct
