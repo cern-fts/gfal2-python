@@ -20,7 +20,7 @@
 
 Name:				gfal2-python
 Version:			1.3.0
-Release:			1%{?dist}
+Release:			2%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
