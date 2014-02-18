@@ -82,15 +82,15 @@ time_t Gfal::GStat::get_st_ctime(){
 
 std::string Gfal::GStat::string_rep() {
 	std::ostringstream res;
-    res << "uid: " << _st.st_uid << std::endl;
-    res << "gid: " << _st.st_gid << std::endl;
-    res << "mode: " << std::oct << _st.st_mode << std::endl;
-    res << "size: " << _st.st_size << std::endl;
-    res << "nlink: " << _st.st_nlink << std::endl;
-    res << "ino: " << _st.st_ino << std::endl;
-    res << "ctime: " << _st.st_ctime << std::endl;
-    res << "atime: " << _st.st_atime << std::endl;
-    res << "mtime: " << _st.st_mtime << std::endl;
+    res << "uid: " << _st.st_uid << '\n';
+    res << "gid: " << _st.st_gid << '\n';
+    res << "mode: " << std::oct << _st.st_mode << '\n';
+    res << "size: " << _st.st_size << '\n';
+    res << "nlink: " << _st.st_nlink << '\n';
+    res << "ino: " << _st.st_ino << '\n';
+    res << "ctime: " << _st.st_ctime << '\n';
+    res << "atime: " << _st.st_atime << '\n';
+    res << "mtime: " << _st.st_mtime << '\n';
 
 	return res.str();
 }
