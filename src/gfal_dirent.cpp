@@ -22,41 +22,60 @@
 #include "gfalfile.h"
 
 
-ino_t Gfal::Gdirent::get_d_ino() {
-	struct dirent * ent = this;
-	return ent->d_ino;
-}
-
-off_t Gfal::Gdirent::get_d_off() {
-        struct dirent * ent = this;
-        return ent->d_off;
+Gfal::GDirent::GDirent() :
+    _dir(),
+    _end_of_directory(true) {
+    memset(&_dir, 0, sizeof(struct dirent));
 }
 
 
-unsigned short Gfal::Gdirent::get_d_reclen() {
-        struct dirent * ent = this;
-        return ent->d_reclen;
+Gfal::GDirent::GDirent(struct dirent* entry) {
+    _end_of_directory = (entry == NULL);
+    if (!_end_of_directory) {
+        memcpy(&_dir, entry, sizeof(struct dirent));
+    }else{
+        memset(&_dir, 0, sizeof(struct dirent));
+    }
 }
 
-unsigned char Gfal::Gdirent::get_d_type() {
-        struct dirent * ent = this;
-        return ent->d_type;
+Gfal::GDirent::GDirent(const GDirent & orig){
+    memcpy(&_dir, &orig._dir, sizeof(struct dirent));
+}
+
+ino_t Gfal::GDirent::get_d_ino() {
+    return _dir.d_ino;
+}
+
+off_t Gfal::GDirent::get_d_off() {
+
+        return _dir.d_off;
 }
 
 
-std::string Gfal::Gdirent::get_d_name() {
-        struct dirent * ent = this;
-        return ent->d_name;
+unsigned short Gfal::GDirent::get_d_reclen() {
+
+        return _dir.d_reclen;
 }
 
-std::string Gfal::Gdirent::string_rep() {
-    struct dirent * ent = this;
+unsigned char Gfal::GDirent::get_d_type() {
+
+        return _dir.d_type;
+}
+
+
+std::string Gfal::GDirent::get_d_name() {
+
+        return std::string(_dir.d_name);
+}
+
+std::string Gfal::GDirent::string_rep() {
+
 	std::ostringstream res;
-	res << "inode: " << ent->d_ino << std::endl;
-	res << "offset: " << ent->d_off << std::endl;
-	res << "length: " << ent->d_reclen << std::endl;
-	res << "type: " << ent->d_type << std::endl;
-	res << "name: " << ent->d_name << std::endl;
+    res << "inode: " << _dir.d_ino << std::endl;
+    res << "offset: " << _dir.d_off << std::endl;
+    res << "length: " << _dir.d_reclen << std::endl;
+    res << "type: " << _dir.d_type << std::endl;
+    res << "name: " << _dir.d_name << std::endl;
 
 	return res.str();
 }

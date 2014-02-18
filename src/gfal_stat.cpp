@@ -60,7 +60,7 @@ gid_t Gfal::GStat::get_st_gid(){
     return _st.st_gid;
 }
 
-off_t Gfal::GStat::get_st_size(){
+size_t Gfal::GStat::get_st_size(){
 
     return _st.st_size;
 }

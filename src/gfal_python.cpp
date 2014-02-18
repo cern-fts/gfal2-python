@@ -106,7 +106,7 @@ BOOST_PYTHON_MODULE(gfal2)
 
 
     // register stat struct
-    class_<Gfal::GStat>("st_stat")
+    class_<Gfal::GStat, boost::shared_ptr<Gfal::GStat> >("_c_st_stat")
         .add_property("st_dev", &Gfal::GStat::get_st_dev)
         .add_property("st_ino", &Gfal::GStat::get_st_ino)
         .add_property("st_mode", &Gfal::GStat::get_st_mode)
@@ -123,13 +123,13 @@ BOOST_PYTHON_MODULE(gfal2)
 	;
 	
 	// register dirent struct
-    class_<Gfal::Gdirent>("st_dirent")
-    	.add_property("d_ino", &Gfal::Gdirent::get_d_ino)
-    	.add_property("d_off", &Gfal::Gdirent::get_d_off)
-    	.add_property("d_reclen", &Gfal::Gdirent::get_d_ino)
-    	.add_property("d_type", &Gfal::Gdirent::get_d_type)
-    	.add_property("d_name", &Gfal::Gdirent::get_d_name)
-    	.def("__nonzero__", &Gfal::Gdirent::isValid)
+    class_<Gfal::GDirent, boost::shared_ptr<Gfal::GDirent> >("_c_st_dirent")
+        .add_property("d_ino", &Gfal::GDirent::get_d_ino)
+        .add_property("d_off", &Gfal::GDirent::get_d_off)
+        .add_property("d_reclen", &Gfal::GDirent::get_d_ino)
+        .add_property("d_type", &Gfal::GDirent::get_d_type)
+        .add_property("d_name", &Gfal::GDirent::get_d_name)
+        .def("__nonzero__", &Gfal::GDirent::isValid)
 	;
 
     // Transfer parameters
@@ -178,7 +178,7 @@ BOOST_PYTHON_MODULE(gfal2)
         .def("lseek", &Gfal::GfalFile::lseek)
     ;
     
-    class_<Gfal::GfalDirectory, boost::shared_ptr<Gfal::GfalDirectory> >("DirectoryType",  init<Gfal, const std::string &>())
+    class_<Gfal::GfalDirectory, boost::shared_ptr<Gfal::GfalDirectory>, boost::noncopyable >("DirectoryType",  init<Gfal, const std::string &>())
         .def("read", &Gfal::GfalDirectory::read)
         .def("readpp", &Gfal::GfalDirectory::readpp)
     ;

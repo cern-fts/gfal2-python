@@ -66,8 +66,12 @@ public:
 
     virtual ~Gfal(){}
 
-    class Gdirent : public dirent {
+    class GDirent{
     public:
+        struct dirent _dir;
+        bool _end_of_directory;
+
+
         ino_t          		get_d_ino();       /* inode number */
         off_t          		get_d_off();       /* offset to the next dirent */
         unsigned short 	get_d_reclen();    /* length of this record */
@@ -75,23 +79,12 @@ public:
         std::string     	get_d_name(); /* filename */
         std::string 		string_rep();
 
-        bool _end_of_directory;
         bool isValid() { return !_end_of_directory; }
 
-        Gdirent(): _end_of_directory(true) {
-        }
 
-
-        Gdirent(struct dirent* entry) {
-            _end_of_directory = (entry == NULL);
-            if (!_end_of_directory) {
-                d_ino    = entry->d_ino;
-                d_off    = entry->d_off;
-                d_reclen = entry->d_reclen;
-                d_type   = entry->d_type;
-                strncpy(d_name, entry->d_name, sizeof(d_name));
-            }
-        }
+        GDirent();
+        GDirent(struct dirent* entry);
+        GDirent(const GDirent & orig);
 
     };
 
@@ -113,7 +106,7 @@ public:
 
         gid_t get_st_gid();
 
-        off_t get_st_size();
+        size_t get_st_size();
 
         time_t get_st_atime();
 
@@ -162,16 +155,16 @@ public:
             int fd;
     };
 
-    class GfalDirectory
+    class GfalDirectory : protected boost::noncopyable
     {
     	public:
     		GfalDirectory(const Gfal & context,
     					const std::string & path);
     		virtual ~GfalDirectory();
     		// wrapper to the gfal_readdirpp call
-            boost::python::object readpp();
+            boost::python::tuple readpp();
     		// wrapper to the gfal_readdir call
-    		Gdirent read();
+            boost::shared_ptr<GDirent> read();
 
 		private:
 			/* add your private declarations */
