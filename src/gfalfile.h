@@ -127,7 +127,7 @@ public:
 
     } ;
 
-    class GfalFile
+    class GfalFile : protected boost::noncopyable
     {
         public:
             GfalFile(const Gfal & context,

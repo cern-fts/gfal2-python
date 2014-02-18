@@ -170,7 +170,7 @@ BOOST_PYTHON_MODULE(gfal2)
     register_exception_translator<GErrorWrapper>(&gerror_exception_translator);
 
     // Create the Python type object for our extension class and define __init__ function.
-    class_<Gfal::GfalFile, boost::shared_ptr<Gfal::GfalFile> >("FileType",  init<Gfal, const std::string &, const std::string &>())
+    class_<Gfal::GfalFile, boost::shared_ptr<Gfal::GfalFile>, boost::noncopyable >("FileType",  init<Gfal, const std::string &, const std::string &>())
         .def("read", &Gfal::GfalFile::read)  // Add a regular member function.
         .def("pread", &Gfal::GfalFile::pread)
         .def("write", &Gfal::GfalFile::write)  
