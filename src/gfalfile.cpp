@@ -133,29 +133,34 @@ off_t Gfal::GfalFile::lseek(off_t offset, int flag) {
  *********** GFAL DIRECTORY
  */
 
-Gfal::GfalDirectory::GfalDirectory(const Gfal & context, const std::string & path) :
-    cont(context.getContext()),
-    path(path)
- {
-	GfalPy::scopedGILRelease unlock;
-    GError* tmp_err=NULL;
-    d = gfal2_opendir(cont->context, path.c_str(), &tmp_err);
-	if(d == NULL)
-        check_GError(&tmp_err);
- }
-
-Gfal::GfalDirectory::~GfalDirectory() {
-    	GfalPy::scopedGILRelease unlock;
-        (void) gfal2_closedir(cont->context, d, NULL);
- }
-
-boost::python::tuple Gfal::GfalDirectory::readpp() {
+Gfal::GfalDirectory::GfalDirectory(const Gfal & context,
+        const std::string & path) :
+        cont(context.getContext()), path(path)
+{
     GfalPy::scopedGILRelease unlock;
-    GError* tmp_err=NULL;
-    boost::shared_ptr<Gfal::GStat> stat( new Gfal::GStat());
+    GError* tmp_err = NULL;
+    d = gfal2_opendir(cont->context, path.c_str(), &tmp_err);
+    if (d == NULL)
+        check_GError(&tmp_err);
+}
 
-    boost::shared_ptr<Gfal::GDirent> dirent(new Gfal::GDirent(gfal2_readdirpp(cont->context, d, &stat->_st, &tmp_err)));
-    if(dirent->isValid() == false) {
+Gfal::GfalDirectory::~GfalDirectory()
+{
+    GfalPy::scopedGILRelease unlock;
+    (void) gfal2_closedir(cont->context, d, NULL);
+}
+
+boost::python::tuple Gfal::GfalDirectory::readpp()
+{
+    GError* tmp_err = NULL;
+    boost::shared_ptr<Gfal::GDirent> dirent;
+    boost::shared_ptr<Gfal::GStat> stat(new Gfal::GStat());
+
+    {
+        GfalPy::scopedGILRelease unlock;
+        dirent.reset(new Gfal::GDirent(gfal2_readdirpp(cont->context, d, &stat->_st, &tmp_err)));
+    }
+    if (dirent->isValid() == false) {
         check_GError(&tmp_err);
         return boost::python::make_tuple(dirent, stat);
     }
