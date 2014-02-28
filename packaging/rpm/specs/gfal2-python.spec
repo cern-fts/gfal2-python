@@ -90,8 +90,8 @@ make DESTDIR=%{buildroot} install
 
 %files doc
 %defattr (-,root,root)
-%dir %{_docdir}/%{name}-%{version}/html
-%{_docdir}/%{name}-%{version}/html/*
+%dir %{_pkgdocdir}/html
+%{_pkgdocdir}/html/*
 
 %changelog
 * Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.0-1
