@@ -162,7 +162,7 @@ boost::python::tuple Gfal::GfalDirectory::readpp()
     }
     if (dirent->isValid() == false) {
         check_GError(&tmp_err);
-        return boost::python::make_tuple(dirent, stat);
+        return boost::python::make_tuple(boost::python::object(), boost::python::object());
     }
 
     return boost::python::make_tuple(dirent, stat);
