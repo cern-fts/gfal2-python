@@ -65,7 +65,8 @@ make clean
 %setup -q
 
 %build
-%cmake -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
+%cmake \
+-DDOC_INSTALL_DIR=%{_pkgdocdir} \
  %{boost_cmake_flags} \
  -DUNIT_TESTS=TRUE . 
 
