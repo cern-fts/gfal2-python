@@ -22,7 +22,7 @@
 %endif
 
 Name:				gfal2-python
-Version:			1.4.0
+Version:			1.4.1
 Release:			1%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
@@ -94,8 +94,8 @@ make DESTDIR=%{buildroot} install
 %{_pkgdocdir}/html/*
 
 %changelog
-* Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.0-1
- - Release 1.4.0 of gfal2 python bindings, see RELEASE-NOTES for details
+* Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.1-1
+ - Release 1.4.1 of gfal2 python bindings, see RELEASE-NOTES for details
 
 * Sat Nov 16 2013 Ville Skyttä <ville.skytta@iki.fi> - 1.3.0-2
 - Install docs to %%{_pkgdocdir} where available (#993774).

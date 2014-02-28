@@ -1,3 +1,6 @@
+* 1.4.1-1 :
+ - fix [LCGUTIL-351] 
+
 * 1.4.0-1 :
 - [LCGUTIL-329] - GFal segmentation fault listing folders with a huge quantity of files
 - Bug correction and shared_ptr support for Stat() and readdirpp()
