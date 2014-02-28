@@ -1,3 +1,6 @@
+%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
+
+
 #include boost > 141 for EL5
 %if 0%{?el5}
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include/boost141 -DBOOST_LIBRARYDIR=%{_libdir}/boost141
@@ -79,19 +82,23 @@ make DESTDIR=%{buildroot} install
 %files
 %defattr (-,root,root)
 %{python_sitearch}/gfal2.so
-%{_docdir}/%{name}-%{version}/LICENSE
-%{_docdir}/%{name}-%{version}/RELEASE-NOTES
-%{_docdir}/%{name}-%{version}/README
+%{_pkgdocdir}/LICENSE
+%{_pkgdocdir}/RELEASE-NOTES
+%{_pkgdocdir}/README
+
 
 %files doc
 %defattr (-,root,root)
 %dir %{_docdir}/%{name}-%{version}/html
 %{_docdir}/%{name}-%{version}/html/*
 
-
 %changelog
 * Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.0-1
  - Release 1.4.0 of gfal2 python bindings, see RELEASE-NOTES for details
+
+* Sat Nov 16 2013 Ville Skyttä <ville.skytta@iki.fi> - 1.3.0-2
+- Install docs to %%{_pkgdocdir} where available (#993774).
+- Own doc dirs.
 
 * Fri Nov 01 2013 Adrien Devresse <adevress at cern.ch> - 1.3.0-1  
  - Release 1.3.0 of gfal2 python bindings, see RELEASE-NOTES for details
