@@ -19,8 +19,8 @@
 %endif
 
 Name:				gfal2-python
-Version:			1.3.0
-Release:			2%{?dist}
+Version:			1.4.0
+Release:			1%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
 License:			ASL 2.0
@@ -30,7 +30,7 @@ Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
-BuildRequires:		gfal2-devel
+BuildRequires:		gfal2-devel >= 2.4.8
 %if 0%{?el5}
 BuildRequires:		boost141-devel
 %else
@@ -90,6 +90,9 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
+* Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.0-1
+ - Release 1.4.0 of gfal2 python bindings, see RELEASE-NOTES for details
+
 * Fri Nov 01 2013 Adrien Devresse <adevress at cern.ch> - 1.3.0-1  
  - Release 1.3.0 of gfal2 python bindings, see RELEASE-NOTES for details
 

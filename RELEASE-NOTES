@@ -1,4 +1,7 @@
-Trunk
+* 1.4.0-1 :
+- [LCGUTIL-329] - GFal segmentation fault listing folders with a huge quantity of files
+- Bug correction and shared_ptr support for Stat() and readdirpp()
+- Fix a problem in the __str__() value of Gfal::Stat() 
 
 * 1.3.0-1 : 
  - Correct a GError to python exception translation problem
