@@ -51,7 +51,7 @@ make clean
 WD=`pwd`
 
 # Build alternative Python
-/usr/bin/wget http://python.org/ftp/python/%{_alt_python_version}/Python-%{_alt_python_version}.tgz
+/usr/bin/wget http://legacy.python.org/ftp/python/%{_alt_python_version}/Python-%{_alt_python_version}.tgz
 tar xzf Python-%{_alt_python_version}.tgz
 cd Python-%{_alt_python_version}
 ./configure --prefix=${WD}/altpython/ --enable-shared
