@@ -41,11 +41,15 @@ static PyObject *GErrorPyType = NULL;
 
 
 
-void gerror_exception_translator(const GErrorWrapper  & x){
+void gerror_exception_translator(const GErrorWrapper  & x) {
 	assert(GErrorPyType != NULL); // check if type init is valid
     PyErr_SetObject(GErrorPyType, Py_BuildValue("si", x.what(), x.code()));
 }
 
+
+Gfal creat_context(void) {
+    return Gfal();
+}
 
 BOOST_PYTHON_MODULE(gfal2)
 {
@@ -55,7 +59,8 @@ BOOST_PYTHON_MODULE(gfal2)
     scope gfal2Scope = scope();
 
     // global functions
-    def("set_verbose", &gfal_set_verbose_enum, "define the log level of gfal 2.0 ");
+    def("set_verbose", &gfal_set_verbose_enum, "define the log level of gfal 2.0");
+    def("creat_context", &creat_context, "create a gfal2 context");
 
     enum_<gfal_verbose_levels>("verbose_level")
             .value("normal",gfal_verbose_normal)
@@ -67,7 +72,7 @@ BOOST_PYTHON_MODULE(gfal2)
 	// register exception
 	GErrorPyType = createGErrorException(gfal2Scope);
 
-    scope scope_posix =  class_<Gfal>("creat_context")
+    scope scope_posix =  class_<Gfal>("Gfal2Context")
     .def("open", &Gfal::open)
     .def("file", &Gfal::file)
     .def("opendir", &Gfal::opendir)
@@ -103,7 +108,6 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("bring_online", &Gfal::bring_online)
     .def("bring_online_poll", &Gfal::bring_online_poll)
     .def("release", &Gfal::release);
-
 
     // register stat struct
     class_<Gfal::GStat, boost::shared_ptr<Gfal::GStat> >("_c_st_stat")
