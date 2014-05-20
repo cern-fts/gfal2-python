@@ -207,6 +207,19 @@ public:
         return overwrite;
     }
 
+    void set_create_parent(bool create_parent) {
+        GError * tmp_err = NULL;
+        gfalt_set_create_parent_dir(params, create_parent, &tmp_err);
+        check_GError(&tmp_err);
+    }
+
+    bool get_create_parent(void) {
+        GError * tmp_err = NULL;
+        gboolean create = gfalt_get_create_parent_dir(params, &tmp_err);
+        check_GError(&tmp_err);
+        return create;
+    }
+
     // Callbacks
     void set_event_callback(PyObject* callable) {
         callback_objs.event_callback = boost::python::object(boost::python::handle<>(callable));
