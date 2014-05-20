@@ -146,7 +146,7 @@ BOOST_PYTHON_MODULE(gfal2)
         .add_property("nbstreams", &Gfalt_params::get_nbstream, &Gfalt_params::set_nbstream)
         .add_property("overwrite", &Gfalt_params::get_overwrite, &Gfalt_params::set_overwrite)
         .add_property("create_parent", &Gfalt_params::get_create_parent, &Gfalt_params::set_create_parent)
-        .add_property("buffersize", &Gfalt_params::get_buffersize, &Gfalt_params::set_buffersize)
+        .add_property("tcp_buffersize", &Gfalt_params::get_tcp_buffersize, &Gfalt_params::set_tcp_buffersize)
         .add_property("event_callback", &Gfalt_params::get_event_callback, &Gfalt_params::set_event_callback)
         .add_property("monitor_callback", &Gfalt_params::get_monitor_callback, &Gfalt_params::set_monitor_callback)
 
