@@ -220,6 +220,19 @@ public:
         return create;
     }
 
+    void set_buffersize(uint64_t buffersize) {
+        GError * tmp_err = NULL;
+        gfalt_set_tcp_buffer_size(params, buffersize, &tmp_err);
+        check_GError(&tmp_err);
+    }
+
+    uint64_t get_buffersize(void) {
+        GError * tmp_err = NULL;
+        uint64_t buffersize = gfalt_get_tcp_buffer_size(params, &tmp_err);
+        check_GError(&tmp_err);
+        return buffersize;
+    }
+
     // Callbacks
     void set_event_callback(PyObject* callable) {
         callback_objs.event_callback = boost::python::object(boost::python::handle<>(callable));
