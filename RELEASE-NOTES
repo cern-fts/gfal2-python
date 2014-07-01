@@ -1,3 +1,7 @@
+* Tue Jul 01 2014 Alejandro Álvarez <aalvarez at cern.ch> - 1.5.0
+ - [LCGUTIL-387] - Add buffer size parameter to gfal-cp
+ - [LCGUTIL-391] - Python bindings do not expose create parent option for copies
+
 * 1.4.1-1 :
  - fix [LCGUTIL-351] 
 
