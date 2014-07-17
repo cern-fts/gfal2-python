@@ -46,7 +46,7 @@ private:
 
     class GfalContextWrapper {
     public:
-        gfal_context_t context;
+        gfal2_context_t context;
 
         GfalContextWrapper() {
             GError* tmp_err=NULL;
