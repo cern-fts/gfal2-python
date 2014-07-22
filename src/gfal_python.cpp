@@ -14,13 +14,13 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
- 
+
 
 /**
  * main file for boost python wrapper
- * 
+ *
  * */
- 
+
 
 #include <iostream>
 #include <string>
@@ -53,9 +53,9 @@ Gfal creat_context(void) {
 
 BOOST_PYTHON_MODULE(gfal2)
 {
-	// initialize multi-threading 
+	// initialize multi-threading
 	PyEval_InitThreads();
-	
+
     scope gfal2Scope = scope();
 
     // global functions
@@ -68,7 +68,7 @@ BOOST_PYTHON_MODULE(gfal2)
             .value("debug", gfal_verbose_debug)
             .value("trace", gfal_verbose_trace)
             ;
-	
+
 	// register exception
 	GErrorPyType = createGErrorException(gfal2Scope);
 
@@ -102,6 +102,7 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("set_opt_string", &Gfal::set_opt_string)
     .def("set_opt_boolean", &Gfal::set_opt_boolean)
     .def("set_opt_integer", &Gfal::set_opt_integer)
+    .def("load_opts_from_file", &Gfal::load_opts_from_file)
     .def("filecopy", static_cast<int (Gfal::*)(const std::string & src, const std::string & dst)>(&Gfal::filecopy))
     .def("filecopy", static_cast<int (Gfal::*)(const Gfalt_params& p, const std::string & src, const std::string & dst)>(&Gfal::filecopy))
     .def("cancel", &Gfal::cancel)
@@ -121,11 +122,11 @@ BOOST_PYTHON_MODULE(gfal2)
         .add_property("st_gid", &Gfal::GStat::get_st_gid)
         .add_property("st_uid", &Gfal::GStat::get_st_uid)
         .add_property("st_size", &Gfal::GStat::get_st_size)
-		
+
         .def("__str__", &Gfal::GStat::string_rep)
         .def("__repr__", &Gfal::GStat::string_rep)
 	;
-	
+
 	// register dirent struct
     class_<Gfal::GDirent, boost::shared_ptr<Gfal::GDirent> >("_c_st_dirent")
         .add_property("d_ino", &Gfal::GDirent::get_d_ino)
@@ -171,7 +172,7 @@ BOOST_PYTHON_MODULE(gfal2)
         .def("__str__", &Gfalt_event::__str__)
         .def("__repr__", &Gfalt_event::__str__)
         ;
-	
+
     // register exception
     register_exception_translator<GErrorWrapper>(&gerror_exception_translator);
 
@@ -179,11 +180,11 @@ BOOST_PYTHON_MODULE(gfal2)
     class_<Gfal::GfalFile, boost::shared_ptr<Gfal::GfalFile>, boost::noncopyable >("FileType",  init<Gfal, const std::string &, const std::string &>())
         .def("read", &Gfal::GfalFile::read)  // Add a regular member function.
         .def("pread", &Gfal::GfalFile::pread)
-        .def("write", &Gfal::GfalFile::write)  
+        .def("write", &Gfal::GfalFile::write)
         .def("pwrite", &Gfal::GfalFile::pwrite)
         .def("lseek", &Gfal::GfalFile::lseek)
     ;
-    
+
     class_<Gfal::GfalDirectory, boost::shared_ptr<Gfal::GfalDirectory>, boost::noncopyable >("DirectoryType",  init<Gfal, const std::string &>())
         .def("read", &Gfal::GfalDirectory::read)
         .def("readpp", &Gfal::GfalDirectory::readpp)

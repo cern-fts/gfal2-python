@@ -14,7 +14,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
- 
+
 
 #include <iostream>
 #include <string>
@@ -243,6 +243,8 @@ public:
 
     int set_opt_boolean(const std::string & nmspace, const std::string & key, bool val);
 
+    int load_opts_from_file(const std::string & path);
+
 
     // transfer
     int filecopy(const std::string & src, const std::string & dst);
@@ -267,4 +269,4 @@ int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);
 boost::shared_ptr<Gfal> create_instance();
 
 
-#endif /* GFALFILE_H */ 
+#endif /* GFALFILE_H */
