@@ -51,6 +51,11 @@ Gfal creat_context(void) {
     return Gfal();
 }
 
+std::string gfal_version_wrapper(void)
+{
+    return gfal_version();
+}
+
 BOOST_PYTHON_MODULE(gfal2)
 {
 	// initialize multi-threading
@@ -59,8 +64,9 @@ BOOST_PYTHON_MODULE(gfal2)
     scope gfal2Scope = scope();
 
     // global functions
-    def("set_verbose", &gfal_set_verbose_enum, "define the log level of gfal 2.0");
+    def("set_verbose", &gfal_set_verbose_enum, "define the log level of gfal2");
     def("creat_context", &creat_context, "create a gfal2 context");
+    def("get_version", &gfal_version_wrapper, "gfal2 version");
 
     enum_<gfal_verbose_levels>("verbose_level")
             .value("normal",gfal_verbose_normal)
