@@ -233,6 +233,19 @@ public:
         return buffersize;
     }
 
+    bool get_strict_copy(void) {
+        GError * tmp_err = NULL;
+        bool strict = gfalt_get_strict_copy_mode(params, &tmp_err);
+        check_GError(&tmp_err);
+        return strict;
+    }
+
+    void set_strict_copy(bool val) {
+        GError * tmp_err = NULL;
+        gfalt_set_strict_copy_mode(params, val, &tmp_err);
+        check_GError(&tmp_err);
+    }
+
     // Callbacks
     void set_event_callback(PyObject* callable) {
         callback_objs.event_callback = boost::python::object(boost::python::handle<>(callable));
