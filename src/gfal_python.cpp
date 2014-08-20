@@ -37,7 +37,7 @@
 using namespace boost::python;
 
 
-static PyObject *GErrorPyType = NULL;
+PyObject *GErrorPyType = NULL;
 
 
 
@@ -111,6 +111,9 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("load_opts_from_file", &Gfal::load_opts_from_file)
     .def("filecopy", static_cast<int (Gfal::*)(const std::string & src, const std::string & dst)>(&Gfal::filecopy))
     .def("filecopy", static_cast<int (Gfal::*)(const Gfalt_params& p, const std::string & src, const std::string & dst)>(&Gfal::filecopy))
+    .def("filecopy", static_cast<boost::python::object (Gfal::*)(const boost::python::list&, const boost::python::list&)>(&Gfal::filecopy))
+    .def("filecopy", static_cast<boost::python::object (Gfal::*)(const Gfalt_params&, const boost::python::list&, const boost::python::list&)>(&Gfal::filecopy))
+    .def("filecopy", static_cast<boost::python::object (Gfal::*)(const Gfalt_params&, const boost::python::list&, const boost::python::list&, const boost::python::list&)>(&Gfal::filecopy))
     .def("cancel", &Gfal::cancel)
     .def("bring_online", &Gfal::bring_online)
     .def("bring_online_poll", &Gfal::bring_online_poll)

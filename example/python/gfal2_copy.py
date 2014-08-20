@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import gfal2
-import logging
 import optparse
 import sys
 

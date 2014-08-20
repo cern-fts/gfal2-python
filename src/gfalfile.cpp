@@ -15,20 +15,20 @@
 * limitations under the License.
 */
 
-
-
-
 #include <gfal_api.h>
 #include <algorithm>
 #include <vector>
 #include <cstring>
 #include <unistd.h>
 #include "gfal_boost_include.hpp"
+#include "GErrorWrapper.h"
 
 
 #include "gfalfile.h"
 
-static const ssize_t MAX_BUFFER_SIZE=4096;
+static const ssize_t MAX_BUFFER_SIZE = 4096;
+extern PyObject *GErrorPyType;
+
 
 static int convert_open_flag_py_to_cpp(const std::string & str){
 	if( str.compare("rw") == 0 || str.compare("rw") == 0)
@@ -199,6 +199,90 @@ int Gfal::filecopy(const Gfalt_params & p, const std::string & src, const std::s
     int ret = gfalt_copy_file(cont->context, p.params, src.c_str(), dst.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return ret;
+}
+
+
+boost::python::object Gfal::filecopy(const boost::python::list& srcs,
+        const boost::python::list& dsts)
+{
+    Gfalt_params params;
+    return filecopy(params, srcs, dsts);
+}
+
+boost::python::object Gfal::filecopy(const Gfalt_params & p, const boost::python::list& srcs,
+        const boost::python::list& dsts)
+{
+    boost::python::list no_chksums;
+    return filecopy(p, srcs, dsts, no_chksums);
+}
+
+boost::python::object Gfal::filecopy(const Gfalt_params & p, const boost::python::list& srcs,
+        const boost::python::list& dsts,
+        const boost::python::list& chksums)
+{
+    GError * op_error = NULL;
+    GError** file_errors = NULL;
+
+    long nbfiles = boost::python::len(srcs);
+    long nbchksum = boost::python::len(chksums);
+
+    if (nbfiles != boost::python::len(dsts))
+        throw GErrorWrapper("Number of sources and destinations do not match", EINVAL);
+    if (nbfiles != nbchksum && nbchksum != 0)
+        throw GErrorWrapper("Number of pairs and checksums do not match", EINVAL);
+
+    std::vector<std::string> sources;
+    std::vector<std::string> destinations;
+    std::vector<std::string> checksums;
+    const char* sources_ptr[nbfiles];
+    const char* destinations_ptr[nbfiles];
+    const char* checksums_ptr[nbfiles];
+    int ret;
+
+    for (long i = 0; i < nbfiles; ++i) {
+        sources.push_back(boost::python::extract<std::string>(srcs[i]));
+        destinations.push_back(boost::python::extract<std::string>(dsts[i]));
+        sources_ptr[i] = sources.back().c_str();
+        destinations_ptr[i] = destinations.back().c_str();
+        if (nbchksum) {
+            checksums.push_back(boost::python::extract<std::string>(chksums[i]));
+            checksums_ptr[i] = checksums.back().c_str();
+        }
+    }
+
+    {
+        GfalPy::scopedGILRelease unlock;
+
+        if (nbchksum == 0) {
+            ret = gfalt_copy_bulk(cont->context, p.params, nbfiles, sources_ptr,
+                    destinations_ptr, NULL, &op_error, &file_errors);
+        }
+        else {
+            ret = gfalt_copy_bulk(cont->context, p.params, nbfiles, sources_ptr,
+                    destinations_ptr, checksums_ptr, &op_error, &file_errors);
+        }
+
+        if (ret < 0 && op_error != NULL)
+            check_GError(&op_error);
+    }
+
+    boost::python::list errors;
+    if (file_errors != NULL) {
+        for (long i = 0; i < nbfiles; ++i) {
+            if (file_errors[i] != NULL) {
+                PyObject* args = Py_BuildValue("si", file_errors[i]->message, file_errors[i]->code);
+                PyObject *err = PyObject_CallObject(GErrorPyType, args);
+                Py_DECREF(args);
+                g_error_free(file_errors[i]);
+                errors.append(boost::python::handle<>(err));
+            }
+            else {
+                errors.append(boost::python::object());
+            }
+        }
+        g_free(file_errors);
+    }
+    return errors;
 }
 
 /**

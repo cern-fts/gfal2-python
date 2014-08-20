@@ -248,8 +248,15 @@ public:
 
     // transfer
     int filecopy(const std::string & src, const std::string & dst);
-    // transfer
     int filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst);
+
+    boost::python::object filecopy(const boost::python::list& srcs,
+            const boost::python::list& dsts);
+    boost::python::object filecopy(const Gfalt_params & p, const boost::python::list& srcs,
+            const boost::python::list& dsts);
+    boost::python::object filecopy(const Gfalt_params & p, const boost::python::list& srcs,
+            const boost::python::list& dsts,
+            const boost::python::list& checksums);
 
  //   int filecopy(const Gfalt_params &params, const std::string & src, const std::string & dst);
 
