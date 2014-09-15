@@ -229,7 +229,7 @@ BOOST_PYTHON_MODULE(gfal2)
 	;
 
     // Transfer parameters
-    class_<Gfalt_params>("transfer_parameters", "filecopy parameters")
+    class_<Gfalt_params>("TransferParameters", "filecopy parameters")
         .def("copy", &Gfalt_params::copy)
         .add_property("timeout", &Gfalt_params::get_timeout, &Gfalt_params::set_timeout,
             "Operation timeout"
@@ -270,6 +270,8 @@ BOOST_PYTHON_MODULE(gfal2)
             "Gets the user specified checksum")
         ;
 
+    scope().attr("transfer_parameters") = scope().attr("TransferParameters");
+
     // Callback types
     enum_<gfal_event_side_t>("event_side")
         .value("event_source", GFAL_EVENT_SOURCE)
@@ -277,7 +279,7 @@ BOOST_PYTHON_MODULE(gfal2)
         .value("event_none", GFAL_EVENT_NONE)
         ;
 
-    class_<Gfalt_event>("gfalt_event")
+    class_<Gfalt_event>("GfaltEvent")
         .add_property("side", &Gfalt_event::side)
         .add_property("timestamp", &Gfalt_event::timestamp)
         .add_property("stage", &Gfalt_event::stage)
@@ -287,6 +289,8 @@ BOOST_PYTHON_MODULE(gfal2)
         .def("__str__", &Gfalt_event::__str__)
         .def("__repr__", &Gfalt_event::__str__)
         ;
+
+    scope().attr("gfalt_event") = scope().attr("GfaltEvent");
 
     // register exception
     register_exception_translator<GErrorWrapper>(&gerror_exception_translator);
