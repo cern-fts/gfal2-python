@@ -75,26 +75,26 @@ Gfal::GfalFile::~GfalFile()
 std::string Gfal::GfalFile::read(size_t count) {
 	GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
-	std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
-    ssize_t ret = gfal2_read(cont->context, fd, &(buf->front()), count, &tmp_err);
+	std::vector<char> buf(count + 1); // vector on the heap for massive buffer size
+    ssize_t ret = gfal2_read(cont->context, fd, &(buf.front()), count, &tmp_err);
 	if(ret <  0)
         check_GError(&tmp_err);
 
-	(*buf)[ret] ='\0';
-	return std::string(&(buf->front()),ret);
+	buf[ret] ='\0';
+	return std::string(&(buf.front()),ret);
 }
 
 
 std::string Gfal::GfalFile::pread(off_t offset, size_t count){
     GfalPy::scopedGILRelease unlock;
     GError* tmp_err=NULL;
-    std::auto_ptr< std::vector<char> > buf(new std::vector<char>(count+1)); // vector on the heap for massive buffer size
-    ssize_t ret = gfal2_pread(cont->context, fd, &(buf->front()), count, offset, &tmp_err);
+    std::vector<char> buf(count + 1); // vector on the heap for massive buffer size
+    ssize_t ret = gfal2_pread(cont->context, fd, &(buf.front()), count, offset, &tmp_err);
     if(ret <  0)
         check_GError(&tmp_err);
 
-    (*buf)[ret] ='\0';
-    return std::string(&(buf->front()),ret);
+    buf[ret] ='\0';
+    return std::string(&(buf.front()),ret);
 }
 
 ssize_t Gfal::GfalFile::write(const std::string & str){
