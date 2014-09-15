@@ -18,7 +18,3 @@ IF(MAIN_DOC)
 
 
 ENDIF(MAIN_DOC)
-
-
-
-

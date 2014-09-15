@@ -12,6 +12,3 @@ modules: @CMAKE_BINARY_DIR@/src/gfal2.so
 # Write html output to the directory "apidocs"
 output: html
 target: html/
-
-
-

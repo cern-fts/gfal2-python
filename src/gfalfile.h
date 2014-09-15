@@ -35,7 +35,7 @@
 #define GFALFILE_H
 
 enum gfal_verbose_levels{
-    gfal_verbose_normal =GFAL_VERBOSE_NORMAL,
+    gfal_verbose_normal = GFAL_VERBOSE_NORMAL,
     gfal_verbose_verbose = GFAL_VERBOSE_VERBOSE,
     gfal_verbose_debug = GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG,
     gfal_verbose_trace = GFAL_VERBOSE_TRACE | GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG

@@ -187,7 +187,7 @@ boost::shared_ptr<Gfal::GDirent> Gfal::GfalDirectory::read() {
 int Gfal::filecopy(const std::string &src, const std::string &dst) {
 	GfalPy::scopedGILRelease unlock;
     GError * tmp_err=NULL;
-    int ret =gfalt_copy_file(cont->context, NULL, src.c_str(), dst.c_str(), &tmp_err);
+    int ret = gfalt_copy_file(cont->context, NULL, src.c_str(), dst.c_str(), &tmp_err);
     check_GError(&tmp_err);
     return ret;
 }
