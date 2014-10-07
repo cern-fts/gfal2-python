@@ -31,7 +31,7 @@ set(OUTPUT_NAME_MAIN "gfal2")
 # EPYDOC definition for EPEL5 support
 if (NOT SKIP_DOC)
     set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/gfal2.so")
-    set(EPYDOC_MODULE_URL "https://svnweb.cern.ch/trac/lcgutil/wiki/gfal2-python")
+    set(EPYDOC_MODULE_URL  "http://dmc.web.cern.ch/projects/gfal2-python")
     set(EPYDOC_MODULE_NAME "gfal2")
 
     include(MacroAddepydoc REQUIRED)
