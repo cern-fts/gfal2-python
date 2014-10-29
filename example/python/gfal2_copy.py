@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 import gfal2
+import logging
 import optparse
 import sys
+
+gfal2.set_verbose(gfal2.verbose_level.debug)
 
 
 def event_callback(event):

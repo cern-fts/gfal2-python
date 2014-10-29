@@ -14,6 +14,8 @@ include(MacroCopyFile REQUIRED)
 include(ReleaseDebugAutoFlags REQUIRED)
 include(CMakeGeneratePkgConfig REQUIRED)
 
+set (Boost_NO_BOOST_CMAKE ON)
+
 find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Boost COMPONENTS python)
