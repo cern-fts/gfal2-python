@@ -262,12 +262,19 @@ public:
 
     // bring online and related
     boost::python::tuple bring_online(const std::string& path, time_t pintime,
-                             time_t timeout, bool async);
+            time_t timeout, bool async);
 
     int bring_online_poll(const std::string& path, const std::string& token);
 
 
     int release(const std::string& path, const std::string& token);
+
+    boost::python::tuple bring_online_list(const boost::python::list& files, time_t pintime,
+            time_t timeout, bool async);
+
+    boost::python::list bring_online_poll_list(const boost::python::list& files, const std::string& token);
+
+    boost::python::list release_list(const boost::python::list& files, const std::string& token);
 };
 
 int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);

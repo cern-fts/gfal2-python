@@ -14,7 +14,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
- 
+
 
 
 #ifndef GERRORWRAPPER_EXCEPTION_H
@@ -34,9 +34,9 @@ class GErrorWrapper : public std::exception
 	public:
         GErrorWrapper(const std::string &msg, int error);
         GErrorWrapper(const GError* gerr);
-		
+
 		virtual ~GErrorWrapper() throw();
-	
+
 		const char * what() const throw();
 		int code() const;
 
@@ -49,5 +49,10 @@ class GErrorWrapper : public std::exception
  * Create GErrorException (inherits from Python's Exception)
  */
 PyObject* createGErrorException(boost::python::scope&);
+
+/**
+ * Translate a list of GError to a list of GErrorException
+ */
+void GError2PyError(boost::python::list& pyerrors, size_t nerrors, GError** g_errors);
 
 #endif /* GERRORWRAPPER_EXCEPTION_H */

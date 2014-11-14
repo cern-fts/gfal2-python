@@ -185,3 +185,24 @@ exception:
     Py_XDECREF(attrs);
     return NULL;
 }
+
+
+void GError2PyError(boost::python::list& pyerrors, size_t nerrors, GError** g_errors)
+{
+    extern PyObject *GErrorPyType;
+
+    if (g_errors != NULL) {
+        for (size_t i = 0; i < nerrors; ++i) {
+            if (g_errors[i] != NULL) {
+                PyObject* args = Py_BuildValue("si", g_errors[i]->message, g_errors[i]->code);
+                PyObject *err = PyObject_CallObject(GErrorPyType, args);
+                Py_DECREF(args);
+                g_error_free(g_errors[i]);
+                pyerrors.append(boost::python::handle<>(err));
+            }
+            else {
+                pyerrors.append(boost::python::object());
+            }
+        }
+    }
+}

@@ -198,6 +198,15 @@ BOOST_PYTHON_MODULE(gfal2)
         "Polls the status for asynchronous bring_online operations"
     )
     .def("release", &Gfal::release,
+        "Releases a file pinned by a bring_online call"
+    )
+    .def("bring_online", &Gfal::bring_online_list,
+        "Performs a bulk bring online operation"
+    )
+    .def("bring_online_poll", &Gfal::bring_online_poll_list,
+        "Perform a bulk bring online poll operation"
+    )
+    .def("release", &Gfal::release_list,
         "Releases a set of files pinned by a bring_online call"
     );
 
