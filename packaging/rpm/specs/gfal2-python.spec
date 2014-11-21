@@ -92,7 +92,9 @@ make DESTDIR=%{buildroot} install
 %defattr (-,root,root)
 %{_pkgdocdir}/readme.html
 %dir %{_pkgdocdir}/html
+%dir %{_pkgdocdir}/examples
 %{_pkgdocdir}/html/*
+%{_pkgdocdir}/examples/*
 
 %changelog
 * Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.1-1

@@ -37,6 +37,7 @@ if (NOT SKIP_DOC)
     set(EPYDOC_MODULE_NAME "gfal2")
 
     include(MacroAddepydoc REQUIRED)
+
 endif (NOT SKIP_DOC)
 
 set(VERSION_MAJOR 1)
@@ -55,7 +56,7 @@ pkg_check_modules(GFAL2_TRANSFER_PKG REQUIRED gfal_transfer)
 
 
 
-#install doc license
+# Install doc license
 install(FILES "LICENSE" "RELEASE-NOTES" "README" "readme.html"
                         DESTINATION ${DOC_INSTALL_DIR})
 
@@ -66,5 +67,8 @@ add_subdirectory (test)
 
 if (NOT SKIP_DOC)
 	add_subdirectory(doc)
+  # Install examples
+  install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/example/python/"
+            DESTINATION ${DOC_INSTALL_DIR}/examples)
 endif (NOT SKIP_DOC)
 
