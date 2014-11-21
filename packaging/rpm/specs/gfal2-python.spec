@@ -90,6 +90,7 @@ make DESTDIR=%{buildroot} install
 
 %files doc
 %defattr (-,root,root)
+%{_pkgdocdir}/readme.html
 %dir %{_pkgdocdir}/html
 %{_pkgdocdir}/html/*
 
