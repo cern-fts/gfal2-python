@@ -4,10 +4,8 @@
 
 ## vars
 BASE_TMP=/tmp
-FINAL_DIR="RPMS/"
 
 TARBALL_FILTER="--exclude='.git' --exclude='.svn' --exclude='RPMS' --exclude='*.rpm'"
-FOO="HELLO"
 
 set -e
 
@@ -18,7 +16,7 @@ create_tmp_dir() {
 }
 
 get_attrs_spec(){
-	export SPEC_CONTENT="$(rpm -E "`cat $1`")"
+        export SPEC_CONTENT="$(rpm -E "`cat $1 | head -n 50`")"
 	export PKG_VERSION="$( echo "$SPEC_CONTENT" | grep "Version:"  | sed 's@Version:\(.*\)@\1@g' | sed -e 's/^[ \t]*//')"
 	export PKG_RELEASE="$( echo "$SPEC_CONTENT" | grep "Version:"  | sed 's@Release:\(.*\)@\1@g' | sed -e 's/^[ \t]*//')"	
 	export PKG_NAME="$(echo "$SPEC_CONTENT" | grep "Name:" | sed 's@Name:\(.*\)@\1@g' | sed -e 's/^[ \t]*//')"
@@ -68,7 +66,7 @@ rpm_build_src_package(){
 	local MACRO_TOPDIR="s  \"_topdir $RPM_BUILD_DIR\""
 	cd $RPM_BUILD_DIR
 	ls $PWD/SOURCES/
-	rpmbuild -bs --nodeps --define "_topdir $RPM_BUILD_DIR" SPECS/$1
+	rpmbuild -bs --nodeps --define "_topdir $RPM_BUILD_DIR" --define='_sourcedir %{_topdir}/SOURCES' --define='_srcrpmdir %{_topdir}/SRPMS' SPECS/$1
 	cd $OLD_DIR
 	echo "End the rpmbuild source call...."	
 }
@@ -82,7 +80,6 @@ if [[ "$1" == "" || "$2" == "" ]]; then
 fi
 
 create_rpmbuild_env $1
-mkdir -p SRPMS
 
 # list spec file
 for i in $1/*.spec 
@@ -97,8 +94,7 @@ do
 	echo "TARBALL: $RPM_BUILD_DIR/SOURCES/$SRC_NAME"
 	rpm_build_src_package `basename $i` 
 done
-mkdir -p  $FINAL_DIR
-cp $RPM_BUILD_DIR/SRPMS/* $FINAL_DIR
+cp $RPM_BUILD_DIR/SRPMS/* .
 ## clean everything
 delete_rpmbuild_env
 	
