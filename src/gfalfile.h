@@ -245,6 +245,7 @@ public:
 
     int load_opts_from_file(const std::string & path);
 
+    boost::python::list get_plugin_names(void);
 
     // transfer
     int filecopy(const std::string & src, const std::string & dst);
@@ -257,8 +258,6 @@ public:
     boost::python::object filecopy(const Gfalt_params & p, const boost::python::list& srcs,
             const boost::python::list& dsts,
             const boost::python::list& checksums);
-
- //   int filecopy(const Gfalt_params &params, const std::string & src, const std::string & dst);
 
     // bring online and related
     boost::python::tuple bring_online(const std::string& path, time_t pintime,

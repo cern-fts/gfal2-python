@@ -82,7 +82,7 @@ BOOST_PYTHON_MODULE(gfal2)
 	// register exception
 	GErrorPyType = createGErrorException(gfal2Scope);
 
-    scope scope_posix =  class_<Gfal>("Gfal2Context", "Gfal2 Context")
+    scope context_scope = class_<Gfal>("Gfal2Context", "Gfal2 Context")
     .def("open", &Gfal::open,
         "Opens a file and returns a file descriptor"
     )
@@ -208,7 +208,9 @@ BOOST_PYTHON_MODULE(gfal2)
     )
     .def("release", &Gfal::release_list,
         "Releases a set of files pinned by a bring_online call"
-    );
+    )
+    .def("get_plugin_names", &Gfal::get_plugin_names,
+        "Returns the name list of loaded plugins");
 
     // register stat struct
     class_<Gfal::GStat, boost::shared_ptr<Gfal::GStat> >("Stat", "Please, note that not all fields make sense for all protocols")

@@ -709,6 +709,19 @@ int Gfal::load_opts_from_file(const std::string & path) {
     return ret;
 }
 
+boost::python::list Gfal::get_plugin_names(void) {
+    boost::python::list pyplugins;
+    gchar** plugins = gfal2_get_plugin_names(cont->context);
+    int nplugins = g_strv_length(plugins);
+
+    for (int i = 0; i < nplugins; ++i) {
+        pyplugins.append(std::string(plugins[i]));
+    }
+    g_strfreev(plugins);
+
+    return pyplugins;
+}
+
 boost::shared_ptr<Gfal> create_instance(){
     return boost::shared_ptr<Gfal>(new Gfal());
 }

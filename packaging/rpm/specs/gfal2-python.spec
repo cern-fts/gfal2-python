@@ -33,7 +33,7 @@ Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{
 BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
-BuildRequires:		gfal2-devel >= 2.7.0
+BuildRequires:		gfal2-devel >= 2.8.0
 %if 0%{?el5}
 BuildRequires:		boost141-devel
 %else
@@ -41,6 +41,8 @@ BuildRequires:		boost-devel
 %endif
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
+
+Required:           gfal2 >= 2.8.0
 
 %description
 Python bindings for gfal 2.0.
