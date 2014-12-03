@@ -44,33 +44,29 @@ Directory::~Directory()
 boost::python::tuple Directory::readpp()
 {
     GError* tmp_err = NULL;
-    boost::shared_ptr<Dirent> dirent;
-    boost::shared_ptr<Stat> stat(new Stat());
+    Dirent dirent;
+    Stat stat;
 
     {
         ScopedGILRelease unlock;
-        dirent.reset(
-                new Dirent(gfal2_readdirpp(cont->context, d, &stat->_st,&tmp_err))
-        );
+        dirent = gfal2_readdirpp(cont->context, d, &stat._st, &tmp_err);
     }
-    if (dirent->isValid() == false) {
+
+    if (dirent.isValid() == false) {
         GErrorWrapper::throwOnError(&tmp_err);
-        return boost::python::make_tuple(boost::python::object(),
-                boost::python::object());
+        return boost::python::make_tuple(boost::python::object(), boost::python::object());
     }
 
     return boost::python::make_tuple(dirent, stat);
 }
 
 
-boost::shared_ptr<Dirent> Directory::read()
+Dirent Directory::read()
 {
     ScopedGILRelease unlock;
     GError* tmp_err = NULL;
 
-    boost::shared_ptr <Dirent> dirent(
-                    new Dirent(gfal2_readdir(cont->context, d, &tmp_err))
-    );
+    Dirent dirent(gfal2_readdir(cont->context, d, &tmp_err));
     GErrorWrapper::throwOnError(&tmp_err);
     return dirent;
 }

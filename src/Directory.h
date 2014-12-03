@@ -33,7 +33,7 @@ class Directory : protected boost::noncopyable
         virtual ~Directory();
 
         boost::python::tuple readpp();
-        boost::shared_ptr<Dirent> read();
+        Dirent read();
 
     private:
         boost::shared_ptr<GfalContextWrapper> cont;

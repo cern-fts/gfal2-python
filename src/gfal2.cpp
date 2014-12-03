@@ -201,7 +201,7 @@ BOOST_PYTHON_MODULE(gfal2)
         "Returns the name list of loaded plugins");
 
     // register stat struct
-	boost::python::class_<PyGfal2::Stat, boost::shared_ptr<PyGfal2::Stat> >
+	boost::python::class_<PyGfal2::Stat>
 	    ("Stat", "Please, note that not all fields make sense for all protocols")
         .add_property("st_dev", &PyGfal2::Stat::get_st_dev, "Device of contatining file")
         .add_property("st_ino", &PyGfal2::Stat::get_st_ino, "Inode")
@@ -214,12 +214,12 @@ BOOST_PYTHON_MODULE(gfal2)
         .add_property("st_uid", &PyGfal2::Stat::get_st_uid, "User ID")
         .add_property("st_size", &PyGfal2::Stat::get_st_size, "Size")
 
-        .def("__str__", &PyGfal2::Stat::string_rep)
-        .def("__repr__", &PyGfal2::Stat::string_rep)
+        .def("__str__", &PyGfal2::Stat::__str__)
+        .def("__repr__", &PyGfal2::Stat::__str__)
 	;
 
 	// register dirent struct
-	boost::python::class_<PyGfal2::Dirent, boost::shared_ptr<PyGfal2::Dirent> >
+	boost::python::class_<PyGfal2::Dirent>
 	    ("Dirent", "Please, note that not all fields make sense for all protocols")
         .add_property("d_ino", &PyGfal2::Dirent::get_d_ino, "Inode")
         .add_property("d_off", &PyGfal2::Dirent::get_d_off, "Offset to the next dirent")

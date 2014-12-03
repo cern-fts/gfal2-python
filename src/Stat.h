@@ -76,7 +76,7 @@ public:
         return _st.st_ctime;
     }
 
-    std::string string_rep() {
+    std::string __str__() {
         std::ostringstream res;
         res << "uid: " << get_st_uid() << '\n';
         res << "gid: " << get_st_gid() << '\n';

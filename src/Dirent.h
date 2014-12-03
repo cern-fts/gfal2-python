@@ -69,7 +69,7 @@ public:
         return std::string(_dir.d_name);
     }
 
-    std::string string_rep() {
+    std::string __str__() {
         std::ostringstream res;
         res << "inode: " << _dir.d_ino << std::endl;
         res << "offset: " << _dir.d_off << std::endl;
