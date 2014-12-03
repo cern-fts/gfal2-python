@@ -16,6 +16,9 @@
 */
 
 
+#ifndef GFAL2CONTEXT_h
+#define GFAL2CONTEXT_h
+
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
@@ -27,152 +30,56 @@
 #include <gfal_api.h>
 #include <transfer/gfal_transfer.h>
 
-#include "gfal_boost_include.hpp"
-#include "gfalt_params.h"
+#include "Directory.h"
+#include "Dirent.h"
+#include "File.h"
+#include "GfaltParams.h"
+#include "Stat.h"
 
+namespace PyGfal2 {
 
-#ifndef GFALFILE_H
-#define GFALFILE_H
-
-enum gfal_verbose_levels{
+enum gfal_verbose_levels
+{
     gfal_verbose_normal = GFAL_VERBOSE_NORMAL,
     gfal_verbose_verbose = GFAL_VERBOSE_VERBOSE,
     gfal_verbose_debug = GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG,
     gfal_verbose_trace = GFAL_VERBOSE_TRACE | GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG
 };
 
-class Gfal{
+class GfalContextWrapper
+{
+public:
+    gfal2_context_t context;
+
+    GfalContextWrapper()
+    {
+        GError* tmp_err = NULL;
+        context = gfal2_context_new(&tmp_err);
+        if (context == NULL)
+            GErrorWrapper::throwOnError(&tmp_err);
+    }
+    ~GfalContextWrapper()
+    {
+        gfal2_context_free(context);
+    }
+};
+
+
+class Gfal2Context
+{
 private:
-
-    class GfalContextWrapper {
-    public:
-        gfal2_context_t context;
-
-        GfalContextWrapper() {
-            GError* tmp_err=NULL;
-            context = gfal2_context_new(&tmp_err);
-            if(context == NULL)
-                check_GError(&tmp_err);
-        }
-        ~GfalContextWrapper() {
-            gfal2_context_free(context);
-        }
-    };
-
     boost::shared_ptr<GfalContextWrapper> cont;
 
 public:
-    Gfal(): cont(new GfalContextWrapper()) {}
+    Gfal2Context(): cont(new GfalContextWrapper) {
+    }
 
-    virtual ~Gfal(){}
+    virtual ~Gfal2Context() {
+    }
 
-    class GDirent{
-    public:
-        struct dirent _dir;
-        bool _end_of_directory;
-
-
-        ino_t          		get_d_ino();       /* inode number */
-        off_t          		get_d_off();       /* offset to the next dirent */
-        unsigned short 	get_d_reclen();    /* length of this record */
-        unsigned char  	get_d_type();      /* type of file; not supported by all file system types */
-        std::string     	get_d_name(); /* filename */
-        std::string 		string_rep();
-
-        bool isValid() { return !_end_of_directory; }
-
-
-        GDirent();
-        GDirent(struct dirent* entry);
-        GDirent(const GDirent & orig);
-
-    };
-
-    class GStat{
-    public:
-        GStat();
-
-        GStat(const GStat & orig);
-
-        dev_t get_st_dev();
-
-        ino_t get_st_ino();
-
-        mode_t get_st_mode();
-
-        nlink_t get_st_nlink();
-
-        uid_t get_st_uid();
-
-        gid_t get_st_gid();
-
-        size_t get_st_size();
-
-        time_t get_st_atime();
-
-        time_t get_st_mtime();
-
-        time_t get_st_ctime();
-
-        std::string string_rep();
-
-        struct stat _st;
-
-    } ;
-
-    class GfalFile : protected boost::noncopyable
-    {
-        public:
-            GfalFile(const Gfal & context,
-                     const std::string & path,
-                     const std::string & flag);
-            virtual ~GfalFile();
-            /// wrapper to the gfal_read call
-            std::string read(size_t count);
-            /// position independent read call
-            std::string pread(off_t offset, size_t count);
-            /// wrapper to the gfal_write call
-            ssize_t write(const std::string & str);
-            /// position independent write call
-            ssize_t pwrite(const std::string & str, off_t offset);
-
-            /**
-             * wrapper to the gfal_lseek call
-             */
-             off_t lseek(off_t offset, int flag=0);
-
-            // Static global function
-
-            /**
-             * Wrap to the gfal_lstat call
-             * */
-        private:
-            /* add your private declarations */
-            boost::shared_ptr<GfalContextWrapper> cont;
-            std::string path;
-            std::string flag;
-
-            int fd;
-    };
-
-    class GfalDirectory : protected boost::noncopyable
-    {
-    	public:
-    		GfalDirectory(const Gfal & context,
-    					const std::string & path);
-    		virtual ~GfalDirectory();
-    		// wrapper to the gfal_readdirpp call
-            boost::python::tuple readpp();
-    		// wrapper to the gfal_readdir call
-            boost::shared_ptr<GDirent> read();
-
-		private:
-			/* add your private declarations */
-			boost::shared_ptr<GfalContextWrapper> cont;
-			std::string path;
-
-			DIR* d;
-    };
+    static Gfal2Context creat_context(void) {
+        return PyGfal2::Gfal2Context();
+    }
 
     boost::shared_ptr<GfalContextWrapper> getContext() const {
         return cont ;
@@ -181,15 +88,15 @@ public:
 
     int cancel();
 
-    boost::shared_ptr<GfalFile> open(const std::string & path, const std::string &flag);
-    boost::shared_ptr<GfalFile> file(const std::string & path, const std::string &flag);
+    boost::shared_ptr<File> open(const std::string & path, const std::string &flag);
+    boost::shared_ptr<File> file(const std::string & path, const std::string &flag);
 
-    boost::shared_ptr<GfalDirectory> opendir(const std::string & path);
-    boost::shared_ptr<GfalDirectory> directory(const std::string & path);
+    boost::shared_ptr<Directory> opendir(const std::string & path);
+    boost::shared_ptr<Directory> directory(const std::string & path);
 
-    GStat lstat(const std::string & path);
+    Stat lstat(const std::string & path);
 
-    GStat stat_c(const std::string & path);
+    Stat stat_c(const std::string & path);
 
     int access(const std::string &, int flag);
 
@@ -249,13 +156,13 @@ public:
 
     // transfer
     int filecopy(const std::string & src, const std::string & dst);
-    int filecopy(const Gfalt_params & p, const std::string & src, const std::string & dst);
+    int filecopy(const GfaltParams & p, const std::string & src, const std::string & dst);
 
     boost::python::object filecopy(const boost::python::list& srcs,
             const boost::python::list& dsts);
-    boost::python::object filecopy(const Gfalt_params & p, const boost::python::list& srcs,
+    boost::python::object filecopy(const GfaltParams & p, const boost::python::list& srcs,
             const boost::python::list& dsts);
-    boost::python::object filecopy(const Gfalt_params & p, const boost::python::list& srcs,
+    boost::python::object filecopy(const GfaltParams & p, const boost::python::list& srcs,
             const boost::python::list& dsts,
             const boost::python::list& checksums);
 
@@ -278,8 +185,6 @@ public:
 
 int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);
 
+} // PyGfal2 namespace
 
-boost::shared_ptr<Gfal> create_instance();
-
-
-#endif /* GFALFILE_H */
+#endif /* GFAL2CONTEXT_h */

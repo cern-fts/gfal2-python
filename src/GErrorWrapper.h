@@ -26,6 +26,10 @@
 #include <stdexcept>
 #include <typeinfo>
 
+namespace PyGfal2 {
+
+extern PyObject *GErrorPyType;
+
 /**
  * Exception to be thrown by the wrapper code
  */
@@ -40,19 +44,28 @@ class GErrorWrapper : public std::exception
 		const char * what() const throw();
 		int code() const;
 
+		/**
+		 * Convenience function.
+		 * Throws a GErrorWrapper if err is set
+		 * Otherwise, it just returns
+		 */
+		static void throwOnError(GError**err);
+
 	private:
 		std::string _message;
 		int _code;
 };
 
 /**
- * Create GErrorException (inherits from Python's Exception)
+ * Creates the _type_ GErrorException (inherits from Python's Exception)
  */
-PyObject* createGErrorException(boost::python::scope&);
+PyObject* createGErrorExceptionType(boost::python::scope&);
 
 /**
  * Translate a list of GError to a list of GErrorException
  */
 void GError2PyError(boost::python::list& pyerrors, size_t nerrors, GError** g_errors);
+
+}
 
 #endif /* GERRORWRAPPER_EXCEPTION_H */

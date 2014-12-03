@@ -16,15 +16,17 @@
 */
 
 #include "GErrorWrapper.h"
-#include "gfal_boost_include.hpp"
 
-/*** GErrorWrapper ***/
+using namespace PyGfal2;
+
+
+PyObject *PyGfal2::GErrorPyType = NULL;
+
 
 GErrorWrapper::GErrorWrapper(const std::string &msg, int error):
     _message(msg), _code(error)
 {
 }
-
 
 
 GErrorWrapper::GErrorWrapper(const GError* gerr):
@@ -33,11 +35,9 @@ GErrorWrapper::GErrorWrapper(const GError* gerr):
 }
 
 
-
 GErrorWrapper::~GErrorWrapper() throw()
 {
 }
-
 
 
 const char *GErrorWrapper::what() const throw()
@@ -46,10 +46,21 @@ const char *GErrorWrapper::what() const throw()
 }
 
 
-
 int GErrorWrapper::code() const
 {
     return this->_code;
+}
+
+
+void GErrorWrapper::throwOnError(GError **err)
+{
+    if (err && *err)
+    {
+        std::string err_msg((*err)->message);
+        int code = (*err)->code;
+        g_clear_error(err);
+        throw GErrorWrapper(err_msg, code);
+    }
 }
 
 /*** Python Exception ***/
@@ -144,7 +155,7 @@ exception:
 
 
 
-PyObject* createGErrorException(boost::python::scope& scop)
+PyObject* PyGfal2::createGErrorExceptionType(boost::python::scope& scop)
 {
     namespace bp = boost::python;
 
@@ -187,10 +198,8 @@ exception:
 }
 
 
-void GError2PyError(boost::python::list& pyerrors, size_t nerrors, GError** g_errors)
+void PyGfal2::GError2PyError(boost::python::list& pyerrors, size_t nerrors, GError** g_errors)
 {
-    extern PyObject *GErrorPyType;
-
     if (g_errors != NULL) {
         for (size_t i = 0; i < nerrors; ++i) {
             if (g_errors[i] != NULL) {
