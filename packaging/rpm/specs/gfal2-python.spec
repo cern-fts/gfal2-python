@@ -42,7 +42,7 @@ BuildRequires:		boost-devel
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
 
-Required:           gfal2 >= 2.8.0
+Requires:           gfal2 >= 2.8.0
 
 %description
 Python bindings for gfal 2.0.
