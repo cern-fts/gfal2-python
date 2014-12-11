@@ -137,7 +137,7 @@ void GfaltParams::set_src_spacetoken(const std::string & token)
 std::string GfaltParams::get_src_spacetoken()
 {
     GError * tmp_err = NULL;
-    gchar* res = gfalt_get_dst_spacetoken(params, &tmp_err);
+    const gchar* res = gfalt_get_dst_spacetoken(params, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
     return (res) ? res : "";
 }
@@ -154,7 +154,7 @@ void GfaltParams::set_dst_spacetoken(const std::string & token)
 std::string GfaltParams::get_dst_spacetoken()
 {
     GError * tmp_err = NULL;
-    gchar* res = gfalt_get_dst_spacetoken(params, &tmp_err);
+    const gchar* res = gfalt_get_dst_spacetoken(params, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
     return (res) ? res : "";
 }
