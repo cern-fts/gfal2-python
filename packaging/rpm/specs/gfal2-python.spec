@@ -57,7 +57,7 @@ BuildArch:			noarch
 %endif
 
 %description doc
-documentation files  of %{name} .
+Documentation files for %{name}.
 
 %clean
 rm -rf %{buildroot};

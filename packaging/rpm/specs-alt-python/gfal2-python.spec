@@ -1,3 +1,5 @@
+%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
+
 #include boost > 141 for EL5
 %if 0%{?el5}
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include/boost141 -DBOOST_LIBRARYDIR=%{_libdir}/boost141
@@ -6,7 +8,7 @@
 %endif
 
 # Alternative Python version
-%define _alt_python_version %{?alt_python_version}%{?!alt_python_version:3.0}
+%define _alt_python_version %{?alt_python_version}%{?!alt_python_version:2.7}
 %define _alt_python_sitearch %{_libdir}/python*/site-packages
 
 ## add filter setup
@@ -40,6 +42,16 @@ Python bindings for gfal 2.0.
 GFAL 2.0 offers an a single, simple and portable API
 for the file operations in grids and cloud environments.
 
+%package doc
+Summary:			Documentation for %{name}
+Group:				Applications/Internet
+%if 0%{?fedora} > 10 || 0%{?rhel}>5
+BuildArch:			noarch
+%endif
+
+%description doc
+Documentation files for %{name}.
+
 %clean
 rm -rf %{buildroot};
 make clean
@@ -61,7 +73,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WD/altpython/lib/
 
 # Build gfal2 wrapper
 PYVER=%{_alt_python_version}
-%cmake -DDOC_INSTALL_DIR=%{_docdir}/%{name}-%{version} \
+%cmake \
+ -DDOC_INSTALL_DIR=%{_pkgdocdir} \
  %{boost_cmake_flags} \
  -DUNIT_TESTS=TRUE \
  -DALT_PYTHON_LOCATION=$WD/altpython/ \
@@ -84,6 +97,7 @@ make DESTDIR=%{buildroot} install
 %{_docdir}/%{name}-%{version}/LICENSE
 %{_docdir}/%{name}-%{version}/RELEASE-NOTES
 %{_docdir}/%{name}-%{version}/README
+%{_pkgdocdir}/readme.html
 
 %changelog
 * Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.1-1
