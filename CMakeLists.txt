@@ -16,10 +16,8 @@ include(CMakeGeneratePkgConfig REQUIRED)
 
 set (Boost_NO_BOOST_CMAKE ON)
 
-find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Boost COMPONENTS python)
-
 find_package(PythonEasy REQUIRED)
 
 #enable testing
@@ -37,7 +35,6 @@ if (NOT SKIP_DOC)
     set(EPYDOC_MODULE_NAME "gfal2")
 
     include(MacroAddepydoc REQUIRED)
-
 endif (NOT SKIP_DOC)
 
 set(VERSION_MAJOR 1)
@@ -46,11 +43,11 @@ set(VERSION_PATCH 0)
 set(VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 # libs checks
-pkg_check_modules(GLIB2_PKG REQUIRED glib-2.0)
-pkg_check_modules(GTHREAD2_PKG REQUIRED gthread-2.0)
+find_package (GLIB2 REQUIRED)
+find_package (GTHREAD2 REQUIRED)
 
 # GFAL2
-find_package(Gfal2 REQUIRED)
+find_package(GFAL2 REQUIRED)
 
 # Install doc license
 install(FILES "LICENSE" "RELEASE-NOTES" "README" "readme.html"
