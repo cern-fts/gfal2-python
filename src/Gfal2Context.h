@@ -172,7 +172,6 @@ public:
 
     int bring_online_poll(const std::string& path, const std::string& token);
 
-
     int release(const std::string& path, const std::string& token);
 
     boost::python::tuple bring_online_list(const boost::python::list& files, time_t pintime,
@@ -181,6 +180,10 @@ public:
     boost::python::list bring_online_poll_list(const boost::python::list& files, const std::string& token);
 
     boost::python::list release_list(const boost::python::list& files, const std::string& token);
+
+    int abort_bring_online(const std::string& path, const std::string& token);
+
+    boost::python::list abort_bring_online_list(const boost::python::list& files, const std::string& token);
 };
 
 int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);

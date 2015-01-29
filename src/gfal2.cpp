@@ -192,11 +192,15 @@ BOOST_PYTHON_MODULE(gfal2)
         "Performs a bulk bring online operation"
     )
     .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll_list,
-        "Perform a bulk bring online poll operation"
+        "Performs a bulk bring online poll operation"
     )
     .def("release", &PyGfal2::Gfal2Context::release_list,
         "Releases a set of files pinned by a bring_online call"
     )
+    .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online,
+             "Aborts a bring online request")
+    .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online_list,
+         "Aborts a bring online request")
     .def("get_plugin_names", &PyGfal2::Gfal2Context::get_plugin_names,
         "Returns the name list of loaded plugins");
 

@@ -437,7 +437,8 @@ boost::python::list Gfal2Context::bring_online_poll_list(const boost::python::li
 }
 
 
-boost::python::list Gfal2Context::release_list(const boost::python::list& pyfiles, const std::string& token)
+boost::python::list Gfal2Context::release_list(const boost::python::list& pyfiles,
+        const std::string& token)
 {
     size_t nbfiles = boost::python::len(pyfiles);
     if (nbfiles == 0)
@@ -453,6 +454,43 @@ boost::python::list Gfal2Context::release_list(const boost::python::list& pyfile
     }
 
     gfal2_release_file_list(cont->context, nbfiles, files_ptr, token.c_str(),
+            errors.data());
+
+    boost::python::list pyerrors;
+    GError2PyError(pyerrors, nbfiles, errors.data());
+    return pyerrors;
+}
+
+
+int Gfal2Context::abort_bring_online(const std::string &path, const std::string& token)
+{
+    GError* error = NULL;
+    const char* file_ptr = path.c_str();
+    int ret;
+    ret = gfal2_abort_files(cont->context, 1, &file_ptr, token.c_str(), &error);
+    if (ret < 0)
+        GErrorWrapper::throwOnError(&error);
+    return ret;
+}
+
+
+boost::python::list Gfal2Context::abort_bring_online_list(
+        const boost::python::list& pyfiles, const std::string& token)
+{
+    size_t nbfiles = boost::python::len(pyfiles);
+    if (nbfiles == 0)
+        throw GErrorWrapper("Empty list of files", EINVAL);
+
+    std::vector<std::string> files(nbfiles);
+    std::vector<GError*> errors(nbfiles, NULL);
+    const char* files_ptr[nbfiles];
+
+    for (size_t i = 0; i < nbfiles; ++i) {
+        files.push_back(boost::python::extract<std::string>(pyfiles[i]));
+        files_ptr[i] = files.back().c_str();
+    }
+
+    gfal2_abort_files(cont->context, nbfiles, files_ptr, token.c_str(),
             errors.data());
 
     boost::python::list pyerrors;
