@@ -1,3 +1,10 @@
+* Fri Feb 03 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.7.0
+ - [DMC-543] - listdir leaks the file descriptor
+ - [DMC-546] - Expose bulk bring-online operations in gfal2-python
+ - [DMC-583] - Core: Add call to recover list of installed plugins
+ - [DMC-623] - Expose abort files call
+ - [DMC-616] - Facilitate build integration with PH-SFT tools
+
 * Fri Nov 07 2014 Alejandro Álvarez <aalvarez at cern.ch> - 1.6.0
  - [DMC-479] - Expose gfal_version in the Python wrappers
  - [DMC-496] - Pythonize names transfer_parameters and gfalt_event
