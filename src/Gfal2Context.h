@@ -104,6 +104,8 @@ public:
 
     int unlink(const std::string &);
 
+    boost::python::list unlink_list(const boost::python::list& files);
+
     int mkdir(const std::string &, mode_t mode);
 
     int mkdir_rec(const std::string &, mode_t mode);
