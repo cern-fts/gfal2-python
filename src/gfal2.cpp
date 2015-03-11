@@ -94,6 +94,9 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("unlink", &PyGfal2::Gfal2Context::unlink,
         "Removes a file"
     )
+    .def("unlink", &PyGfal2::Gfal2Context::unlink_list,
+        "Removes a set of files"
+    )
     .def("mkdir", &PyGfal2::Gfal2Context::mkdir,
         "Creates a directory"
     )

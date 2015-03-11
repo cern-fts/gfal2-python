@@ -196,6 +196,29 @@ int Gfal2Context::unlink(const std::string & path)
 }
 
 
+boost::python::list Gfal2Context::unlink_list(const boost::python::list& pyfiles)
+{
+    size_t nbfiles = boost::python::len(pyfiles);
+    if (nbfiles == 0)
+        throw GErrorWrapper("Empty list of files", EINVAL);
+
+    std::vector<std::string> files(nbfiles);
+    std::vector<GError*> errors(nbfiles, NULL);
+    const char* files_ptr[nbfiles];
+
+    for (size_t i = 0; i < nbfiles; ++i) {
+        files.push_back(boost::python::extract<std::string>(pyfiles[i]));
+        files_ptr[i] = files.back().c_str();
+    }
+
+    gfal2_unlink_list(cont->context, nbfiles, files_ptr, errors.data());
+
+    boost::python::list pyerrors;
+    GError2PyError(pyerrors, nbfiles, errors.data());
+    return pyerrors;
+}
+
+
 int Gfal2Context::mkdir(const std::string & path, mode_t mode)
 {
     ScopedGILRelease unlock;

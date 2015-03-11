@@ -18,7 +18,7 @@
 }
 
 Name:				gfal2-python
-Version:			1.7.0
+Version:			1.6.0
 Release:			1.py%{?_alt_python_version}%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet

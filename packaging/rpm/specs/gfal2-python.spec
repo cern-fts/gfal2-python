@@ -22,7 +22,7 @@
 %endif
 
 Name:				gfal2-python
-Version:			1.7.0
+Version:			1.7.1
 Release:			1%{?dist}
 Summary:			Python bindings for gfal 2.0
 Group:				Applications/Internet
