@@ -24,8 +24,8 @@
 
 #include "Gfal2Context.h"
 #include "GfaltParams.h"
+#include "LoggingHelper.h"
 #include "pyGIL.h"
-
 
 
 void gerror_exception_translator(const PyGfal2::GErrorWrapper & x)
@@ -46,6 +46,11 @@ BOOST_PYTHON_MODULE(gfal2)
 	PyEval_InitThreads();
 
 	boost::python::scope gfal2Scope = boost::python::scope();
+
+	// Setup the logging
+	gfal2_log_set_handler(&PyGfal2::logging_helper, NULL);
+	gfal2_log_set_level(G_LOG_LEVEL_DEBUG);
+
 
     // disable boost::python automatic docstring generation style
     // do not confuse users with C++ signatures and the like

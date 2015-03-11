@@ -675,6 +675,6 @@ int Gfal2Context::cancel()
 
 int PyGfal2::gfal_set_verbose_enum(gfal_verbose_levels lvls)
 {
-    gfal_set_verbose((int) lvls);
+    PyErr_WarnEx(PyExc_DeprecationWarning, "set_verbose is deprecated. Use the Python logging module instead: logging.getLogger('gfal2')", 1);
     return 0;
 }

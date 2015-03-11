@@ -72,6 +72,7 @@ private:
 
 public:
     Gfal2Context(): cont(new GfalContextWrapper) {
+
     }
 
     virtual ~Gfal2Context() {
