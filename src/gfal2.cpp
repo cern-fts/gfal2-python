@@ -37,7 +37,7 @@ void gerror_exception_translator(const PyGfal2::GErrorWrapper & x)
 
 std::string gfal_version_wrapper(void)
 {
-    return gfal_version();
+    return gfal2_version();
 }
 
 BOOST_PYTHON_MODULE(gfal2)
@@ -165,6 +165,12 @@ BOOST_PYTHON_MODULE(gfal2)
     )
     .def("load_opts_from_file", &PyGfal2::Gfal2Context::load_opts_from_file,
         "Loads a set of configuration parameters from a .ini formatted file"
+    )
+    .def("set_user_agent", &PyGfal2::Gfal2Context::set_user_agent,
+        "Sets the user agent identification, name and version"
+    )
+    .def("get_user_agent", &PyGfal2::Gfal2Context::get_user_agent,
+        "Gets the user agent identification, name and version"
     )
     .def("filecopy", static_cast<int (PyGfal2::Gfal2Context::*)(const std::string & src, const std::string & dst)>(&PyGfal2::Gfal2Context::filecopy),
         "Shortcut for filecopy(gfal2.transfer_params(), src, dst)"

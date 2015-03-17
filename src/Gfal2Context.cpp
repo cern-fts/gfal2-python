@@ -651,6 +651,23 @@ int Gfal2Context::load_opts_from_file(const std::string & path)
 }
 
 
+int Gfal2Context::set_user_agent(const std::string & agent, const std::string & version)
+{
+    GError * tmp_err = NULL;
+    int ret = gfal2_set_user_agent(cont->context, agent.c_str(), version.c_str(), &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return ret;
+}
+
+
+boost::python::tuple Gfal2Context::get_user_agent(void)
+{
+    const char* agent, *version;
+    gfal2_get_user_agent(cont->context, &agent, &version);
+    return boost::python::make_tuple(agent, version);
+}
+
+
 boost::python::list Gfal2Context::get_plugin_names(void)
 {
     boost::python::list pyplugins;

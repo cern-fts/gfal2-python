@@ -155,6 +155,10 @@ public:
 
     int load_opts_from_file(const std::string & path);
 
+    int set_user_agent(const std::string & agent, const std::string & version);
+
+    boost::python::tuple get_user_agent(void);
+
     boost::python::list get_plugin_names(void);
 
     // transfer
