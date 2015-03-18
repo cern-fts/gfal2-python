@@ -157,9 +157,15 @@ public:
 
     int set_user_agent(const std::string & agent, const std::string & version);
 
+    boost::python::list get_plugin_names(void);
+
+    // Client-side additional information
     boost::python::tuple get_user_agent(void);
 
-    boost::python::list get_plugin_names(void);
+    int add_client_info(const std::string& key, const std::string& value);
+    int remove_client_info(const std::string& key);
+    int clear_client_info(void);
+    boost::python::dict get_client_info(void);
 
     // transfer
     int filecopy(const std::string & src, const std::string & dst);

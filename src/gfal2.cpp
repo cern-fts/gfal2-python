@@ -172,6 +172,18 @@ BOOST_PYTHON_MODULE(gfal2)
     .def("get_user_agent", &PyGfal2::Gfal2Context::get_user_agent,
         "Gets the user agent identification, name and version"
     )
+    .def("add_client_info", &PyGfal2::Gfal2Context::add_client_info,
+        "Sets a custom key/value pair to be sent to the server, if the protocol allows it"
+    )
+    .def("remove_client_info", &PyGfal2::Gfal2Context::remove_client_info,
+        "Removes a key/value pair set previously by add_client_info"
+    )
+    .def("clear_client_info", &PyGfal2::Gfal2Context::clear_client_info,
+        "Clears all key/value pairs set by add_client_info"
+    )
+    .def("get_client_info", &PyGfal2::Gfal2Context::get_client_info,
+        "Returns the key/value pairs as a dictionary"
+    )
     .def("filecopy", static_cast<int (PyGfal2::Gfal2Context::*)(const std::string & src, const std::string & dst)>(&PyGfal2::Gfal2Context::filecopy),
         "Shortcut for filecopy(gfal2.transfer_params(), src, dst)"
     )
