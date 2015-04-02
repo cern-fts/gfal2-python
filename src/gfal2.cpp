@@ -49,8 +49,7 @@ BOOST_PYTHON_MODULE(gfal2)
 
 	// Setup the logging
 	gfal2_log_set_handler(&PyGfal2::logging_helper, NULL);
-	gfal2_log_set_level(G_LOG_LEVEL_DEBUG);
-
+	gfal2_log_set_level(G_LOG_LEVEL_INFO);
 
     // disable boost::python automatic docstring generation style
     // do not confuse users with C++ signatures and the like
@@ -61,11 +60,12 @@ BOOST_PYTHON_MODULE(gfal2)
 	boost::python::def("creat_context", &PyGfal2::Gfal2Context::creat_context, "Create a gfal2 context");
 	boost::python::def("get_version", &gfal_version_wrapper, "Get the gfal2 version");
 
-	boost::python::enum_<PyGfal2::gfal_verbose_levels>("verbose_level")
-            .value("normal", PyGfal2::gfal_verbose_normal)
-            .value("verbose", PyGfal2::gfal_verbose_verbose)
-            .value("debug", PyGfal2::gfal_verbose_debug)
-            .value("trace", PyGfal2::gfal_verbose_trace)
+	boost::python::enum_<GLogLevelFlags>("verbose_level")
+            .value("normal", G_LOG_LEVEL_CRITICAL)
+            .value("warning", G_LOG_LEVEL_WARNING)
+            .value("verbose", G_LOG_LEVEL_INFO)
+            .value("debug", G_LOG_LEVEL_DEBUG)
+            .value("trace", G_LOG_LEVEL_DEBUG)
             ;
 
 	// register exception

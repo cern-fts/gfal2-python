@@ -736,14 +736,8 @@ int Gfal2Context::cancel()
 }
 
 
-int PyGfal2::gfal_set_verbose_enum(gfal_verbose_levels lvls)
+int PyGfal2::gfal_set_verbose_enum(GLogLevelFlags lvls)
 {
-// If PyErr_Warn is defined, then it is because it is deprecated
-#ifdef PyErr_Warn
-    PyErr_WarnEx(PyExc_DeprecationWarning, "set_verbose is deprecated. Use the Python logging module instead: logging.getLogger('gfal2')", 1);
-// If not defined, then it is a method and is not deprecated for this version of Python
-#else
-    PyErr_Warn(PyExc_DeprecationWarning, "set_verbose is deprecated. Use the Python logging module instead: logging.getLogger('gfal2')");
-#endif
+    gfal2_log_set_level(lvls);
     return 0;
 }
