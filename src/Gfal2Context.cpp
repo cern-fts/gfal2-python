@@ -666,6 +666,69 @@ boost::python::list Gfal2Context::get_plugin_names(void)
 }
 
 
+int Gfal2Context::set_user_agent(const std::string & agent, const std::string & version)
+{
+    GError * tmp_err = NULL;
+    int ret = gfal2_set_user_agent(cont->context, agent.c_str(), version.c_str(), &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return ret;
+}
+
+
+boost::python::tuple Gfal2Context::get_user_agent(void)
+{
+    const char* agent, *version;
+    gfal2_get_user_agent(cont->context, &agent, &version);
+    return boost::python::make_tuple(agent, version);
+}
+
+
+int Gfal2Context::add_client_info(const std::string& key, const std::string& value)
+{
+    GError * tmp_err = NULL;
+    int ret = gfal2_add_client_info(cont->context, key.c_str(), value.c_str(), &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return ret;
+}
+
+
+int Gfal2Context::remove_client_info(const std::string& key)
+{
+    GError * tmp_err = NULL;
+    int ret = gfal2_remove_client_info(cont->context, key.c_str(), &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return ret;
+}
+
+
+int Gfal2Context::clear_client_info(void)
+{
+    GError * tmp_err = NULL;
+    int ret = gfal2_clear_client_info(cont->context, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return ret;
+}
+
+
+boost::python::dict Gfal2Context::get_client_info(void)
+{
+    boost::python::dict dictionary;
+
+    GError* tmp_err = NULL;
+    size_t nitems = gfal2_get_client_info_count(cont->context, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+
+    for (size_t i = 0; i < nitems; ++i) {
+        const char *key, *value;
+        gfal2_get_client_info_pair(cont->context, i, &key, &value, &tmp_err);
+        GErrorWrapper::throwOnError(&tmp_err);
+        dictionary[key] = value;
+    }
+
+    return dictionary;
+}
+
+
 int Gfal2Context::cancel()
 {
     ScopedGILRelease unlock;
@@ -673,8 +736,8 @@ int Gfal2Context::cancel()
 }
 
 
-int PyGfal2::gfal_set_verbose_enum(gfal_verbose_levels lvls)
+int PyGfal2::gfal_set_verbose_enum(GLogLevelFlags lvls)
 {
-    gfal_set_verbose((int) lvls);
+    gfal2_log_set_level(lvls);
     return 0;
 }

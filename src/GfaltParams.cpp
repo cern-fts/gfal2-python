@@ -253,8 +253,10 @@ void GfaltParams::set_event_callback(PyObject* callable)
 {
     callback_objs.event_callback = boost::python::object(
             boost::python::handle<>(callable));
-    gfalt_set_event_callback(params, event_callback_wrapper, NULL);
-    gfalt_set_user_data(params, &callback_objs, NULL);
+    GError *tmp_err = NULL;
+    gfalt_add_event_callback(params, event_callback_wrapper,
+            &callback_objs, NULL, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
 }
 
 
@@ -268,8 +270,10 @@ void GfaltParams::set_monitor_callback(PyObject* callable)
 {
     callback_objs.monitor_callback = boost::python::object(
             boost::python::handle<>(callable));
-    gfalt_set_monitor_callback(params, monitor_callback_wrapper, NULL);
-    gfalt_set_user_data(params, &callback_objs, NULL);
+    GError *tmp_err = NULL;
+    gfalt_add_monitor_callback(params, monitor_callback_wrapper,
+            &callback_objs, NULL, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
 }
 
 PyObject* GfaltParams::get_monitor_callback(void)

@@ -24,8 +24,8 @@
 
 #include "Gfal2Context.h"
 #include "GfaltParams.h"
+#include "LoggingHelper.h"
 #include "pyGIL.h"
-
 
 
 void gerror_exception_translator(const PyGfal2::GErrorWrapper & x)
@@ -37,7 +37,7 @@ void gerror_exception_translator(const PyGfal2::GErrorWrapper & x)
 
 std::string gfal_version_wrapper(void)
 {
-    return gfal_version();
+    return gfal2_version();
 }
 
 BOOST_PYTHON_MODULE(gfal2)
@@ -46,6 +46,10 @@ BOOST_PYTHON_MODULE(gfal2)
 	PyEval_InitThreads();
 
 	boost::python::scope gfal2Scope = boost::python::scope();
+
+	// Setup the logging
+	gfal2_log_set_handler(&PyGfal2::logging_helper, NULL);
+	gfal2_log_set_level(G_LOG_LEVEL_INFO);
 
     // disable boost::python automatic docstring generation style
     // do not confuse users with C++ signatures and the like
@@ -56,11 +60,12 @@ BOOST_PYTHON_MODULE(gfal2)
 	boost::python::def("creat_context", &PyGfal2::Gfal2Context::creat_context, "Create a gfal2 context");
 	boost::python::def("get_version", &gfal_version_wrapper, "Get the gfal2 version");
 
-	boost::python::enum_<PyGfal2::gfal_verbose_levels>("verbose_level")
-            .value("normal", PyGfal2::gfal_verbose_normal)
-            .value("verbose", PyGfal2::gfal_verbose_verbose)
-            .value("debug", PyGfal2::gfal_verbose_debug)
-            .value("trace", PyGfal2::gfal_verbose_trace)
+	boost::python::enum_<GLogLevelFlags>("verbose_level")
+            .value("normal", G_LOG_LEVEL_CRITICAL)
+            .value("warning", G_LOG_LEVEL_WARNING)
+            .value("verbose", G_LOG_LEVEL_INFO)
+            .value("debug", G_LOG_LEVEL_DEBUG)
+            .value("trace", G_LOG_LEVEL_DEBUG)
             ;
 
 	// register exception
@@ -160,6 +165,24 @@ BOOST_PYTHON_MODULE(gfal2)
     )
     .def("load_opts_from_file", &PyGfal2::Gfal2Context::load_opts_from_file,
         "Loads a set of configuration parameters from a .ini formatted file"
+    )
+    .def("set_user_agent", &PyGfal2::Gfal2Context::set_user_agent,
+        "Sets the user agent identification, name and version"
+    )
+    .def("get_user_agent", &PyGfal2::Gfal2Context::get_user_agent,
+        "Gets the user agent identification, name and version"
+    )
+    .def("add_client_info", &PyGfal2::Gfal2Context::add_client_info,
+        "Sets a custom key/value pair to be sent to the server, if the protocol allows it"
+    )
+    .def("remove_client_info", &PyGfal2::Gfal2Context::remove_client_info,
+        "Removes a key/value pair set previously by add_client_info"
+    )
+    .def("clear_client_info", &PyGfal2::Gfal2Context::clear_client_info,
+        "Clears all key/value pairs set by add_client_info"
+    )
+    .def("get_client_info", &PyGfal2::Gfal2Context::get_client_info,
+        "Returns the key/value pairs as a dictionary"
     )
     .def("filecopy", static_cast<int (PyGfal2::Gfal2Context::*)(const std::string & src, const std::string & dst)>(&PyGfal2::Gfal2Context::filecopy),
         "Shortcut for filecopy(gfal2.transfer_params(), src, dst)"

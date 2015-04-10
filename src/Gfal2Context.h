@@ -38,14 +38,6 @@
 
 namespace PyGfal2 {
 
-enum gfal_verbose_levels
-{
-    gfal_verbose_normal = GFAL_VERBOSE_NORMAL,
-    gfal_verbose_verbose = GFAL_VERBOSE_VERBOSE,
-    gfal_verbose_debug = GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG,
-    gfal_verbose_trace = GFAL_VERBOSE_TRACE | GFAL_VERBOSE_VERBOSE | GFAL_VERBOSE_DEBUG
-};
-
 class GfalContextWrapper
 {
 public:
@@ -72,6 +64,7 @@ private:
 
 public:
     Gfal2Context(): cont(new GfalContextWrapper) {
+
     }
 
     virtual ~Gfal2Context() {
@@ -154,7 +147,17 @@ public:
 
     int load_opts_from_file(const std::string & path);
 
+    int set_user_agent(const std::string & agent, const std::string & version);
+
     boost::python::list get_plugin_names(void);
+
+    // Client-side additional information
+    boost::python::tuple get_user_agent(void);
+
+    int add_client_info(const std::string& key, const std::string& value);
+    int remove_client_info(const std::string& key);
+    int clear_client_info(void);
+    boost::python::dict get_client_info(void);
 
     // transfer
     int filecopy(const std::string & src, const std::string & dst);
@@ -188,7 +191,7 @@ public:
     boost::python::list abort_bring_online_list(const boost::python::list& files, const std::string& token);
 };
 
-int gfal_set_verbose_enum(enum gfal_verbose_levels lvls);
+int gfal_set_verbose_enum(GLogLevelFlags lvls);
 
 } // PyGfal2 namespace
 
