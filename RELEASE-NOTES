@@ -1,3 +1,10 @@
+* Fri Apr 10 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.0
+** Improvement
+ - [DMC-649] - Core: Improve logger system, deprecate old methods
+ - [DMC-651] - Core and plugins: Allow to send custom key/value to the servers
+** New Feature
+ - [DMC-641] - Core: Allow to register multiple event listeners
+
 * Fri Feb 03 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.7.0
  - [DMC-543] - listdir leaks the file descriptor
  - [DMC-546] - Expose bulk bring-online operations in gfal2-python
