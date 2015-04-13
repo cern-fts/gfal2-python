@@ -211,6 +211,7 @@ boost::python::list Gfal2Context::unlink_list(const boost::python::list& pyfiles
         files_ptr[i] = files.back().c_str();
     }
 
+    ScopedGILRelease unlock;
     gfal2_unlink_list(cont->context, nbfiles, files_ptr, errors.data());
 
     boost::python::list pyerrors;
@@ -300,6 +301,7 @@ std::string Gfal2Context::readlink(const std::string & path)
 std::string Gfal2Context::checksum(const std::string & uri,
         const std::string & chk_type, off_t start_offset, size_t data_length)
 {
+    ScopedGILRelease unlock;
     char buffer[MAX_BUFFER_SIZE];
     GError* tmp_err = NULL;
     gfal2_checksum(cont->context, uri.c_str(), chk_type.c_str(), start_offset,
@@ -378,6 +380,8 @@ boost::python::list Gfal2Context::listxattr(const std::string & file)
 boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t pintime,
         time_t timeout, bool async)
 {
+    ScopedGILRelease unlock;
+
     GError* tmp_err = NULL;
     char token[128] = { 0 };
     int ret = gfal2_bring_online(cont->context, path.c_str(), pintime, timeout, token,
@@ -392,6 +396,8 @@ boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t 
 
 int Gfal2Context::bring_online_poll(const std::string& path, const std::string& token)
 {
+    ScopedGILRelease unlock;
+
     GError* tmp_err = NULL;
     int ret = gfal2_bring_online_poll(cont->context, path.c_str(), token.c_str(),
             &tmp_err);
@@ -403,6 +409,8 @@ int Gfal2Context::bring_online_poll(const std::string& path, const std::string& 
 
 int Gfal2Context::release(const std::string& path, const std::string& token)
 {
+    ScopedGILRelease unlock;
+
     GError* tmp_err = NULL;
     int ret = gfal2_release_file(cont->context, path.c_str(), token.c_str(), &tmp_err);
     if (ret < 0)
@@ -427,6 +435,7 @@ boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& 
     }
 
     char token[128] = { 0 };
+    ScopedGILRelease unlock;
     gfal2_bring_online_list(cont->context, nbfiles, files_ptr, pintime, timeout, token,
             sizeof(token), async, errors.data());
 
@@ -451,6 +460,7 @@ boost::python::list Gfal2Context::bring_online_poll_list(const boost::python::li
         files_ptr[i] = files.back().c_str();
     }
 
+    ScopedGILRelease unlock;
     gfal2_bring_online_poll_list(cont->context, nbfiles, files_ptr, token.c_str(),
             errors.data());
 
@@ -476,6 +486,7 @@ boost::python::list Gfal2Context::release_list(const boost::python::list& pyfile
         files_ptr[i] = files.back().c_str();
     }
 
+    ScopedGILRelease unlock;
     gfal2_release_file_list(cont->context, nbfiles, files_ptr, token.c_str(),
             errors.data());
 
@@ -490,6 +501,7 @@ int Gfal2Context::abort_bring_online(const std::string &path, const std::string&
     GError* error = NULL;
     const char* file_ptr = path.c_str();
     int ret;
+    ScopedGILRelease unlock;
     ret = gfal2_abort_files(cont->context, 1, &file_ptr, token.c_str(), &error);
     if (ret < 0)
         GErrorWrapper::throwOnError(&error);
@@ -513,6 +525,7 @@ boost::python::list Gfal2Context::abort_bring_online_list(
         files_ptr[i] = files.back().c_str();
     }
 
+    ScopedGILRelease unlock;
     gfal2_abort_files(cont->context, nbfiles, files_ptr, token.c_str(),
             errors.data());
 
@@ -548,6 +561,7 @@ boost::shared_ptr<Directory> Gfal2Context::directory(const std::string & path)
 
 int Gfal2Context::get_opt_integer(const std::string & nmspace, const std::string & key)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_get_opt_integer(cont->context, nmspace.c_str(), key.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -558,6 +572,7 @@ int Gfal2Context::get_opt_integer(const std::string & nmspace, const std::string
 std::string Gfal2Context::get_opt_string(const std::string & nmspace,
         const std::string & key)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     char* p = gfal2_get_opt_string(cont->context, nmspace.c_str(), key.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -567,6 +582,7 @@ std::string Gfal2Context::get_opt_string(const std::string & nmspace,
 
 boost::python::list Gfal2Context::get_opt_string_list(const std::string & nmspace, const std::string & key)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     gsize size = 0;
     boost::python::list result;
@@ -584,6 +600,7 @@ boost::python::list Gfal2Context::get_opt_string_list(const std::string & nmspac
 
 bool Gfal2Context::get_opt_boolean(const std::string & nmspace, const std::string & key)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     const bool ret = gfal2_get_opt_boolean(cont->context, nmspace.c_str(), key.c_str(),
             &tmp_err);
@@ -594,6 +611,7 @@ bool Gfal2Context::get_opt_boolean(const std::string & nmspace, const std::strin
 
 int Gfal2Context::set_opt_integer(const std::string & nmspace, const std::string & key, int value)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_set_opt_integer(cont->context, nmspace.c_str(), key.c_str(), value, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -604,6 +622,7 @@ int Gfal2Context::set_opt_integer(const std::string & nmspace, const std::string
 int Gfal2Context::set_opt_string(const std::string & nmspace, const std::string & key,
         const std::string & value)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_set_opt_string(cont->context, nmspace.c_str(), key.c_str(), (char*) value.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -614,6 +633,7 @@ int Gfal2Context::set_opt_string(const std::string & nmspace, const std::string 
 int Gfal2Context::set_opt_string_list(const std::string & nmspace,
         const std::string & key, const boost::python::list &py_value)
 {
+    ScopedGILRelease unlock;
     std::vector<std::string> value = convert_python_list_to_typed_list<std::string>(
             py_value);
 
@@ -634,6 +654,7 @@ int Gfal2Context::set_opt_string_list(const std::string & nmspace,
 
 int Gfal2Context::set_opt_boolean(const std::string & nmspace, const std::string & key, bool val)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_set_opt_boolean(cont->context, nmspace.c_str(), key.c_str(), val,
             &tmp_err);
@@ -644,6 +665,7 @@ int Gfal2Context::set_opt_boolean(const std::string & nmspace, const std::string
 
 int Gfal2Context::load_opts_from_file(const std::string & path)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_load_opts_from_file(cont->context, path.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -653,6 +675,7 @@ int Gfal2Context::load_opts_from_file(const std::string & path)
 
 boost::python::list Gfal2Context::get_plugin_names(void)
 {
+    ScopedGILRelease unlock;
     boost::python::list pyplugins;
     gchar** plugins = gfal2_get_plugin_names(cont->context);
     int nplugins = g_strv_length(plugins);
@@ -668,6 +691,7 @@ boost::python::list Gfal2Context::get_plugin_names(void)
 
 int Gfal2Context::set_user_agent(const std::string & agent, const std::string & version)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_set_user_agent(cont->context, agent.c_str(), version.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -677,6 +701,7 @@ int Gfal2Context::set_user_agent(const std::string & agent, const std::string & 
 
 boost::python::tuple Gfal2Context::get_user_agent(void)
 {
+    ScopedGILRelease unlock;
     const char* agent, *version;
     gfal2_get_user_agent(cont->context, &agent, &version);
     return boost::python::make_tuple(agent, version);
@@ -685,6 +710,7 @@ boost::python::tuple Gfal2Context::get_user_agent(void)
 
 int Gfal2Context::add_client_info(const std::string& key, const std::string& value)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_add_client_info(cont->context, key.c_str(), value.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -694,6 +720,7 @@ int Gfal2Context::add_client_info(const std::string& key, const std::string& val
 
 int Gfal2Context::remove_client_info(const std::string& key)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_remove_client_info(cont->context, key.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -703,6 +730,7 @@ int Gfal2Context::remove_client_info(const std::string& key)
 
 int Gfal2Context::clear_client_info(void)
 {
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     int ret = gfal2_clear_client_info(cont->context, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
@@ -712,6 +740,7 @@ int Gfal2Context::clear_client_info(void)
 
 boost::python::dict Gfal2Context::get_client_info(void)
 {
+    ScopedGILRelease unlock;
     boost::python::dict dictionary;
 
     GError* tmp_err = NULL;
@@ -738,6 +767,7 @@ int Gfal2Context::cancel()
 
 int PyGfal2::gfal_set_verbose_enum(GLogLevelFlags lvls)
 {
+    ScopedGILRelease unlock;
     gfal2_log_set_level(lvls);
     return 0;
 }
