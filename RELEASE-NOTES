@@ -1,4 +1,6 @@
-* Fri Apr 10 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.0
+* Mon Apr 13 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.1
+** Bug
+ - [DMC-670] - Several calls are missing a ScopedGILRelease
 ** Improvement
  - [DMC-649] - Core: Improve logger system, deprecate old methods
  - [DMC-651] - Core and plugins: Allow to send custom key/value to the servers
