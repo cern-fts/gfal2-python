@@ -21,16 +21,21 @@
 %global __provides_exclude_from ^(%{python_sitearch}/.*\\.so)$
 %endif
 
-Name:				gfal2-python
-Version:			1.8.1
-Release:			1%{?dist}
-Summary:			Python bindings for gfal2
-Group:				Applications/Internet
-License:			ASL 2.0
-URL:				http://dmc.web.cern.ch/projects/gfal2-python
-# svn export http://svn.cern.ch/guest/lcgutil/gfal2-bindings/trunk gfal2-bindings
-Source0:			http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/%{name}/%{name}-%{version}.tar.gz
-BuildRoot:			%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+Name:			gfal2-python
+Version:		1.8.1
+Release:		1%{?dist}
+Summary:		Python bindings for gfal 2
+Group:			Applications/Internet
+License:		ASL 2.0
+URL:			http://dmc.web.cern.ch/
+# git clone https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.8.1
+# pushd gfal2-python-1.8.1
+# git checkout v1.8.1
+# git submodule init && git submodule update
+# popd
+# tar czf gfal2-python-1.8.1.tar.gz gfal2-python-1.8.1
+Source0:		%{name}-%{version}.tar.gz
+BuildRoot:		%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:		cmake
 BuildRequires:		gfal2-devel >= 2.9.1
@@ -42,11 +47,11 @@ BuildRequires:		boost-devel
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
 
-Requires:           gfal2 >= 2.9.1
+Requires:		gfal2-core >= 2.9.1
 
 %description
-Python bindings for gfal 2.0.
-GFAL 2.0 offers an a single, simple and portable API
+Python bindings for gfal2.
+GFAL2 offers an a single, simple and portable API
 for the file operations in grids and cloud environments.
 
 %package doc
@@ -57,7 +62,7 @@ BuildArch:			noarch
 %endif
 
 %description doc
-Documentation files for %{name}.
+Documentation files for %{name} .
 
 %clean
 rm -rf %{buildroot};
@@ -89,7 +94,6 @@ make DESTDIR=%{buildroot} install
 %{_pkgdocdir}/RELEASE-NOTES
 %{_pkgdocdir}/README
 
-
 %files doc
 %defattr (-,root,root)
 %{_pkgdocdir}/readme.html
@@ -99,6 +103,33 @@ make DESTDIR=%{buildroot} install
 %{_pkgdocdir}/examples/*
 
 %changelog
+* Fri Apr 17 2015 Alejandro Alvarez <aalvarez at cern.ch> - 1.8.1-1
+- Update for release 1.8.1
+
+* Thu Apr 02 2015 Alejandro Alvarez <aalvarez at cern.ch> - 1.7.1-1
+- Update for release 1.7.1
+
+* Fri Feb 06 2015 Alejandro Alvarez <aalvarez at cern.ch> - 1.7.0-1
+- Update for release 1.7.0
+
+* Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 1.6.0-2
+- Rebuild for boost 1.57.0
+
+* Fri Nov 07 2014 Alejandro Alvarez <aalvarez at cern.ch> - 1.6.0-1
+- Update for release 1.6.0
+
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.5.0-1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Tue Jul 01 2014 Alejandro Alvarez <aalvarez at cern.ch> - 1.5.0-1
+- Update for release 1.5.0
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 1.4.1-2
+- Rebuild for boost 1.55.0
+
 * Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.1-1
  - Release 1.4.1 of gfal2 python bindings, see RELEASE-NOTES for details
 
