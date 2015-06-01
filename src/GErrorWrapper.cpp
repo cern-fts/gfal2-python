@@ -155,17 +155,13 @@ exception:
 
 
 
-PyObject* PyGfal2::createGErrorExceptionType(boost::python::scope& scop)
+PyObject* PyGfal2::createGErrorExceptionType(boost::python::scope& scope)
 {
-    namespace bp = boost::python;
-
     PyObject* typeObj = NULL;
     PyObject* attrs   = NULL;
 
-    bp::object scope;
-
     // Get name
-    std::string scopeName = bp::extract<std::string>(scop.attr("__name__"));
+    std::string scopeName = boost::python::extract<std::string>(scope.attr("__name__"));
     std::string qualifiedName = scopeName + ".GError";
 
     // Initialize class attributes
@@ -183,12 +179,13 @@ PyObject* PyGfal2::createGErrorExceptionType(boost::python::scope& scop)
 
     // Create exception
     if (!(typeObj = PyErr_NewException(
-            const_cast<char*>(qualifiedName.c_str()), GErrorParent, attrs)))
+            const_cast<char*>(qualifiedName.c_str()), GErrorParent, attrs))) {
         goto exception;
+    }
 
     Py_DECREF(attrs);
 
-    scop.attr("GError") = bp::borrowed(typeObj);
+    scope.attr("GError") = boost::python::borrowed(typeObj);
     return typeObj;
 
 exception:
