@@ -35,6 +35,7 @@
 #include "File.h"
 #include "GfaltParams.h"
 #include "Stat.h"
+#include "pyGIL.h"
 
 namespace PyGfal2 {
 
@@ -63,8 +64,9 @@ private:
     boost::shared_ptr<GfalContextWrapper> cont;
 
 public:
-    Gfal2Context(): cont(new GfalContextWrapper) {
-
+    Gfal2Context() {
+        ScopedGILRelease unlock;
+        cont = boost::shared_ptr<GfalContextWrapper>(new GfalContextWrapper);
     }
 
     virtual ~Gfal2Context() {
