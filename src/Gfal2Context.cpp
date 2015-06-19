@@ -403,6 +403,10 @@ int Gfal2Context::bring_online_poll(const std::string& path, const std::string& 
     GError* tmp_err = NULL;
     int ret = gfal2_bring_online_poll(cont->context, path.c_str(), token.c_str(),
             &tmp_err);
+    if (ret < 0 && tmp_err->code == EAGAIN) {
+        g_error_free(tmp_err);
+        ret = 0;
+    }
     if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
     return ret;
