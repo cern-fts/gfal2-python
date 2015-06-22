@@ -1,4 +1,6 @@
 .project
 .cproject
 .settings
-
+*.rpm
+*.log
+*.tar.gz
