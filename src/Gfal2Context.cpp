@@ -648,10 +648,10 @@ int Gfal2Context::set_opt_string(const std::string & nmspace, const std::string 
 int Gfal2Context::set_opt_string_list(const std::string & nmspace,
         const std::string & key, const boost::python::list &py_value)
 {
-    ScopedGILRelease unlock;
     std::vector<std::string> value = convert_python_list_to_typed_list<std::string>(
             py_value);
 
+    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     const int size_list = value.size();
     char* tab_ptr[size_list + 1];
