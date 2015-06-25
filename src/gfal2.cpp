@@ -55,6 +55,11 @@ BOOST_PYTHON_MODULE(gfal2)
     // do not confuse users with C++ signatures and the like
 	boost::python::docstring_options local_docstring_options(true, true, false);
 
+	// Expose gfal2-python version
+#ifdef GFAL2_PYTHON_VERSION
+	boost::python::scope().attr("__version__") = boost::python::str(GFAL2_PYTHON_VERSION);
+#endif
+
     // global functions
 	boost::python::def("set_verbose", &PyGfal2::gfal_set_verbose_enum, "Define the log level of gfal2");
 	boost::python::def("creat_context", &PyGfal2::Gfal2Context::creat_context, "Create a gfal2 context");
