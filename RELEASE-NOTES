@@ -1,3 +1,16 @@
+* Fri Jul 03 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.3
+** Bug
+ - [DMC-690] - Segfault inside set_opt_string_list
+** New feature
+ - [DMC-689] - Add __version__ to gfal2 bindings
+
+* Fri Jun 19 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.2
+** Bug
+ - [DMC-677] - Need to reduce scope of ScopedGILRelease (see DMC-670)
+ - [DMC-686] - Missing GIL release on gfal2 context constructor (Was Listing endpoints via WebFTS intermittently fails )
+** Improvement
+ - [DMC-674] - Validate version as part of the packaging
+
 * Mon Apr 13 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.1
 ** Bug
  - [DMC-670] - Several calls are missing a ScopedGILRelease
