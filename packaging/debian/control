@@ -1,0 +1,24 @@
+Source: gfal2-python
+Priority: optional
+Maintainer: DMC Devel <dmc-devel@cern.ch>
+Build-Depends: debhelper (>= 8.0.0), cmake, python-epydoc, libgfal2-dev(>=2.9.0), libboost-dev, libboost-python1.55-dev, libpython-dev, pkg-config
+Standards-Version: 3.9.5
+Section: net
+Homepage: http://dmc.web.cern.ch/
+
+Package: gfal2-python
+Architecture: any
+Depends:  libgfal2-2 (>= 2.9.0), libgfal-transfer2 (>= 2.9.0), ${shlibs:Depends}, ${misc:Depends}
+Recommends: gfal2-plugin-file (>= 2.9.0), gfal2-plugin-srm (>= 2.9.0), gfal2-plugin-gridftp (>= 2.9.0), gfal2-plugin-http (>= 2.9.0)
+Description: Python bindings for gfal 2
+  Python bindings for gfal2.
+  GFAL2 offers an a single, simple and portable API
+  for the file operations in grids and cloud environments.
+
+Package: gfal2-python-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Description: Documentation for gfal2-python
+ Documentation files for gfal2-python
+
