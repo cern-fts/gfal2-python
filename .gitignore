@@ -6,3 +6,4 @@
 *.tar.gz
 *.gz
 *.dsc
+*.egg-info

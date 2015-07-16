@@ -19,8 +19,6 @@ set(Boost_NO_BOOST_CMAKE ON)
 find_package(Boost COMPONENTS python REQUIRED)
 find_package(PythonEasy REQUIRED)
 
-#enable testing
-enable_testing()
 
 #define PROJECT vars
 set(PROJECT_NAME_MAIN "gfal2-python")
@@ -58,10 +56,14 @@ endif (NOT SKIP_DOC)
 add_definitions( -D_FILE_OFFSET_BITS=64 )
 
 add_subdirectory (src)
-add_subdirectory (test)
+
+if (NOT SKIP_TESTS)
+  enable_testing()
+  add_subdirectory (test)
+endif (NOT SKIP_TESTS)
 
 if (NOT SKIP_DOC)
-	add_subdirectory(doc)
+  add_subdirectory(doc)
   # Install examples
   install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/example/python/"
             DESTINATION ${DOC_INSTALL_DIR}/examples)

@@ -25,9 +25,11 @@ import distutils.dir_util
 
 from setuptools import setup
 
+# Change this when there are changes in the setup.py or MANIFEST.in
+RELEASE=3
 
 def get_version():
-    ver_components = dict()
+    ver_components = dict(VERSION_RELEASE=RELEASE)
     with open('CMakeLists.txt') as cmake:
         for line in cmake:
             line = line.strip()
@@ -38,7 +40,7 @@ def get_version():
                     ver_components[varname] = varval
     if len(ver_components) == 0:
         raise ValueError('Could not find the version')
-    return "%(VERSION_MAJOR)s.%(VERSION_MINOR)s.%(VERSION_PATCH)s" % ver_components
+    return "%(VERSION_MAJOR)s.%(VERSION_MINOR)s.%(VERSION_PATCH)s.post%(VERSION_RELEASE)s" % ver_components
 
 
 def validate():
@@ -52,7 +54,7 @@ def _run_make():
     distutils.dir_util.mkpath('build')
     os.chdir('build')
     try:
-        distutils.spawn.spawn(['cmake', '-DSKIP_DOC=TRUE', '..'])
+        distutils.spawn.spawn(['cmake', '-DSKIP_DOC=TRUE', '-DSKIP_TESTS=TRUE', '..'])
         distutils.spawn.spawn(['make'])
     finally:
         os.chdir('..')
