@@ -50,8 +50,10 @@ find_package (GTHREAD2 REQUIRED)
 find_package(GFAL2 REQUIRED)
 
 # Install doc license
+if (NOT SKIP_DOC)
 install(FILES "LICENSE" "RELEASE-NOTES" "README" "readme.html"
                         DESTINATION ${DOC_INSTALL_DIR})
+endif (NOT SKIP_DOC)
 
 add_definitions( -D_FILE_OFFSET_BITS=64 )
 
