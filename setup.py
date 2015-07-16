@@ -92,7 +92,7 @@ setup(
     classifiers = [
 		"Intended Audience :: Developers",
 		"Topic :: Software Development :: Libraries :: Python Modules",
-		"License :: OSI Approved :: Apache 2",
+		"License :: OSI Approved :: Apache Software License",
 		"Development Status :: 5 - Production/Stable",
 		"Operating System :: Unix",
 		"Programming Language :: C"
