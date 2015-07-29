@@ -42,6 +42,8 @@ std::string gfal_version_wrapper(void)
 
 BOOST_PYTHON_MODULE(gfal2)
 {
+	Py_Initialize();
+
 	// initialize multi-threading
 	PyEval_InitThreads();
 

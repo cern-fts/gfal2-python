@@ -54,7 +54,11 @@ public:
     }
 
     off_t get_d_off() {
+#ifdef __linux__
         return _dir.d_off;
+#else
+        return 0;
+#endif
     }
 
     unsigned short get_d_reclen() {
@@ -72,7 +76,9 @@ public:
     std::string __str__() {
         std::ostringstream res;
         res << "inode: " << _dir.d_ino << std::endl;
+#ifdef __linux__
         res << "offset: " << _dir.d_off << std::endl;
+#endif
         res << "length: " << _dir.d_reclen << std::endl;
         res << "type: " << _dir.d_type << std::endl;
         res << "name: " << _dir.d_name << std::endl;

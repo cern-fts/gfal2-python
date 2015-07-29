@@ -19,6 +19,7 @@ set(Boost_NO_BOOST_CMAKE ON)
 find_package(Boost COMPONENTS python REQUIRED)
 find_package(PythonEasy REQUIRED)
 
+message("Python: ${PYTHON_EXECUTABLE}")
 
 #define PROJECT vars
 set(PROJECT_NAME_MAIN "gfal2-python")
