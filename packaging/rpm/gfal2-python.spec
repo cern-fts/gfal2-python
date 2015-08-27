@@ -1,5 +1,7 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
+# Use static linking against boost
+%bcond_with static_boost_python
 
 #include boost > 141 for EL5
 %if 0%{?el5}
@@ -44,6 +46,9 @@ BuildRequires:		boost141-devel
 %else
 BuildRequires:		boost-devel
 %endif
+%if %{with static_boost_python}
+BuildRequires:		boost-static
+%endif
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
 
@@ -83,8 +88,11 @@ if [ "$gfal2_python_cmake_ver=" != "$gfal2_python_spec_ver=" ]; then
 fi
 
 %cmake \
--DDOC_INSTALL_DIR=%{_pkgdocdir} \
+ -DDOC_INSTALL_DIR=%{_pkgdocdir} \
  %{boost_cmake_flags} \
+%if %{with static_boost_python}
+ -DBoost_USE_STATIC_LIBS=ON \
+%endif
  -DUNIT_TESTS=TRUE . 
 
 make %{?_smp_mflags}
