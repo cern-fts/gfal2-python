@@ -1,7 +1,8 @@
-%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
 # Use static linking against boost
 %bcond_with static_boost_python
+
+# Doc directory
+%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 #include boost > 141 for EL5
 %if 0%{?el5}
@@ -46,8 +47,12 @@ BuildRequires:		boost141-devel
 %else
 BuildRequires:		boost-devel
 %endif
-%if %{with static_boost_python}
+%if 0%{?with_static_boost_python}
+%if 0%{?el5}
+BuildRequires:      boost141-static
+%else
 BuildRequires:		boost-static
+%endif
 %endif
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
@@ -90,7 +95,7 @@ fi
 %cmake \
  -DDOC_INSTALL_DIR=%{_pkgdocdir} \
  %{boost_cmake_flags} \
-%if %{with static_boost_python}
+%if 0%{?with_static_boost_python}
  -DBoost_USE_STATIC_LIBS=ON \
 %endif
  -DUNIT_TESTS=TRUE . 
