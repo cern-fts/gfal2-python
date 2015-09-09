@@ -1,7 +1,7 @@
 Source: gfal2-python
 Priority: optional
 Maintainer: DMC Devel <dmc-devel@cern.ch>
-Build-Depends: debhelper (>= 8.0.0), cmake, python-epydoc, libgfal2-dev(>=2.9.0), libboost-dev, libboost-python1.55-dev, libpython-dev, pkg-config
+Build-Depends: debhelper (>= 8.0.0), cmake, python-epydoc, libgfal2-dev(>=2.9.0), libboost-dev, libboost-python1.58-dev, libpython-dev, pkg-config
 Standards-Version: 3.9.5
 Section: net
 Homepage: http://dmc.web.cern.ch/
