@@ -1,3 +1,8 @@
+* Mon Oct 12 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.4
+ - [DMC-698] - Port DMC clients to MacOSX
+ - [DMC-725] - Provide a gfal2-python build linked against python2.7,
+system stdc++ and statically against boost python
+
 * Fri Jul 03 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.3
 ** Bug
  - [DMC-690] - Segfault inside set_opt_string_list
