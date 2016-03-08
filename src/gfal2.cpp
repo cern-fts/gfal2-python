@@ -30,7 +30,7 @@
 #include "pyGIL.h"
 
 
-void gerror_exception_translator(const PyGfal2::GErrorWrapper & x)
+void gerror_exception_translator(const PyGfal2::GErrorWrapper &x)
 {
     assert(PyGfal2::GErrorPyType != NULL);
     PyErr_SetObject(PyGfal2::GErrorPyType, Py_BuildValue("si", x.what(), x.code()));
@@ -42,206 +42,213 @@ std::string gfal_version_wrapper(void)
     return gfal2_version();
 }
 
-BOOST_PYTHON_MODULE(gfal2)
+BOOST_PYTHON_MODULE (gfal2)
 {
-	Py_Initialize();
+    Py_Initialize();
 
-	// initialize multi-threading
-	PyEval_InitThreads();
+    // initialize multi-threading
+    PyEval_InitThreads();
 
-	boost::python::scope gfal2Scope = boost::python::scope();
+    boost::python::scope gfal2Scope = boost::python::scope();
 
-	// Setup the logging
-	gfal2_log_set_handler(&PyGfal2::logging_helper, NULL);
-	gfal2_log_set_level(G_LOG_LEVEL_INFO);
+    // Setup the logging
+    gfal2_log_set_handler(&PyGfal2::logging_helper, NULL);
+    gfal2_log_set_level(G_LOG_LEVEL_INFO);
 
     // disable boost::python automatic docstring generation style
     // do not confuse users with C++ signatures and the like
-	boost::python::docstring_options local_docstring_options(true, true, false);
+    boost::python::docstring_options local_docstring_options(true, true, false);
 
-	// Expose gfal2-python version
+    // Expose gfal2-python version
 #ifdef GFAL2_PYTHON_VERSION
-	boost::python::scope().attr("__version__") = boost::python::str(GFAL2_PYTHON_VERSION);
+    boost::python::scope().attr("__version__") = boost::python::str(GFAL2_PYTHON_VERSION);
 #endif
 
     // global functions
-	boost::python::def("set_verbose", &PyGfal2::gfal_set_verbose_enum, "Define the log level of gfal2");
-	boost::python::def("creat_context", &PyGfal2::Gfal2Context::creat_context, "Create a gfal2 context");
-	boost::python::def("get_version", &gfal_version_wrapper, "Get the gfal2 version");
+    boost::python::def("set_verbose", &PyGfal2::gfal_set_verbose_enum, "Define the log level of gfal2");
+    boost::python::def("creat_context", &PyGfal2::Gfal2Context::creat_context, "Create a gfal2 context");
+    boost::python::def("get_version", &gfal_version_wrapper, "Get the gfal2 version");
 
-	boost::python::enum_<GLogLevelFlags>("verbose_level")
-            .value("normal", G_LOG_LEVEL_CRITICAL)
-            .value("warning", G_LOG_LEVEL_WARNING)
-            .value("verbose", G_LOG_LEVEL_INFO)
-            .value("debug", G_LOG_LEVEL_DEBUG)
-            .value("trace", G_LOG_LEVEL_DEBUG)
-            ;
+    boost::python::enum_<GLogLevelFlags>("verbose_level")
+        .value("normal", G_LOG_LEVEL_CRITICAL)
+        .value("warning", G_LOG_LEVEL_WARNING)
+        .value("verbose", G_LOG_LEVEL_INFO)
+        .value("debug", G_LOG_LEVEL_DEBUG)
+        .value("trace", G_LOG_LEVEL_DEBUG);
 
-	// register exception
-	PyGfal2::GErrorPyType = PyGfal2::createGErrorExceptionType(gfal2Scope);
+    // register exception
+    PyGfal2::GErrorPyType = PyGfal2::createGErrorExceptionType(gfal2Scope);
 
-	boost::python::scope context_scope = boost::python::class_<PyGfal2::Gfal2Context>("Gfal2Context", "Gfal2 Context")
-    .def("open", &PyGfal2::Gfal2Context::open,
-        "Opens a file and returns a file descriptor"
-    )
-    .def("file", &PyGfal2::Gfal2Context::file,
-        "Synonym for open"
-    )
-    .def("opendir", &PyGfal2::Gfal2Context::opendir,
-        "Opens a directory and returns a directory descriptor"
-    )
-    .def("directory", &PyGfal2::Gfal2Context::directory,
-        "Synonym for opendir"
-    )
-    .def("access", &PyGfal2::Gfal2Context::access,
-        "Checks if the calling process/user can access the file with the given mode (see os.access)"
-    )
-    .def("lstat", &PyGfal2::Gfal2Context::lstat,
-        "Identical to stat, but following symlinks"
-    )
-    .def("stat", &PyGfal2::Gfal2Context::stat_c,
-        "Performs a stat call on a file"
-    )
-    .def("chmod", &PyGfal2::Gfal2Context::chmod,
-        "Changes the permissions of the file"
-    )
-    .def("unlink", &PyGfal2::Gfal2Context::unlink,
-        "Removes a file"
-    )
-    .def("unlink", &PyGfal2::Gfal2Context::unlink_list,
-        "Removes a set of files"
-    )
-    .def("mkdir", &PyGfal2::Gfal2Context::mkdir,
-        "Creates a directory"
-    )
-    .def("mkdir_rec", &PyGfal2::Gfal2Context::mkdir_rec,
-        "Creates a directory and its parents if needed"
-    )
-    .def("rmdir", &PyGfal2::Gfal2Context::rmdir,
+    boost::python::scope context_scope = boost::python::class_<PyGfal2::Gfal2Context>("Gfal2Context", "Gfal2 Context")
+        .def("open", &PyGfal2::Gfal2Context::open,
+            "Opens a file and returns a file descriptor"
+        )
+        .def("file", &PyGfal2::Gfal2Context::file,
+            "Synonym for open"
+        )
+        .def("opendir", &PyGfal2::Gfal2Context::opendir,
+            "Opens a directory and returns a directory descriptor"
+        )
+        .def("directory", &PyGfal2::Gfal2Context::directory,
+            "Synonym for opendir"
+        )
+        .def("access", &PyGfal2::Gfal2Context::access,
+            "Checks if the calling process/user can access the file with the given mode (see os.access)"
+        )
+        .def("lstat", &PyGfal2::Gfal2Context::lstat,
+            "Identical to stat, but following symlinks"
+        )
+        .def("stat", &PyGfal2::Gfal2Context::stat_c,
+            "Performs a stat call on a file"
+        )
+        .def("chmod", &PyGfal2::Gfal2Context::chmod,
+            "Changes the permissions of the file"
+        )
+        .def("unlink", &PyGfal2::Gfal2Context::unlink,
+            "Removes a file"
+        )
+        .def("unlink", &PyGfal2::Gfal2Context::unlink_list,
+            "Removes a set of files"
+        )
+        .def("mkdir", &PyGfal2::Gfal2Context::mkdir,
+            "Creates a directory"
+        )
+        .def("mkdir_rec", &PyGfal2::Gfal2Context::mkdir_rec,
+            "Creates a directory and its parents if needed"
+        )
+        .def("rmdir", &PyGfal2::Gfal2Context::rmdir,
         "Removes a directory"
-    )
-    .def("listdir", &PyGfal2::Gfal2Context::listdir,
-        "Returns the content of a directory as a list of file names"
-    )
-    .def("rename", &PyGfal2::Gfal2Context::rename,
-        "Renames a file"
-    )
-    .def("readlink", &PyGfal2::Gfal2Context::readlink,
-        "Returns a string representing the path to which the symbolic link points."
-    )
-    .def("symlink", &PyGfal2::Gfal2Context::symlink,
-        "Creates a symbolic link"
-    )
-    .def("checksum",
-        static_cast<std::string (PyGfal2::Gfal2Context::*)(const std::string & uri, const std::string & chk_type, off_t offset, size_t length)>(&PyGfal2::Gfal2Context::checksum),
-        "Returns the checksum for the given part of a file. If both offset and length are 0, the whole file will be processed"
-     )
-    .def("checksum", static_cast<std::string (PyGfal2::Gfal2Context::*)(const std::string & uri, const std::string & chk_type)>(&PyGfal2::Gfal2Context::checksum),
-        "Shortcut for checksum(uri, chk_type, 0, 0)"
-    )
-    .def("getxattr", &PyGfal2::Gfal2Context::getxattr,
-        "Gets an extended attribute"
-    )
-    .def("setxattr", &PyGfal2::Gfal2Context::setxattr,
-        "Sets an extended attribute"
-    )
-    .def("listxattr", &PyGfal2::Gfal2Context::listxattr,
-        "List known/supported extended attributes"
-    )
-    .def("get_opt_integer", &PyGfal2::Gfal2Context::get_opt_integer,
-        "Returns the integer value assigned to a configuration parameter"
-    )
-    .def("get_opt_boolean", &PyGfal2::Gfal2Context::get_opt_boolean,
-        "Returns the boolean value assigned to a configuration parameter"
-    )
-    .def("get_opt_string", &PyGfal2::Gfal2Context::get_opt_string,
-        "Returns the string value assigned to a configuration parameter"
-    )
-    .def("get_opt_string_list", &PyGfal2::Gfal2Context::get_opt_string_list,
-        "Returns the list of strings assigned to a configuration parameter"
-    )
-    .def("set_opt_string_list", &PyGfal2::Gfal2Context::set_opt_string_list,
-        "Sets a configuration parameter as a list of strings"
-    )
-    .def("set_opt_string", &PyGfal2::Gfal2Context::set_opt_string,
-        "Sets a configuration parameter as a string"
-    )
-    .def("set_opt_boolean", &PyGfal2::Gfal2Context::set_opt_boolean,
-        "Sets a configuration parameter as a boolean"
-    )
-    .def("set_opt_integer", &PyGfal2::Gfal2Context::set_opt_integer,
-        "Sets a configuration parameter as an integer"
-    )
-    .def("load_opts_from_file", &PyGfal2::Gfal2Context::load_opts_from_file,
-        "Loads a set of configuration parameters from a .ini formatted file"
-    )
-    .def("set_user_agent", &PyGfal2::Gfal2Context::set_user_agent,
-        "Sets the user agent identification, name and version"
-    )
-    .def("get_user_agent", &PyGfal2::Gfal2Context::get_user_agent,
-        "Gets the user agent identification, name and version"
-    )
-    .def("add_client_info", &PyGfal2::Gfal2Context::add_client_info,
-        "Sets a custom key/value pair to be sent to the server, if the protocol allows it"
-    )
-    .def("remove_client_info", &PyGfal2::Gfal2Context::remove_client_info,
-        "Removes a key/value pair set previously by add_client_info"
-    )
-    .def("clear_client_info", &PyGfal2::Gfal2Context::clear_client_info,
-        "Clears all key/value pairs set by add_client_info"
-    )
-    .def("get_client_info", &PyGfal2::Gfal2Context::get_client_info,
-        "Returns the key/value pairs as a dictionary"
-    )
-    .def("filecopy", static_cast<int (PyGfal2::Gfal2Context::*)(const std::string & src, const std::string & dst)>(&PyGfal2::Gfal2Context::filecopy),
-        "Shortcut for filecopy(gfal2.transfer_params(), src, dst)"
-    )
-    .def("filecopy",
-         static_cast<int (PyGfal2::Gfal2Context::*)(const PyGfal2::GfaltParams& p, const std::string & src, const std::string & dst)>(&PyGfal2::Gfal2Context::filecopy),
-         "Copies src into dst using the configured transfer parameters"
-    )
-    .def("filecopy",
-         static_cast<boost::python::object (PyGfal2::Gfal2Context::*)(const boost::python::list&, const boost::python::list&)>(&PyGfal2::Gfal2Context::filecopy),
-         "Shortcut for filecopy(gfal2.transfer_params(), sources, destinations)"
-    )
-    .def("filecopy",
-         static_cast<boost::python::object (PyGfal2::Gfal2Context::*)(const PyGfal2::GfaltParams&, const boost::python::list&, const boost::python::list&)>(&PyGfal2::Gfal2Context::filecopy),
-         "Shortcut for filecopy(params, sources, destinations, [])"
-    )
-    .def("filecopy",
-         static_cast<boost::python::object (PyGfal2::Gfal2Context::*)(const PyGfal2::GfaltParams&, const boost::python::list&, const boost::python::list&, const boost::python::list&)>(&PyGfal2::Gfal2Context::filecopy),
-         "Performs a bulk copy from sources[i] to destinations[i] with checksum checksum[i]. All sources must use same protocol/storage, and same goes for destinations."
-    )
-    .def("cancel", &PyGfal2::Gfal2Context::cancel,
-        "Cancel running operations")
-    .def("bring_online", &PyGfal2::Gfal2Context::bring_online,
-        "Performs a bring online operation (only for protocols that support this operation)"
-    )
-    .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll,
-        "Polls the status for asynchronous bring_online operations"
-    )
-    .def("release", &PyGfal2::Gfal2Context::release,
-        "Releases a file pinned by a bring_online call"
-    )
-    .def("bring_online", &PyGfal2::Gfal2Context::bring_online_list,
-        "Performs a bulk bring online operation"
-    )
-    .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll_list,
-        "Performs a bulk bring online poll operation"
-    )
-    .def("release", &PyGfal2::Gfal2Context::release_list,
-        "Releases a set of files pinned by a bring_online call"
-    )
-    .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online,
-             "Aborts a bring online request")
-    .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online_list,
-         "Aborts a bring online request")
-    .def("get_plugin_names", &PyGfal2::Gfal2Context::get_plugin_names,
-        "Returns the name list of loaded plugins");
+        )
+        .def("listdir", &PyGfal2::Gfal2Context::listdir,
+            "Returns the content of a directory as a list of file names"
+        )
+        .def("rename", &PyGfal2::Gfal2Context::rename,
+            "Renames a file"
+        )
+        .def("readlink", &PyGfal2::Gfal2Context::readlink,
+            "Returns a string representing the path to which the symbolic link points."
+        )
+        .def("symlink", &PyGfal2::Gfal2Context::symlink,
+            "Creates a symbolic link"
+        )
+        .def("checksum",
+            static_cast<std::string (PyGfal2::Gfal2Context::*)(const std::string &uri, const std::string &chk_type,
+                off_t offset, size_t length)>(&PyGfal2::Gfal2Context::checksum),
+            "Returns the checksum for the given part of a file. If both offset and length are 0, the whole file will be processed"
+        )
+        .def("checksum", static_cast<std::string (PyGfal2::Gfal2Context::*)(const std::string &uri,
+                const std::string &chk_type)>(&PyGfal2::Gfal2Context::checksum),
+            "Shortcut for checksum(uri, chk_type, 0, 0)"
+        )
+        .def("getxattr", &PyGfal2::Gfal2Context::getxattr,
+            "Gets an extended attribute"
+        )
+        .def("setxattr", &PyGfal2::Gfal2Context::setxattr,
+            "Sets an extended attribute"
+        )
+        .def("listxattr", &PyGfal2::Gfal2Context::listxattr,
+            "List known/supported extended attributes"
+        )
+        .def("get_opt_integer", &PyGfal2::Gfal2Context::get_opt_integer,
+            "Returns the integer value assigned to a configuration parameter"
+        )
+        .def("get_opt_boolean", &PyGfal2::Gfal2Context::get_opt_boolean,
+            "Returns the boolean value assigned to a configuration parameter"
+        )
+        .def("get_opt_string", &PyGfal2::Gfal2Context::get_opt_string,
+            "Returns the string value assigned to a configuration parameter"
+        )
+        .def("get_opt_string_list", &PyGfal2::Gfal2Context::get_opt_string_list,
+            "Returns the list of strings assigned to a configuration parameter"
+        )
+        .def("set_opt_string_list", &PyGfal2::Gfal2Context::set_opt_string_list,
+            "Sets a configuration parameter as a list of strings"
+        )
+        .def("set_opt_string", &PyGfal2::Gfal2Context::set_opt_string,
+            "Sets a configuration parameter as a string"
+        )
+        .def("set_opt_boolean", &PyGfal2::Gfal2Context::set_opt_boolean,
+            "Sets a configuration parameter as a boolean"
+        )
+        .def("set_opt_integer", &PyGfal2::Gfal2Context::set_opt_integer,
+            "Sets a configuration parameter as an integer"
+        )
+        .def("load_opts_from_file", &PyGfal2::Gfal2Context::load_opts_from_file,
+            "Loads a set of configuration parameters from a .ini formatted file"
+        )
+        .def("set_user_agent", &PyGfal2::Gfal2Context::set_user_agent,
+            "Sets the user agent identification, name and version"
+        )
+        .def("get_user_agent", &PyGfal2::Gfal2Context::get_user_agent,
+            "Gets the user agent identification, name and version"
+        )
+        .def("add_client_info", &PyGfal2::Gfal2Context::add_client_info,
+            "Sets a custom key/value pair to be sent to the server, if the protocol allows it"
+        )
+        .def("remove_client_info", &PyGfal2::Gfal2Context::remove_client_info,
+            "Removes a key/value pair set previously by add_client_info"
+        )
+        .def("clear_client_info", &PyGfal2::Gfal2Context::clear_client_info,
+            "Clears all key/value pairs set by add_client_info"
+        )
+        .def("get_client_info", &PyGfal2::Gfal2Context::get_client_info,
+            "Returns the key/value pairs as a dictionary"
+        )
+        .def("filecopy", static_cast<int (PyGfal2::Gfal2Context::*)(const std::string &src,
+                const std::string &dst)>(&PyGfal2::Gfal2Context::filecopy),
+            "Shortcut for filecopy(gfal2.transfer_params(), src, dst)"
+        )
+        .def("filecopy",
+            static_cast<int (PyGfal2::Gfal2Context::*)(const PyGfal2::GfaltParams &p, const std::string &src,
+                const std::string &dst)>(&PyGfal2::Gfal2Context::filecopy),
+            "Copies src into dst using the configured transfer parameters"
+        )
+        .def("filecopy",
+            static_cast<boost::python::object (PyGfal2::Gfal2Context::*)(const boost::python::list &,
+                const boost::python::list &)>(&PyGfal2::Gfal2Context::filecopy),
+            "Shortcut for filecopy(gfal2.transfer_params(), sources, destinations)"
+        )
+        .def("filecopy",
+            static_cast<boost::python::object (PyGfal2::Gfal2Context::*)(const PyGfal2::GfaltParams &,
+                const boost::python::list &, const boost::python::list &)>(&PyGfal2::Gfal2Context::filecopy),
+            "Shortcut for filecopy(params, sources, destinations, [])"
+        )
+        .def("filecopy",
+            static_cast<boost::python::object (PyGfal2::Gfal2Context::*)(const PyGfal2::GfaltParams &,
+                const boost::python::list &, const boost::python::list &,
+                const boost::python::list &)>(&PyGfal2::Gfal2Context::filecopy),
+            "Performs a bulk copy from sources[i] to destinations[i] with checksum checksum[i]. All sources must use same protocol/storage, and same goes for destinations."
+        )
+        .def("cancel", &PyGfal2::Gfal2Context::cancel,
+            "Cancel running operations")
+        .def("bring_online", &PyGfal2::Gfal2Context::bring_online,
+            "Performs a bring online operation (only for protocols that support this operation)"
+        )
+        .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll,
+            "Polls the status for asynchronous bring_online operations"
+        )
+        .def("release", &PyGfal2::Gfal2Context::release,
+            "Releases a file pinned by a bring_online call"
+        )
+        .def("bring_online", &PyGfal2::Gfal2Context::bring_online_list,
+            "Performs a bulk bring online operation"
+        )
+        .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll_list,
+            "Performs a bulk bring online poll operation"
+        )
+        .def("release", &PyGfal2::Gfal2Context::release_list,
+            "Releases a set of files pinned by a bring_online call"
+        )
+        .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online,
+            "Aborts a bring online request")
+        .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online_list,
+            "Aborts a bring online request")
+        .def("get_plugin_names", &PyGfal2::Gfal2Context::get_plugin_names,
+            "Returns the name list of loaded plugins");
 
     // register stat struct
-	boost::python::class_<PyGfal2::Stat>
-	    ("Stat", "Please, note that not all fields make sense for all protocols")
+    boost::python::class_<PyGfal2::Stat>
+        ("Stat", "Please, note that not all fields make sense for all protocols")
         .add_property("st_dev", &PyGfal2::Stat::get_st_dev, "Device of contatining file")
         .add_property("st_ino", &PyGfal2::Stat::get_st_ino, "Inode")
         .add_property("st_mode", &PyGfal2::Stat::get_st_mode, "Protection mode")
@@ -254,33 +261,34 @@ BOOST_PYTHON_MODULE(gfal2)
         .add_property("st_size", &PyGfal2::Stat::get_st_size, "Size")
 
         .def("__str__", &PyGfal2::Stat::__str__)
-        .def("__repr__", &PyGfal2::Stat::__str__)
-	;
+        .def("__repr__", &PyGfal2::Stat::__str__);
 
-	// register dirent struct
-	boost::python::class_<PyGfal2::Dirent>
-	    ("Dirent", "Please, note that not all fields make sense for all protocols")
+    // register dirent struct
+    boost::python::class_<PyGfal2::Dirent>
+        ("Dirent", "Please, note that not all fields make sense for all protocols")
         .add_property("d_ino", &PyGfal2::Dirent::get_d_ino, "Inode")
         .add_property("d_off", &PyGfal2::Dirent::get_d_off, "Offset to the next dirent")
         .add_property("d_reclen", &PyGfal2::Dirent::get_d_reclen, "Lenght of this record")
         .add_property("d_type", &PyGfal2::Dirent::get_d_type, "Type of file")
         .add_property("d_name", &PyGfal2::Dirent::get_d_name, "Entry name")
-        .def("__nonzero__", &PyGfal2::Dirent::isValid)
-	;
+        .def("__nonzero__", &PyGfal2::Dirent::isValid);
 
     // Transfer parameters
-	boost::python::class_<PyGfal2::GfaltParams>("TransferParameters", "filecopy parameters")
+    boost::python::class_<PyGfal2::GfaltParams>("TransferParameters", "filecopy parameters")
         .def("copy", &PyGfal2::GfaltParams::copy)
         .add_property("timeout", &PyGfal2::GfaltParams::get_timeout, &PyGfal2::GfaltParams::set_timeout,
             "Operation timeout"
         )
-        .add_property("checksum_check", &PyGfal2::GfaltParams::get_checksum_check, &PyGfal2::GfaltParams::set_checksum_check,
+        .add_property("checksum_check", &PyGfal2::GfaltParams::get_checksum_check,
+            &PyGfal2::GfaltParams::set_checksum_check,
             "Perform checksum validation"
         )
-        .add_property("src_spacetoken", &PyGfal2::GfaltParams::get_src_spacetoken, &PyGfal2::GfaltParams::set_src_spacetoken,
+        .add_property("src_spacetoken", &PyGfal2::GfaltParams::get_src_spacetoken,
+            &PyGfal2::GfaltParams::set_src_spacetoken,
             "Source spacetoken (for protocols that support it)"
         )
-        .add_property("dst_spacetoken", &PyGfal2::GfaltParams::get_dst_spacetoken, &PyGfal2::GfaltParams::set_dst_spacetoken,
+        .add_property("dst_spacetoken", &PyGfal2::GfaltParams::get_dst_spacetoken,
+            &PyGfal2::GfaltParams::set_dst_spacetoken,
             "Destination spacetoken (for protocols that support it)"
         )
         .add_property("nbstreams", &PyGfal2::GfaltParams::get_nbstream, &PyGfal2::GfaltParams::set_nbstream,
@@ -289,37 +297,39 @@ BOOST_PYTHON_MODULE(gfal2)
         .add_property("overwrite", &PyGfal2::GfaltParams::get_overwrite, &PyGfal2::GfaltParams::set_overwrite,
             "If the destination file exists, overwrite it"
         )
-        .add_property("create_parent", &PyGfal2::GfaltParams::get_create_parent, &PyGfal2::GfaltParams::set_create_parent,
+        .add_property("create_parent", &PyGfal2::GfaltParams::get_create_parent,
+            &PyGfal2::GfaltParams::set_create_parent,
             "If the destination parent directory does not exist, create it"
         )
-        .add_property("tcp_buffersize", &PyGfal2::GfaltParams::get_tcp_buffersize, &PyGfal2::GfaltParams::set_tcp_buffersize,
+        .add_property("tcp_buffersize", &PyGfal2::GfaltParams::get_tcp_buffersize,
+            &PyGfal2::GfaltParams::set_tcp_buffersize,
             "TCP Buffersize"
         )
         .add_property("strict_copy", &PyGfal2::GfaltParams::get_strict_copy, &PyGfal2::GfaltParams::set_strict_copy,
             "If set to True, do only copy, and ignore checksum, parent creation, overwrite...")
-        .add_property("event_callback", &PyGfal2::GfaltParams::get_event_callback, &PyGfal2::GfaltParams::set_event_callback,
+        .add_property("event_callback", &PyGfal2::GfaltParams::get_event_callback,
+            &PyGfal2::GfaltParams::set_event_callback,
             "Callback for event handling"
         )
-        .add_property("monitor_callback", &PyGfal2::GfaltParams::get_monitor_callback, &PyGfal2::GfaltParams::set_monitor_callback,
+        .add_property("monitor_callback", &PyGfal2::GfaltParams::get_monitor_callback,
+            &PyGfal2::GfaltParams::set_monitor_callback,
             "Callback for performance monitoring (i.e. throughput)"
         )
 
         .def("set_user_defined_checksum", &PyGfal2::GfaltParams::set_user_defined_checksum,
             "Specify manually the checksum type and value (optional)")
         .def("get_user_defined_checksum", &PyGfal2::GfaltParams::get_user_defined_checksum,
-            "Gets the user specified checksum")
-        ;
+            "Gets the user specified checksum");
 
-	boost::python::scope().attr("transfer_parameters") = boost::python::scope().attr("TransferParameters");
+    boost::python::scope().attr("transfer_parameters") = boost::python::scope().attr("TransferParameters");
 
     // Callback types
-	boost::python::enum_<gfal_event_side_t>("event_side")
+    boost::python::enum_<gfal_event_side_t>("event_side")
         .value("event_source", GFAL_EVENT_SOURCE)
         .value("event_destination", GFAL_EVENT_DESTINATION)
-        .value("event_none", GFAL_EVENT_NONE)
-        ;
+        .value("event_none", GFAL_EVENT_NONE);
 
-	boost::python::class_<PyGfal2::GfaltEvent>("GfaltEvent")
+    boost::python::class_<PyGfal2::GfaltEvent>("GfaltEvent")
         .add_property("side", &PyGfal2::GfaltEvent::side)
         .add_property("timestamp", &PyGfal2::GfaltEvent::timestamp)
         .add_property("stage", &PyGfal2::GfaltEvent::stage)
@@ -327,29 +337,27 @@ BOOST_PYTHON_MODULE(gfal2)
         .add_property("description", &PyGfal2::GfaltEvent::description)
 
         .def("__str__", &PyGfal2::GfaltEvent::__str__)
-        .def("__repr__", &PyGfal2::GfaltEvent::__str__)
-        ;
+        .def("__repr__", &PyGfal2::GfaltEvent::__str__);
 
-	boost::python::scope().attr("gfalt_event") = boost::python::scope().attr("GfaltEvent");
+    boost::python::scope().attr("gfalt_event") = boost::python::scope().attr("GfaltEvent");
 
     // register exception
-	boost::python::register_exception_translator<PyGfal2::GErrorWrapper>(&gerror_exception_translator);
+    boost::python::register_exception_translator<PyGfal2::GErrorWrapper>(&gerror_exception_translator);
 
     // Create the Python type object for our extension class and define __init__ function.
-	boost::python::class_<PyGfal2::File, boost::shared_ptr<PyGfal2::File>, boost::noncopyable >
-	    ("FileType", "File descriptor", boost::python::init<PyGfal2::Gfal2Context, const std::string &, const std::string &>())
+    boost::python::class_<PyGfal2::File, boost::shared_ptr<PyGfal2::File>, boost::noncopyable>
+        ("FileType", "File descriptor",
+            boost::python::init<PyGfal2::Gfal2Context, const std::string &, const std::string &>())
         .def("read", &PyGfal2::File::read)
         .def("pread", &PyGfal2::File::pread)
         .def("write", &PyGfal2::File::write)
         .def("pwrite", &PyGfal2::File::pwrite)
-        .def("lseek", &PyGfal2::File::lseek)
-    ;
+        .def("lseek", &PyGfal2::File::lseek);
 
-	boost::python::class_<PyGfal2::Directory, boost::shared_ptr<PyGfal2::Directory>, boost::noncopyable >
-	    ("DirectoryType", "Directory descriptor", boost::python::init<PyGfal2::Gfal2Context, const std::string &>())
+    boost::python::class_<PyGfal2::Directory, boost::shared_ptr<PyGfal2::Directory>, boost::noncopyable>
+        ("DirectoryType", "Directory descriptor", boost::python::init<PyGfal2::Gfal2Context, const std::string &>())
         .def("read", &PyGfal2::Directory::read,
             "Reads a directory entry from the directory")
         .def("readpp", &PyGfal2::Directory::readpp,
-            "Reads a directory entry and its stat information")
-    ;
+            "Reads a directory entry and its stat information");
 }
