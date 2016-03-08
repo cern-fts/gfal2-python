@@ -1,6 +1,7 @@
 .project
 .cproject
 .settings
+.idea
 *.rpm
 *.log
 *.tar.gz
