@@ -353,6 +353,7 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("write", &PyGfal2::File::write)
         .def("pwrite", &PyGfal2::File::pwrite)
         .def("lseek", &PyGfal2::File::lseek);
+    boost::python::register_ptr_to_python<boost::shared_ptr<PyGfal2::File> >();
 
     boost::python::class_<PyGfal2::Directory, boost::shared_ptr<PyGfal2::Directory>, boost::noncopyable>
         ("DirectoryType", "Directory descriptor", boost::python::init<PyGfal2::Gfal2Context, const std::string &>())
@@ -360,4 +361,5 @@ BOOST_PYTHON_MODULE (gfal2)
             "Reads a directory entry from the directory")
         .def("readpp", &PyGfal2::Directory::readpp,
             "Reads a directory entry and its stat information");
+    boost::python::register_ptr_to_python<boost::shared_ptr<PyGfal2::Directory> >();
 }
