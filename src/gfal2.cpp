@@ -42,6 +42,19 @@ std::string gfal_version_wrapper(void)
     return gfal2_version();
 }
 
+// Wrapper to register the ptr without generating warnings with older
+// boost versions
+template <typename T>
+void register_shared_ptr(void)
+{
+    const boost::python::type_info info = boost::python::type_id<boost::shared_ptr < T > >();
+    const boost::python::converter::registration* reg = boost::python::converter::registry::query(info);
+
+    if (reg == NULL || reg->m_to_python == NULL) {
+        boost::python::register_ptr_to_python < boost::shared_ptr < T > > ();
+    }
+}
+
 BOOST_PYTHON_MODULE (gfal2)
 {
     Py_Initialize();
@@ -353,7 +366,8 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("write", &PyGfal2::File::write)
         .def("pwrite", &PyGfal2::File::pwrite)
         .def("lseek", &PyGfal2::File::lseek);
-    boost::python::register_ptr_to_python<boost::shared_ptr<PyGfal2::File> >();
+
+    register_shared_ptr<PyGfal2::File>();
 
     boost::python::class_<PyGfal2::Directory, boost::shared_ptr<PyGfal2::Directory>, boost::noncopyable>
         ("DirectoryType", "Directory descriptor", boost::python::init<PyGfal2::Gfal2Context, const std::string &>())
@@ -361,5 +375,6 @@ BOOST_PYTHON_MODULE (gfal2)
             "Reads a directory entry from the directory")
         .def("readpp", &PyGfal2::Directory::readpp,
             "Reads a directory entry and its stat information");
-    boost::python::register_ptr_to_python<boost::shared_ptr<PyGfal2::Directory> >();
+
+    register_shared_ptr<PyGfal2::Directory>();
 }
