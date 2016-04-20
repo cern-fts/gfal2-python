@@ -20,9 +20,8 @@
 
 #include <algorithm>
 #include <boost/python.hpp>
-#include <cstring>
+#include <list>
 #include <vector>
-#include <unistd.h>
 
 #include <gfal_api.h>
 
@@ -261,22 +260,37 @@ int Gfal2Context::rmdir(const std::string & path)
 
 boost::python::list Gfal2Context::listdir(const std::string & path)
 {
-    ScopedGILRelease unlock;
     GError* tmp_err = NULL;
     DIR* d = gfal2_opendir(cont->context, path.c_str(), &tmp_err);
-    if (d == NULL)
+    if (d == NULL) {
         GErrorWrapper::throwOnError(&tmp_err);
-    boost::python::list resu;
-    struct dirent* st;
-    while ((st = gfal2_readdir(cont->context, d, &tmp_err)) != NULL) {
-        resu.append<std::string>(std::string(st->d_name));
     }
+
+    // Do the listing outside Python scope
+    // Creating Python objects even via boost require acquiring the GIL
+    std::list<std::string> temporary;
+
+    {
+        ScopedGILRelease unlock;
+        struct dirent *st;
+
+        while ((st = gfal2_readdir(cont->context, d, &tmp_err)) != NULL) {
+            temporary.push_back(std::string(st->d_name));
+        }
+    }
+
     GError* close_error = NULL;
     gfal2_closedir(cont->context, d, &close_error);
+
     GErrorWrapper::throwOnError(&tmp_err);
     GErrorWrapper::throwOnError(&close_error);
 
-    return resu;
+    // Convert to a Python list
+    boost::python::list result;
+    for (std::list<std::string>::const_iterator i = temporary.begin(); i != temporary.end(); ++i) {
+        result.append<std::string>(*i);
+    }
+    return result;
 }
 
 
