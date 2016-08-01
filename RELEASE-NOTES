@@ -1,3 +1,8 @@
+* Mon Aug 01 2016 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.5
+** Bug
+- [DMC-814] - No to_python (by-value) converter found for C++ type: boost::shared_ptr<PyGfal2::Directory>
+- [DMC-832] - Segmentation Fault in gridftp plugin with thread locking
+
 * Mon Oct 12 2015 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.4
  - [DMC-698] - Port DMC clients to MacOSX
  - [DMC-725] - Provide a gfal2-python build linked against python2.7,
