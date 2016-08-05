@@ -93,6 +93,9 @@ BOOST_PYTHON_MODULE (gfal2)
     PyGfal2::GErrorPyType = PyGfal2::createGErrorExceptionType(gfal2Scope);
 
     boost::python::scope context_scope = boost::python::class_<PyGfal2::Gfal2Context>("Gfal2Context", "Gfal2 Context")
+        .def("free", &PyGfal2::Gfal2Context::free,
+            "Release internal resources used by the context. The instance can *not* be used after this"
+        )
         .def("open", &PyGfal2::Gfal2Context::open,
             "Opens a file and returns a file descriptor"
         )

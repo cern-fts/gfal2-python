@@ -28,7 +28,7 @@ Directory::Directory(const Gfal2Context & context, const std::string & path) :
 {
     ScopedGILRelease unlock;
     GError* tmp_err = NULL;
-    d = gfal2_opendir(cont->context, path.c_str(), &tmp_err);
+    d = gfal2_opendir(cont->get(), path.c_str(), &tmp_err);
     if (d == NULL)
         GErrorWrapper::throwOnError(&tmp_err);
 }
@@ -37,7 +37,7 @@ Directory::Directory(const Gfal2Context & context, const std::string & path) :
 Directory::~Directory()
 {
     ScopedGILRelease unlock;
-    (void) gfal2_closedir(cont->context, d, NULL);
+    (void) gfal2_closedir(cont->get(), d, NULL);
 }
 
 
@@ -49,7 +49,7 @@ boost::python::tuple Directory::readpp()
 
     {
         ScopedGILRelease unlock;
-        dirent = gfal2_readdirpp(cont->context, d, &stat._st, &tmp_err);
+        dirent = gfal2_readdirpp(cont->get(), d, &stat._st, &tmp_err);
     }
 
     if (dirent.isValid() == false) {
@@ -66,7 +66,7 @@ Dirent Directory::read()
     ScopedGILRelease unlock;
     GError* tmp_err = NULL;
 
-    Dirent dirent(gfal2_readdir(cont->context, d, &tmp_err));
+    Dirent dirent(gfal2_readdir(cont->get(), d, &tmp_err));
     GErrorWrapper::throwOnError(&tmp_err);
     return dirent;
 }

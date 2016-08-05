@@ -43,19 +43,39 @@ namespace PyGfal2 {
 
 class GfalContextWrapper
 {
-public:
+private:
     gfal2_context_t context;
+
+public:
 
     GfalContextWrapper()
     {
         GError* tmp_err = NULL;
         context = gfal2_context_new(&tmp_err);
-        if (context == NULL)
+        if (context == NULL) {
             GErrorWrapper::throwOnError(&tmp_err);
+        }
     }
     ~GfalContextWrapper()
     {
+        if (context != NULL) {
+            gfal2_context_free(context);
+        }
+    }
+
+    gfal2_context_t get() {
+        if (context == NULL) {
+            throw GErrorWrapper("gfal2 context has been freed", EFAULT);
+        }
+        return context;
+    }
+
+    void free() {
+        if (context == NULL) {
+            throw GErrorWrapper("gfal2 context has been freed", EFAULT);
+        }
         gfal2_context_free(context);
+        context = NULL;
     }
 };
 
@@ -82,6 +102,7 @@ public:
         return cont ;
     }
 
+    void free();
 
     int cancel();
 
