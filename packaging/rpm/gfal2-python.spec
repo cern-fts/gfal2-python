@@ -49,7 +49,11 @@ URL:			http://dmc.web.cern.ch/
 Source0:		%{name}-%{version}.tar.gz
 BuildRoot:		%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
+%if 0%{?el5}
+BuildRequires:		cmake28
+%else
 BuildRequires:		cmake
+%endif
 BuildRequires:		gfal2-devel >= 2.9.1
 %if 0%{?el5}
 BuildRequires:		boost141-devel
@@ -118,19 +122,33 @@ if [ "$gfal2_python_cmake_ver=" != "$gfal2_python_spec_ver=" ]; then
     exit 1
 fi
 
-%cmake \
- -DDOC_INSTALL_DIR=%{_pkgdocdir} \
- %{boost_cmake_flags} \
+%if 0%{?el5}
+    %cmake28 \
+     -DDOC_INSTALL_DIR=%{_pkgdocdir} \
+     %{boost_cmake_flags} \
 %if 0%{?with_static_boost_python}
- -DBoost_USE_STATIC_LIBS=ON \
+     -DBoost_USE_STATIC_LIBS=ON \
 %endif
- -DUNIT_TESTS=TRUE . 
+     -DUNIT_TESTS=TRUE .
+%else
+    %cmake \
+     -DDOC_INSTALL_DIR=%{_pkgdocdir} \
+     %{boost_cmake_flags} \
+%if 0%{?with_static_boost_python}
+     -DBoost_USE_STATIC_LIBS=ON \
+%endif
+     -DUNIT_TESTS=TRUE .
+%endif
 
 make %{?_smp_mflags}
 make doc
 
 %check
-ctest -V -T Test .
+%if 0%{?el5}
+    ctest28 -V -T Test .
+%else
+    ctest -V -T Test .
+%endif
 
 %install
 rm -rf %{buildroot}

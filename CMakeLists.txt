@@ -46,7 +46,7 @@ set(PROJECT_NAME_MAIN "gfal2-python")
 
 # EPYDOC definition for EPEL5 support
 if (NOT SKIP_DOC)
-    set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/gfal2.so")
+    set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/python2/gfal2.so")
     set(EPYDOC_MODULE_URL  "http://dmc.web.cern.ch/projects/gfal2-python")
     set(EPYDOC_MODULE_NAME "gfal2")
 
