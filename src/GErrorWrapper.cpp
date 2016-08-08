@@ -16,6 +16,15 @@
 
 #include "GErrorWrapper.h"
 
+// Python3 compat
+#if PY_MAJOR_VERSION >= 3
+
+#define PyInt_FromLong PyLong_FromLong
+#define PyString_FromString PyUnicode_FromString
+
+#endif
+
+
 using namespace PyGfal2;
 
 
@@ -136,8 +145,13 @@ static int add_method_to_dict(PyObject* klass, PyObject* dict, PyMethodDef* meth
     if (!(func = PyCFunction_NewEx(methodDef, NULL, NULL)))
         goto exception;
 
+#if PY_MAJOR_VERSION >= 3
+    if (!(method = PyInstanceMethod_New(func)))
+        goto exception;
+#else
     if (!(method = PyMethod_New(func, NULL, klass)))
         goto exception;
+#endif
 
     if (PyDict_SetItemString(dict, methodDef->ml_name, method) < 0)
         goto exception;
@@ -188,9 +202,8 @@ PyObject* PyGfal2::createGErrorExceptionType(boost::python::scope& scope)
     return typeObj;
 
 exception:
-    Py_XDECREF(typeObj);
-    Py_XDECREF(attrs);
-    return NULL;
+    PyErr_Print();
+    abort();
 }
 
 

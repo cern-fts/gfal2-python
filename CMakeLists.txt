@@ -21,10 +21,25 @@ find_package(PythonEasy REQUIRED)
 
 message("Python: ${PYTHON_EXECUTABLE}")
 
+if (PYTHON_EXECUTABLE_3)
+    message("Python 3 installed!")
+    message("Python 3: ${PYTHON_EXECUTABLE_3}")
+    find_library(Boost_PYTHON_3_LIBRARY
+        NAMES boost_python3
+        HINTS
+            ${Boost_LIBRARYDIR}
+            "/usr/lib"
+            "/usr/lib64"
+    )
+    if (Boost_PYTHON_3_LIBRARY)
+        message("Boost Python3 library found! ${Boost_PYTHON_3_LIBRARY}")
+    else()
+        message("Boost Python3 library not found")
+    endif ()
+endif ()
+
 #define PROJECT vars
 set(PROJECT_NAME_MAIN "gfal2-python")
-set(OUTPUT_NAME_MAIN "gfal2")
-
 
 # EPYDOC definition for EPEL5 support
 if (NOT SKIP_DOC)

@@ -11,17 +11,26 @@
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include
 %endif
 
+# Python 3
+%if 0%{?fedora} >= 23
+%global with_python3 1
+%endif
+
 # python path discovery
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+
+%if 0%{?with_python3}
+%{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
 
 # python modules filtering
 %if 0%{?el6} || 0%{?el5}
 %{?filter_setup:
-%filter_provides_in %{python_sitearch}/.*\.so$ 
+%filter_provides_in %{python_sitearch}/.*\.so$
 %filter_setup
 }
 %else
-%global __provides_exclude_from ^(%{python_sitearch}/.*\\.so)$
+%global __provides_exclude_from ^((%{python_sitearch})|(%{python3_sitearch})/.*\\.so)$
 %endif
 
 Name:			gfal2-python
@@ -59,6 +68,12 @@ BuildRequires:		epydoc
 
 Requires:		gfal2-core >= 2.9.1
 
+# Python 3
+%if 0%{?with_python3} 
+BuildRequires:      python3-devel
+BuildRequires:      boost-python3-devel
+%endif
+
 %description
 Python bindings for gfal2.
 GFAL2 offers an a single, simple and portable API
@@ -72,7 +87,18 @@ BuildArch:			noarch
 %endif
 
 %description doc
-Documentation files for %{name} .
+Documentation files for %{name}.
+
+%if 0%{?with_python3}
+%package -n gfal2-python3
+Summary:            gfal2 python birngins for Python 3
+Group:              Applications/Internet
+
+%description -n gfal2-python3
+Python 3 bindings for gfal2.
+GFAL2 offers an a single, simple and portable API
+for the file operations in grids and cloud environments.
+%endif
 
 %clean
 rm -rf %{buildroot};
@@ -124,6 +150,12 @@ make DESTDIR=%{buildroot} install
 %dir %{_pkgdocdir}/examples
 %{_pkgdocdir}/html/*
 %{_pkgdocdir}/examples/*
+
+%if 0%{?with_python3}
+%files -n gfal2-python3
+%defattr (-,root,root)
+%{python3_sitearch}/gfal2.so
+%endif
 
 %changelog
 * Fri Apr 17 2015 Alejandro Alvarez <aalvarez at cern.ch> - 1.8.1-1
