@@ -23,6 +23,9 @@
 
 using namespace PyGfal2;
 
+#if PY_VERSION_HEX < 0x02060000
+#define PyErr_WarnEx(category, msg, level) PyErr_Warn(category, msg)
+#endif
 
 static void event_callback_wrapper(const gfalt_event_t e, gpointer user_data)
 {
