@@ -115,16 +115,25 @@ guint GfaltParams::get_nbstream()
 
 void GfaltParams::set_checksum_check(bool checksum_check)
 {
-    GError * tmp_err = NULL;
-    gfalt_set_checksum_check(params, checksum_check, &tmp_err);
+    PyErr_WarnEx(PyExc_DeprecationWarning, "checksum_check is deprecated. Use set_checksum instead.", 1);
+
+    GError *tmp_err = NULL;
+    char type[64], buffer[512];
+
+    gfalt_get_checksum(params, type, sizeof(type), buffer, sizeof(buffer), &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+
+    gfalt_set_checksum(params, checksum_check?GFALT_CHECKSUM_BOTH:GFALT_CHECKSUM_NONE, type, buffer, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
 }
 
 
 bool GfaltParams::get_checksum_check()
 {
+    PyErr_WarnEx(PyExc_DeprecationWarning, "checksum_check is deprecated. Use get_checksum_mode instead.", 1);
+
     GError * tmp_err = NULL;
-    bool res = gfalt_get_checksum_check(params, &tmp_err);
+    bool res = gfalt_get_checksum_mode(params, &tmp_err) != GFALT_CHECKSUM_NONE;
     GErrorWrapper::throwOnError(&tmp_err);
     return res;
 }
@@ -167,19 +176,25 @@ std::string GfaltParams::get_dst_spacetoken()
 void GfaltParams::set_user_defined_checksum(const std::string & chk_type,
         const std::string & checksum)
 {
+    PyErr_WarnEx(PyExc_DeprecationWarning, "set_user_defined_checksum is deprecated. Use set_checksum instead.", 1);
+
     GError * tmp_err = NULL;
-    gfalt_set_user_defined_checksum(params, chk_type.c_str(), checksum.c_str(), &tmp_err);
+    gfalt_checksum_mode_t current = gfalt_get_checksum_mode(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+
+    gfalt_set_checksum(params, current, chk_type.c_str(), checksum.c_str(), &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
 }
 
 
 boost::python::tuple GfaltParams::get_user_defined_checksum()
 {
+    PyErr_WarnEx(PyExc_DeprecationWarning, "get_user_defined_checksum is deprecated. Use get_checksum instead.", 1);
+
     char buff_chktype[GFAL_URL_MAX_LEN];
     char buff_chk[GFAL_URL_MAX_LEN];
     GError * tmp_err = NULL;
-    gfalt_get_user_defined_checksum(params, buff_chktype, GFAL_URL_MAX_LEN, buff_chk,
-            GFAL_URL_MAX_LEN, &tmp_err);
+    gfalt_get_checksum(params, buff_chktype, GFAL_URL_MAX_LEN, buff_chk, GFAL_URL_MAX_LEN, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
     return boost::python::make_tuple<std::string, std::string>(buff_chktype, buff_chk);
 }
@@ -251,6 +266,30 @@ void GfaltParams::set_strict_copy(bool val)
     gfalt_set_strict_copy_mode(params, val, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
 }
+
+
+void GfaltParams::set_checksum(gfalt_checksum_mode_t mode, const std::string &type, const std::string &value)
+{
+    GError *tmp_err = NULL;
+    gfalt_set_checksum(params, mode, type.c_str(), value.c_str(), &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
+boost::python::tuple GfaltParams::get_checksum()
+{
+    char buff_chktype[GFAL_URL_MAX_LEN];
+    char buff_chk[GFAL_URL_MAX_LEN];
+    GError * tmp_err = NULL;
+    gfalt_checksum_mode_t mode = gfalt_get_checksum(params,
+        buff_chktype, GFAL_URL_MAX_LEN,
+        buff_chk, GFAL_URL_MAX_LEN,
+        &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+
+    return boost::python::make_tuple<gfalt_checksum_mode_t, std::string, std::string>(mode, buff_chktype, buff_chk);
+}
+
 
 // Callbacks
 void GfaltParams::set_event_callback(PyObject* callable)

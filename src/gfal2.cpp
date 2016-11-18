@@ -89,6 +89,12 @@ BOOST_PYTHON_MODULE (gfal2)
         .value("debug", G_LOG_LEVEL_DEBUG)
         .value("trace", G_LOG_LEVEL_DEBUG);
 
+    boost::python::enum_<gfalt_checksum_mode_t>("checksum_mode")
+        .value("none", GFALT_CHECKSUM_NONE)
+        .value("source", GFALT_CHECKSUM_SOURCE)
+        .value("target", GFALT_CHECKSUM_TARGET)
+        .value("both", GFALT_CHECKSUM_BOTH);
+
     // register exception
     PyGfal2::GErrorPyType = PyGfal2::createGErrorExceptionType(gfal2Scope);
 
@@ -335,7 +341,13 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("set_user_defined_checksum", &PyGfal2::GfaltParams::set_user_defined_checksum,
             "Specify manually the checksum type and value (optional)")
         .def("get_user_defined_checksum", &PyGfal2::GfaltParams::get_user_defined_checksum,
-            "Gets the user specified checksum");
+            "Get the user specified checksum")
+
+        .def("set_checksum", &PyGfal2::GfaltParams::set_checksum,
+            "Specify the checksum mode, type and value")
+        .def("get_checksum", &PyGfal2::GfaltParams::get_checksum,
+            "Get the user specified checksum mode, type and value")
+        ;
 
     boost::python::scope().attr("transfer_parameters") = boost::python::scope().attr("TransferParameters");
 

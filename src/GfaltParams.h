@@ -118,6 +118,9 @@ public:
     bool                 get_strict_copy(void);
     void                 set_strict_copy(bool val);
 
+    void set_checksum(gfalt_checksum_mode_t mode, const std::string &type, const std::string &value);
+    boost::python::tuple get_checksum();
+
     // Callbacks
     void      set_event_callback(PyObject* callable);
     PyObject* get_event_callback(void);
