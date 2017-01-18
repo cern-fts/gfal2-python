@@ -17,16 +17,17 @@
 
 import os
 import re
+import shutil
 import sys
-import distutils.command.build as _build
-import setuptools.command.install as _install
+import distutils.command.build_ext as _build_ext
 import distutils.spawn
 import distutils.dir_util
-
-from setuptools import setup
+from glob import glob
+from setuptools import Extension, setup
 
 # Change this when there are changes in the setup.py or MANIFEST.in
-RELEASE=3
+RELEASE = 2
+
 
 def get_version():
     ver_components = dict(VERSION_RELEASE=RELEASE)
@@ -49,58 +50,60 @@ def validate():
         sys.exit(-1)
 
 
-def _run_make():
+def _run_make(build_dir, lib_path):
     validate()
-    distutils.dir_util.mkpath('build')
-    os.chdir('build')
+
+    pwd = os.getcwd()
+    full_lib_path = os.path.join(pwd, lib_path)
+    source_dir = os.path.dirname(__file__)
+
+    os.makedirs(build_dir)
+    os.makedirs(os.path.dirname(lib_path))
+    os.chdir(build_dir)
+
     try:
-        distutils.spawn.spawn(['cmake', '-DSKIP_DOC=TRUE', '-DSKIP_TESTS=TRUE', '..'])
+        distutils.spawn.spawn([
+            'cmake', '-DSKIP_DOC=TRUE', '-DSKIP_TESTS=TRUE',
+            source_dir
+        ])
         distutils.spawn.spawn(['make'])
+        shutil.copy('src/gfal2.so', full_lib_path)
     finally:
-        os.chdir('..')
+        os.chdir(pwd)
 
 
-class build(_build.build):
+class build_ext(_build_ext.build_ext):
     def run(self):
-        _run_make()
-
-
-class install(_install.install):
-    def run(self):
-        if not os.path.exists('build/src/gfal2.so'):
-            _run_make()
-        os.chdir('build')
-        try:
-            distutils.spawn.spawn(['make', 'install'])
-        finally:
-            os.chdir('..')
+        _run_make(self.build_temp, self.get_ext_fullpath('gfal2'))
 
 
 setup(
-    name = 'gfal2-python',
-    version = get_version(),
-    description = 'Python bindings for gfal2',
-    requires = [],
-    install_requires = [],
-    url = 'https://dmc.web.cern.ch/',
-    download_url = 'https://gitlab.cern.ch/dmc/gfal2-bindings',
-    author = 'DMC Devel',
-    author_email = 'dmc-devel@cern.ch',
-    maintainer_email = 'dmc-devel@cern.ch',
-    license = 'Apache 2',
-    long_description = 'Python bindings for gfal2',
-    keywords = 'gfal2, grid, dmc, data management clients',
-    platforms = ['GNU/Linux'],
-    classifiers = [
-		"Intended Audience :: Developers",
-		"Topic :: Software Development :: Libraries :: Python Modules",
-		"License :: OSI Approved :: Apache Software License",
-		"Development Status :: 5 - Production/Stable",
-		"Operating System :: Unix",
-		"Programming Language :: C"
+    name='gfal2-python',
+    version=get_version(),
+    description='Python bindings for gfal2',
+    requires=[],
+    install_requires=[],
+    url='https://dmc.web.cern.ch/',
+    download_url='https://gitlab.cern.ch/dmc/gfal2-bindings',
+    author='DMC Devel',
+    author_email='dmc-devel@cern.ch',
+    maintainer_email='dmc-devel@cern.ch',
+    license='Apache 2',
+    long_description='Python bindings for gfal2',
+    keywords='gfal2, grid, dmc, data management clients',
+    platforms=['GNU/Linux'],
+    classifiers=[
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "License :: OSI Approved :: Apache Software License",
+        "Development Status :: 5 - Production/Stable",
+        "Operating System :: Unix",
+        "Programming Language :: C"
     ],
-    cmdclass = {'install': install, 'build': build},
-    zip_safe = False,
-    packages = []
+    cmdclass={'build_ext': build_ext},
+    zip_safe=False,
+    packages=[],
+    ext_modules=[
+        Extension('gfal2', sources=glob("src/*.cpp"))
+    ]
 )
-
