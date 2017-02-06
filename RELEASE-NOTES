@@ -1,3 +1,12 @@
+* Mon Jan 06 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.0
+** Bug
+- [DMC-911] - setup.py broken
+** New Feature
+- [DMC-892] - Generalize checksum methods
+** Improvement
+- [DMC-873] - Explicit context destructor for gfal2 python bindings
+- [DMC-875] - Make possible to build gfal2-python with Python3
+
 * Mon Aug 01 2016 Alejandro Álvarez <aalvarez at cern.ch> - 1.8.5
 ** Bug
 - [DMC-814] - No to_python (by-value) converter found for C++ type: boost::shared_ptr<PyGfal2::Directory>
