@@ -13,7 +13,7 @@
 
 # Python 3
 %if 0%{?fedora} >= 23
-%global with_python3 1
+%global with_python3 0
 %endif
 
 # python path discovery
@@ -26,7 +26,7 @@
 # python modules filtering
 %if 0%{?el6} || 0%{?el5}
 %{?filter_setup:
-%filter_provides_in %{python_sitearch}/.*\.so$
+%filter_provides_in %{python_sitearch}/.*\.so$ 
 %filter_setup
 }
 %else
@@ -40,37 +40,29 @@ Summary:		Python bindings for gfal 2
 Group:			Applications/Internet
 License:		ASL 2.0
 URL:			http://dmc.web.cern.ch/
-# git clone https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.1
+# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.1
 # pushd gfal2-python-1.9.1
 # git checkout v1.9.1
-# git submodule init && git submodule update
 # popd
-# tar czf gfal2-python-1.9.1.tar.gz gfal2-python-1.9.1
+# tar czf gfal2-python-1.9.1.tar.gz --exclude-vcs gfal2-python-1.9.1
 Source0:		%{name}-%{version}.tar.gz
 BuildRoot:		%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 %if 0%{?el5}
-BuildRequires:		cmake28
+BuildRequires:      cmake28
 %else
-BuildRequires:		cmake
+BuildRequires:      cmake
 %endif
-BuildRequires:		gfal2-devel >= 2.9.1
+BuildRequires:		gfal2-devel >= 2.13.0
 %if 0%{?el5}
 BuildRequires:		boost141-devel
 %else
 BuildRequires:		boost-devel
 %endif
-%if 0%{?with_static_boost_python}
-%if 0%{?el5}
-BuildRequires:      boost141-static
-%else
-BuildRequires:		boost-static
-%endif
-%endif
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
 
-Requires:		gfal2-core >= 2.9.1
+Requires:		gfal2-core >= 2.13.0
 
 # Python 3
 %if 0%{?with_python3} 
@@ -176,6 +168,48 @@ make DESTDIR=%{buildroot} install
 %endif
 
 %changelog
+* Mon Feb 20 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.9.1-1
+- Update for release 1.9.0
+
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.5-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
+* Fri Jan 27 2017 Jonathan Wakely <jwakely@redhat.com> - 1.8.5-2
+- Rebuilt for Boost 1.63
+
+* Wed Jan 18 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.8.5-1
+- Update to upstream release
+
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.4-5
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
+* Tue Mar 08 2016 Alejandro Alvarez <aalvarez@cern.ch> - 1.8.4-4
+- Add patch to work with newer versions of Boost
+
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Fri Jan 15 2016 Jonathan Wakely <jwakely@redhat.com> - 1.8.4-2
+- Rebuilt for Boost 1.60
+
+* Mon Nov 09 2015 Alejandro Alvarez <aalvarez@cern.ch> - 1.8.4-1
+- Update for release 1.8.4
+
+* Thu Aug 27 2015 Jonathan Wakely <jwakely@redhat.com> - 1.8.3-4
+- Rebuilt for Boost 1.59
+
+* Wed Jul 29 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Changes/F23Boost159
+
+* Wed Jul 22 2015 David Tardon <dtardon@redhat.com> - 1.8.3-2
+- rebuild for Boost 1.58
+
+* Fri Jul 03 2015 Alejandro Alvarez <aalvarez at cern.ch> - 1.8.3-1
+- Update for release 1.8.3
+
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Fri Apr 17 2015 Alejandro Alvarez <aalvarez at cern.ch> - 1.8.1-1
 - Update for release 1.8.1
 
