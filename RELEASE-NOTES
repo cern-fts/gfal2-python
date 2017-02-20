@@ -1,3 +1,7 @@
+* Mon Feb 20 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.1
+** Bug
+- [DMC-920] - Missing incref on GfaltParams callbacks
+
 * Mon Jan 06 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.0
 ** Bug
 - [DMC-911] - setup.py broken
