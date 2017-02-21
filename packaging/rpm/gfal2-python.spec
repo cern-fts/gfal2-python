@@ -34,17 +34,17 @@
 %endif
 
 Name:			gfal2-python
-Version:		1.9.1
+Version:		1.9.2
 Release:		1%{?dist}
 Summary:		Python bindings for gfal 2
 Group:			Applications/Internet
 License:		ASL 2.0
 URL:			http://dmc.web.cern.ch/
-# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.1
-# pushd gfal2-python-1.9.1
-# git checkout v1.9.1
+# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.2
+# pushd gfal2-python-1.9.2
+# git checkout v1.9.2
 # popd
-# tar czf gfal2-python-1.9.1.tar.gz --exclude-vcs gfal2-python-1.9.1
+# tar czf gfal2-python-1.9.2.tar.gz --exclude-vcs gfal2-python-1.9.2
 Source0:		%{name}-%{version}.tar.gz
 BuildRoot:		%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 

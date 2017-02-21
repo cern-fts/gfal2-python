@@ -26,7 +26,7 @@ from glob import glob
 from setuptools import Extension, setup
 
 # Change this when there are changes in the setup.py or MANIFEST.in
-RELEASE = 2
+RELEASE = 1
 
 
 def get_version():
