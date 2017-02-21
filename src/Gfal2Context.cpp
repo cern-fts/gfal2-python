@@ -261,7 +261,11 @@ int Gfal2Context::rmdir(const std::string & path)
 boost::python::list Gfal2Context::listdir(const std::string & path)
 {
     GError* tmp_err = NULL;
-    DIR* d = gfal2_opendir(cont->get(), path.c_str(), &tmp_err);
+    DIR* d = NULL;
+    {
+        ScopedGILRelease unlock;
+        d = gfal2_opendir(cont->get(), path.c_str(), &tmp_err);
+    }
     if (d == NULL) {
         GErrorWrapper::throwOnError(&tmp_err);
     }
@@ -269,7 +273,6 @@ boost::python::list Gfal2Context::listdir(const std::string & path)
     // Do the listing outside Python scope
     // Creating Python objects even via boost require acquiring the GIL
     std::list<std::string> temporary;
-
     {
         ScopedGILRelease unlock;
         struct dirent *st;
@@ -280,7 +283,10 @@ boost::python::list Gfal2Context::listdir(const std::string & path)
     }
 
     GError* close_error = NULL;
-    gfal2_closedir(cont->get(), d, &close_error);
+    {
+        ScopedGILRelease unlock;
+        gfal2_closedir(cont->get(), d, &close_error);
+    }
 
     GErrorWrapper::throwOnError(&tmp_err);
     GErrorWrapper::throwOnError(&close_error);
