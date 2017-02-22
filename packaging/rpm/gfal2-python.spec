@@ -59,6 +59,13 @@ BuildRequires:		boost141-devel
 %else
 BuildRequires:		boost-devel
 %endif
+%if 0%{?with_static_boost_python}
+%if 0%{?el5}
+BuildRequires:      boost141-static
+%else
+BuildRequires:      boost-static
+%endif
+%endif
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
 
