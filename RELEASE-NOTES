@@ -1,3 +1,7 @@
+* Wed Mar 01 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.2
+** Bug
+- [DMC-922] - Deadlock on listdir when logging is verbose
+
 * Mon Feb 20 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.1
 ** Bug
 - [DMC-920] - Missing incref on GfaltParams callbacks
