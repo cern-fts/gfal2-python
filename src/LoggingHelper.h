@@ -27,6 +27,37 @@ namespace PyGfal2 {
 void logging_helper(const gchar *log_domain, GLogLevelFlags log_level,
         const gchar *message, gpointer user_data);
 
+/** Default handler for gfal2
+ * Avoids "no handlers could be found for logger gfal2"
+ * I can't figure out how to inherit from logging.Handler, so I just added all methods here
+ */
+class NullHandler {
+public:
+    int level;
+    boost::python::list filters;
+
+    NullHandler();
+
+    void createLock(void);
+    void acquire(void);
+    void release(void);
+    void setLevel(int lvl);
+    void setFormatter(boost::python::object form);
+    void addFilter(boost::python::object filt);
+    void removeFilter(boost::python::object filt);
+    void filter(boost::python::object record);
+    void flush();
+    void close();
+    void handle(boost::python::object record);
+    void handleError(boost::python::object record);
+    void format(boost::python::object record);
+    void emit(boost::python::object record);
+};
+
+/** Register a handler for the given logger name
+ */
+void logging_register_handler(const char *name, boost::python::object handler);
+
 };
 
 #endif // LOGGINGHELPER_H

@@ -19,13 +19,13 @@
 #include "pyGIL.h"
 
 
-static PyObject* get_logger()
+static PyObject* get_logger(const char *name = "gfal2")
 {
-    char format[] = "s";
+    static char format[] = "s";
 
     PyObject* logging = PyImport_ImportModule("logging");
-    PyObject* get_logger = PyObject_GetAttrString(logging, "getLogger");
-    return PyObject_CallFunction(get_logger, format, "gfal2");
+    PyObject* getLogger = PyObject_GetAttrString(logging, "getLogger");
+    return PyObject_CallFunction(getLogger, format, name);
 }
 
 
@@ -54,10 +54,84 @@ void PyGfal2::logging_helper(const gchar *log_domain, GLogLevelFlags level,
     ScopedGILLocker lock;
 
     PyObject* logger = get_logger();
-    if (!logger)
+    if (!logger) {
         return;
+    }
 
     char format[] = "s";
     PyObject_CallMethod(logger, (char*)level_method_name(level), format, message);
     Py_XDECREF(logger);
+}
+
+
+PyGfal2::NullHandler::NullHandler(): level(50) {
+}
+
+
+void PyGfal2::NullHandler::createLock(void)
+{}
+
+
+void PyGfal2::NullHandler::acquire(void)
+{}
+
+
+void PyGfal2::NullHandler::release(void)
+{}
+
+
+void PyGfal2::NullHandler::setLevel(int)
+{}
+
+
+void PyGfal2::NullHandler::setFormatter(boost::python::object)
+{}
+
+
+void PyGfal2::NullHandler::addFilter(boost::python::object)
+{}
+
+
+void PyGfal2::NullHandler::removeFilter(boost::python::object)
+{}
+
+
+void PyGfal2::NullHandler::filter(boost::python::object)
+{}
+
+
+void PyGfal2::NullHandler::flush()
+{}
+
+
+void PyGfal2::NullHandler::close()
+{}
+
+
+void PyGfal2::NullHandler::handle(boost::python::object)
+{}
+
+
+void PyGfal2::NullHandler::handleError(boost::python::object)
+{}
+
+
+void PyGfal2::NullHandler::format(boost::python::object)
+{}
+
+
+void PyGfal2::NullHandler::emit(boost::python::object)
+{
+}
+
+
+void PyGfal2::logging_register_handler(const char *name, boost::python::object handler)
+{
+    PyObject *cLogger = get_logger(name);
+    if (!cLogger) {
+        return;
+    }
+
+    boost::python::object logger(boost::python::handle<>(boost::python::borrowed(cLogger)));
+    logger.attr("addHandler")(handler);
 }

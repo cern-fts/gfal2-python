@@ -392,4 +392,29 @@ BOOST_PYTHON_MODULE (gfal2)
             "Reads a directory entry and its stat information");
 
     register_shared_ptr<PyGfal2::Directory>();
+
+    // Null log handler
+    boost::python::class_<PyGfal2::NullHandler> nullHandler("NullHandler");
+    nullHandler.def("emit", &PyGfal2::NullHandler::emit)
+        .def("createLock", &PyGfal2::NullHandler::createLock)
+        .def("acquire", &PyGfal2::NullHandler::acquire)
+        .def("release", &PyGfal2::NullHandler::release)
+        .def("setLevel", &PyGfal2::NullHandler::setLevel)
+        .def("setFormatter", &PyGfal2::NullHandler::setFormatter)
+        .def("addFilter", &PyGfal2::NullHandler::addFilter)
+        .def("removeFilter", &PyGfal2::NullHandler::removeFilter)
+        .def("filter", &PyGfal2::NullHandler::filter)
+        .def("flush", &PyGfal2::NullHandler::flush)
+        .def("close", &PyGfal2::NullHandler::close)
+        .def("handle", &PyGfal2::NullHandler::handle)
+        .def("handleError", &PyGfal2::NullHandler::handleError)
+        .def("format", &PyGfal2::NullHandler::format)
+        .def("emit", &PyGfal2::NullHandler::emit)
+        .add_property("level", &PyGfal2::NullHandler::level)
+        .add_property("filters", &PyGfal2::NullHandler::filters);
+
+    gfal2Scope.attr("NullHandler") = nullHandler;
+
+    // Register the null handler for gfal2 by default
+    PyGfal2::logging_register_handler("gfal2", boost::python::object(nullHandler)());
 }
