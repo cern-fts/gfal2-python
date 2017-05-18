@@ -26,7 +26,7 @@ from glob import glob
 from setuptools import Extension, setup
 
 # Change this when there are changes in the setup.py or MANIFEST.in
-RELEASE = 1
+RELEASE = 3
 
 
 def get_version():
@@ -46,7 +46,7 @@ def get_version():
 
 def validate():
     if distutils.spawn.find_executable('cmake') is None:
-        print 'Missing CMake executable'
+        print('Missing CMake executable')
         sys.exit(-1)
 
 
@@ -67,7 +67,7 @@ def _run_make(build_dir, lib_path):
             source_dir
         ])
         distutils.spawn.spawn(['make'])
-        shutil.copy('src/gfal2.so', full_lib_path)
+        shutil.copy('src/python%d/gfal2.so' % sys.version_info[0], full_lib_path)
     finally:
         os.chdir(pwd)
 
