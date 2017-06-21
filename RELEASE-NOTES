@@ -1,3 +1,7 @@
+* Wed Jun 21 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.3
+** Bug
+- [DMC-930] - Avoid "no handlers could be found for logger gfal2"
+
 * Wed Mar 01 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.2
 ** Bug
 - [DMC-922] - Deadlock on listdir when logging is verbose
