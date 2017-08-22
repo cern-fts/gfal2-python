@@ -1,6 +1,9 @@
 # Use static linking against boost
 %bcond_with static_boost_python
 
+# Python 3
+%bcond_with python3
+
 # Doc directory
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
@@ -11,10 +14,6 @@
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include
 %endif
 
-# Python 3
-%if 0%{?fedora} >= 23
-%global with_python3 0
-%endif
 
 # python path discovery
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -73,7 +72,7 @@ Requires:		gfal2-core >= 2.13.0
 
 # Python 3
 %if 0%{?with_python3} 
-BuildRequires:      python3-devel
+BuildRequires:      python34-devel
 BuildRequires:      boost-python3-devel
 %endif
 
@@ -168,7 +167,7 @@ make DESTDIR=%{buildroot} install
 %{_pkgdocdir}/html/*
 %{_pkgdocdir}/examples/*
 
-%if 0%{?with_python3}
+%if %{with python3}
 %files -n gfal2-python3
 %defattr (-,root,root)
 %{python3_sitearch}/gfal2.so
