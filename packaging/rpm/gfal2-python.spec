@@ -34,7 +34,7 @@
 
 Name:			gfal2-python
 Version:		1.9.3
-Release:		1%{?dist}
+Release:		2%{?dist}
 Summary:		Python bindings for gfal 2
 Group:			Applications/Internet
 License:		ASL 2.0
