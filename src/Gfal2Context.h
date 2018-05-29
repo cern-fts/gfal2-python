@@ -154,6 +154,8 @@ public:
 
 
     // parameters
+    bool remove_opt(const std::string & group_name, const std::string & key);
+
     int get_opt_integer(const std::string & nmspace, const std::string & key);
 
     std::string get_opt_string(const std::string & nmspace, const std::string & key);

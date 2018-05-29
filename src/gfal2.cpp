@@ -55,6 +55,39 @@ void register_shared_ptr(void)
     }
 }
 
+int gfal2_cred_set_wrapper(PyGfal2::Gfal2Context *ctx, const char *url_prefix, const gfal2_cred_t *cred){
+
+  gfal2_context_t handle = ctx->getContext()->get();
+
+  GError* error = NULL;
+  int res = gfal2_cred_set(handle, url_prefix, cred, &error);
+    if (res != 0) {
+      PyGfal2::GErrorWrapper::throwOnError(&error);
+    }
+}
+
+int gfal2_cred_clean_wrapper(PyGfal2::Gfal2Context *ctx) {
+
+  gfal2_context_t handle = ctx->getContext()->get();
+
+  GError* error = NULL;
+  int res = gfal2_cred_clean(handle, &error);
+  if (res != 0) {
+    PyGfal2::GErrorWrapper::throwOnError(&error);
+  }
+}
+
+std::string const gfal2_cred_t_get_value(gfal2_cred_t const& c)
+{
+  return (c.value);
+}
+
+std::string const gfal2_cred_t_get_type(gfal2_cred_t const& c)
+{
+  return (c.type);
+}
+
+
 BOOST_PYTHON_MODULE (gfal2)
 {
     Py_Initialize();
@@ -82,6 +115,16 @@ BOOST_PYTHON_MODULE (gfal2)
     boost::python::def("creat_context", &PyGfal2::Gfal2Context::creat_context, "Create a gfal2 context");
     boost::python::def("get_version", &gfal_version_wrapper, "Get the gfal2 version");
 
+    // functions to enable setting different credentials per url
+    boost::python::def("cred_set", &gfal2_cred_set_wrapper, "Set credentials");
+    boost::python::def("cred_new", &gfal2_cred_new, boost::python::return_value_policy<boost::python::manage_new_object>(), "Define credentials");
+    boost::python::def("cred_clean", &gfal2_cred_clean_wrapper, "Clean credentials");
+    // register gfal2_cred_t
+    boost::python::class_<gfal2_cred_t>
+       ("gfal2_cred", "A struct holding a credential type and value")
+        .add_property("type", boost::python::make_function(gfal2_cred_t_get_type))
+        .add_property("value", boost::python::make_function(gfal2_cred_t_get_value));
+ 
     boost::python::enum_<GLogLevelFlags>("verbose_level")
         .value("normal", G_LOG_LEVEL_CRITICAL)
         .value("warning", G_LOG_LEVEL_WARNING)
@@ -171,6 +214,9 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("listxattr", &PyGfal2::Gfal2Context::listxattr,
             "List known/supported extended attributes"
         )
+	.def("remove_opt", &PyGfal2::Gfal2Context::remove_opt, 
+           "remove an option"
+	)
         .def("get_opt_integer", &PyGfal2::Gfal2Context::get_opt_integer,
             "Returns the integer value assigned to a configuration parameter"
         )

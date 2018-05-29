@@ -596,6 +596,15 @@ boost::shared_ptr<Directory> Gfal2Context::directory(const std::string & path)
     return opendir(path);
 }
 
+bool Gfal2Context::remove_opt(const std::string & group_name, const std::string & key)
+{
+   ScopedGILRelease unlock;
+   GError * tmp_err = NULL;
+   bool ret = gfal2_remove_opt(cont->get(), group_name.c_str(), key.c_str(), &tmp_err);
+   GErrorWrapper::throwOnError(&tmp_err);
+   return ret;
+}
+
 
 int Gfal2Context::get_opt_integer(const std::string & nmspace, const std::string & key)
 {
