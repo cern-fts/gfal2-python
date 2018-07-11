@@ -418,6 +418,27 @@ boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t 
     return boost::python::make_tuple(ret, std::string(token));
 }
 
+boost::python::list Gfal2Context::qos_check_classes(const std::string& url, const std::string& type)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    boost::python::list qos_classes;
+    const char* result = gfal2_qos_check_classes(cont->get(), url.c_str(), type.c_str(), &tmp_err);
+
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string classes(result);
+        std::istringstream iss(classes);
+		std::string classToken;
+		while (std::getline(iss, classToken, ','))
+		{
+			qos_classes.append(classToken);
+		}
+	}
+    return qos_classes;
+}
 
 int Gfal2Context::bring_online_poll(const std::string& path, const std::string& token)
 {
