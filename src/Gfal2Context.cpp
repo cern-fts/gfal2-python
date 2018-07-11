@@ -440,6 +440,70 @@ boost::python::list Gfal2Context::qos_check_classes(const std::string& url, cons
     return qos_classes;
 }
 
+std::string Gfal2Context::check_file_qos(const std::string& fileUrl)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    std::cout << "I am here" << std::endl;
+    const char* result = gfal2_check_file_qos(cont->get(), fileUrl.c_str(), &tmp_err);
+    std::cout << "Got here?" << std::endl;
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string qos(result);
+        return qos;
+	}
+    return NULL;
+}
+
+boost::python::list Gfal2Context::check_available_qos_transitions(const std::string& qosClassUrl)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    boost::python::list qos_transitions;
+    const char* result = gfal2_check_available_qos_transitions(cont->get(), qosClassUrl.c_str(), &tmp_err);
+
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string transitions(result);
+        std::istringstream iss(transitions);
+		std::string transitionToken;
+		while (std::getline(iss, transitionToken, ','))
+		{
+			qos_transitions.append(transitionToken);
+		}
+	}
+    return qos_transitions;
+}
+
+std::string Gfal2Context::check_target_qos(const std::string& fileUrl)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    const char* result = gfal2_check_target_qos(cont->get(), fileUrl.c_str(), &tmp_err);
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string target_qos(result);
+        return target_qos;
+	}
+    return NULL;
+}
+
+int Gfal2Context::change_object_qos(const std::string& fileUrl, const std::string& newQosClass)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    int result = -1;
+    result = gfal2_change_object_qos(cont->get(), fileUrl.c_str(), newQosClass.c_str(), &tmp_err);
+    return result;
+}
+
 int Gfal2Context::bring_online_poll(const std::string& path, const std::string& token)
 {
     ScopedGILRelease unlock;
