@@ -314,7 +314,15 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("get_plugin_names", &PyGfal2::Gfal2Context::get_plugin_names,
             "Returns the name list of loaded plugins")
         .def("qos_check_classes", &PyGfal2::Gfal2Context::qos_check_classes,
-            "Check the QoS classes present in an interface");
+            "Check the QoS classes present in an interface")
+        .def("check_file_qos", &PyGfal2::Gfal2Context::check_file_qos,
+            "Check the QoS of a file in a CDMI enabled interface")
+        .def("check_available_qos_transitions", &PyGfal2::Gfal2Context::check_available_qos_transitions,
+            "Check the available transitions for a specific QoS")
+        .def("check_target_qos", &PyGfal2::Gfal2Context::check_target_qos,
+            "Check the target QoS of a specific file")
+        .def("change_object_qos", &PyGfal2::Gfal2Context::change_object_qos,
+            "Change the QoS of an object, either dir or file");
 
     // register stat struct
     boost::python::class_<PyGfal2::Stat>
