@@ -216,6 +216,9 @@ public:
     int abort_bring_online(const std::string& path, const std::string& token);
 
     boost::python::list abort_bring_online_list(const boost::python::list& files, const std::string& token);
+
+    // QoS
+    boost::python::list qos_check_classes(const std::string& url, const std::string& type);
 };
 
 int gfal_set_verbose_enum(GLogLevelFlags lvls);

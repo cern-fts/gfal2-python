@@ -312,7 +312,9 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online_list,
             "Aborts a bring online request")
         .def("get_plugin_names", &PyGfal2::Gfal2Context::get_plugin_names,
-            "Returns the name list of loaded plugins");
+            "Returns the name list of loaded plugins")
+        .def("qos_check_classes", &PyGfal2::Gfal2Context::qos_check_classes,
+            "Check the QoS classes present in an interface");
 
     // register stat struct
     boost::python::class_<PyGfal2::Stat>
