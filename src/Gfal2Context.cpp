@@ -445,9 +445,7 @@ std::string Gfal2Context::check_file_qos(const std::string& fileUrl)
     ScopedGILRelease unlock;
 
     GError* tmp_err = NULL;
-    std::cout << "I am here" << std::endl;
     const char* result = gfal2_check_file_qos(cont->get(), fileUrl.c_str(), &tmp_err);
-    std::cout << "Got here?" << std::endl;
     if (result == NULL)
         GErrorWrapper::throwOnError(&tmp_err);
     if (result != NULL) {
@@ -491,7 +489,7 @@ std::string Gfal2Context::check_target_qos(const std::string& fileUrl)
         std::string target_qos(result);
         return target_qos;
 	}
-    return NULL;
+    return "";
 }
 
 int Gfal2Context::change_object_qos(const std::string& fileUrl, const std::string& newQosClass)
