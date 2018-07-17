@@ -5,7 +5,7 @@ import gfal2
 import errno
 
 import unittest
-from python_test_lib import *
+from test.functionals.python_test_lib import *
 
 
 class Testgfal2Qos():
