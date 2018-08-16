@@ -17,7 +17,12 @@ include(CMakeGeneratePkgConfig REQUIRED)
 set(Boost_NO_BOOST_CMAKE ON)
 
 find_package(Boost COMPONENTS python REQUIRED)
-find_package(PythonEasy REQUIRED)
+#find_package(PythonEasy REQUIRED)
+
+find_package(PythonInterp 2.7 REQUIRED)
+find_package(PythonLibs 2.7 REQUIRED)
+find_package(PythonInterp 3.7 REQUIRED)
+find_package(PythonLibs 3.7 REQUIRED)
 
 message("Python: ${PYTHON_EXECUTABLE}")
 
