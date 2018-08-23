@@ -2,7 +2,9 @@
 %bcond_with static_boost_python
 
 # Python 3
-%bcond_with python3
+%if %{?fedora}%{!?fedora:0} >= 23 || %{?rhel}%{!?rhel:0} >= 7
+%global with_python3 1
+%endif
 
 # Doc directory
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
