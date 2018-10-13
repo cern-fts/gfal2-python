@@ -9,10 +9,10 @@ gfal2.set_verbose(gfal2.verbose_level.debug)
 
 def event_callback(event):
 	#print event
-	print "[%s] %s %s %s" % (event.timestamp, event.domain, event.stage, event.description)
+	print("[%s] %s %s %s" % (event.timestamp, event.domain, event.stage, event.description))
 
 def monitor_callback(src, dst, average, instant, transferred, elapsed):
-	print "[%4d] %.2fMB (%.2fKB/s)\r" % (elapsed, transferred / 1048576, average / 1024),
+	print("[%4d] %.2fMB (%.2fKB/s)\r" % (elapsed, transferred / 1048576, average / 1024)),
 	sys.stdout.flush()
 
 if __name__ == '__main__':
@@ -37,8 +37,8 @@ if __name__ == '__main__':
 	source = args[0]
 	dest   = args[1]
 
-	print "Source:      %s" % source
-	print "Destination: %s" % dest
+	print("Source:      %s" % source)
+	print("Destination: %s" % dest)
 
 	# Instantiate gfal2
 	ctx = gfal2.creat_context()
@@ -50,23 +50,23 @@ if __name__ == '__main__':
 
 	if options.overwrite:
 		params.overwrite = True
-		print "Enabled overwrite"
+		print("Enabled overwrite")
 
 	if options.validate or options.checksum:
 		params.checksum_check = True
-		print "Enabled checksum check"
+		print("Enabled checksum check")
 
 	if options.checksum:
 		(alg, val) = options.checksum.split(':')
 		params.set_user_defined_checksum(alg, val)
-		print "User defined checksum: %s:%s" % params.get_user_defined_checksum()
+		print("User defined checksum: %s:%s" % params.get_user_defined_checksum())
 
 	if options.source_space_token:
 		params.src_spacetoken = options.source_space_token
-		print "Source space token: %s" % params.src_spacetoken
+		print("Source space token: %s" % params.src_spacetoken)
 	if options.dest_space_token:
 		params.dst_spacetoken = options.dest_space_token
-		print "Destination space token: %s" % params.dst_spacetoken
+		print("Destination space token: %s" % params.dst_spacetoken)
 
 	# Five minutes timeout
 	params.timeout = 300
@@ -77,8 +77,8 @@ if __name__ == '__main__':
 	# (i.e. source can be file:/// and destination gsiftp://)
 	try:
 		r = ctx.filecopy(params, source, dest)
-		print "Copy succeeded!"
-	except Exception, e:
-		print "Copy failed: %s" % str(e)
+		print("Copy succeeded!")
+	except Exception as e:
+		print("Copy failed: %s" % str(e))
 		sys.exit(1)
 
