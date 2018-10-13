@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 ##
 # Example : copy a set of files in one go
@@ -9,11 +9,11 @@ import shlex
 import sys
 
 def event_callback(event):
-    print "[%s] %s %s %s" % (event.timestamp, event.domain, event.stage, event.description)
+    print("[%s] %s %s %s" % (event.timestamp, event.domain, event.stage, event.description))
 
 
 def monitor_callback(src, dst, average, instant, transferred, elapsed):
-    print "[%4d] %.2fMB (%.2fKB/s)\r" % (elapsed, transferred / 1048576, average / 1024),
+    print("[%4d] %.2fMB (%.2fKB/s)\r" % (elapsed, transferred / 1048576, average / 1024)),
     sys.stdout.flush()
 
 
@@ -38,7 +38,7 @@ if __name__ == '__main__':
             sources.append(l[0])
             destinations.append(l[1])
             
-    print "Found %d pairs" % len(sources)
+    print("Found %d pairs" % len(sources))
        
     # Instantiate gfal2
     ctx = gfal2.creat_context()
@@ -50,11 +50,11 @@ if __name__ == '__main__':
     
     if options.overwrite:
         params.overwrite = True
-        print "Enabled overwrite"
+        print("Enabled overwrite")
 
     if options.validate:
         params.checksum_check = True
-        print "Enabled checksum check"
+        print("Enabled checksum check")
         
     # Copy!
     # In this case, an exception will be thrown if the whole process fails
@@ -63,17 +63,17 @@ if __name__ == '__main__':
     try:
         errors = ctx.filecopy(params, sources, destinations)
         if not errors:
-            print "Copy succeeded!"
+            print("Copy succeeded!")
         else:
             for i in range(len(errors)):
                 e = errors[i]
                 src = sources[i]
                 dst = destinations[i]
                 if e:
-                    print "%s => %s failed [%d] %s" % (src, dst, e.code, e.message)
+                    print("%s => %s failed [%d] %s" % (src, dst, e.code, e.message))
                 else:
-                    print "%s => %s succeeded!" % (src, dst)
-    except Exception, e:
-        print "Copy failed: %s" % str(e)
+                    print("%s => %s succeeded!" % (src, dst))
+    except Exception as e:
+        print("Copy failed: %s" % str(e))
         sys.exit(1)
 

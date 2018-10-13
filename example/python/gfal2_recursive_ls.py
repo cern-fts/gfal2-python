@@ -54,7 +54,7 @@ class Crawler:
             entries = [f for f in self.context.listdir(url)
                        if f != '.' and f != '..']
         except gfal2.GError:
-            print >>out, tabbing, '!'
+            out.write(tabbing, '!')
             return
 
         for f in entries:
@@ -68,9 +68,9 @@ class Crawler:
 
             # Print entry
             if self.long:
-                print >>out, tabbing, self._long_format(f, fstat)
+                out.write(tabbing, self._long_format(f, fstat))
             else:
-                print >>out, tabbing, self._short_format(f)
+                out.write(tabbing, self._short_format(f))
 
             # Descend
             if self.recursive and stat.S_ISDIR(fstat.st_mode):
