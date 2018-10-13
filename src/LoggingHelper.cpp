@@ -24,7 +24,10 @@ static PyObject* get_logger(const char *name = "gfal2")
     static char format[] = "s";
 
     PyObject* logging = PyImport_ImportModule("logging");
-    PyObject* getLogger = PyObject_GetAttrString(logging, "getLogger");
+    PyObject* getLogger * = NULL;
+    if (logging != NULL) {
+        getLogger = PyObject_GetAttrString(logging, "getLogger");
+    } else return NULL;
     if (getLogger != NULL) {
          return PyObject_CallFunction(getLogger, format, name);
     } else  return NULL;
