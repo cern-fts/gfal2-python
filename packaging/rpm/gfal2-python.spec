@@ -35,7 +35,7 @@
 %endif
 
 Name:			gfal2-python
-Version:		1.9.5
+Version:		1.10.0
 Release:		1%{?dist}
 Summary:		Python bindings for gfal 2
 Group:			Applications/Internet
@@ -54,7 +54,7 @@ BuildRequires:      cmake28
 %else
 BuildRequires:      cmake
 %endif
-BuildRequires:		gfal2-devel >= 2.13.0
+BuildRequires:		gfal2-devel >= 2.17.0
 %if 0%{?el5}
 BuildRequires:		boost141-devel
 %else
@@ -70,7 +70,7 @@ BuildRequires:      boost-static
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
 
-Requires:		gfal2-core >= 2.13.0
+Requires:		gfal2-core >= 2.17.0
 
 # Python 3
 %if 0%{?with_python3} 
