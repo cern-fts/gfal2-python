@@ -55,12 +55,14 @@ def _run_make(build_dir, lib_path):
     validate()
 
     # prepare paths
-    full_lib_path = os.path.abspath(lib_path)
+    full_lib_path = os.path.dirname(os.path.abspath(lib_path))
     source_dir = os.path.abspath(os.path.dirname(__file__))
 
     # ensure involved directories exist
-    os.makedirs(build_dir)
-    os.makedirs(os.path.dirname(full_lib_path))
+    if not os.path.exists(build_dir):
+        os.makedirs(build_dir)
+    if not os.path.exists(full_lib_path):
+        os.makedirs(full_lib_path)
 
     # build the cmake command
     major = sys.version_info[0]
