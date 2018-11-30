@@ -23,6 +23,7 @@ import distutils.command.build_ext as _build_ext
 import distutils.spawn
 import distutils.dir_util
 from glob import glob
+from subprocess import check_call
 from setuptools import Extension, setup
 
 # Change this when there are changes in the setup.py or MANIFEST.in
@@ -53,23 +54,29 @@ def validate():
 def _run_make(build_dir, lib_path):
     validate()
 
-    pwd = os.getcwd()
-    full_lib_path = os.path.join(pwd, lib_path)
-    source_dir = os.path.dirname(__file__)
+    # prepare paths
+    full_lib_path = os.path.dirname(os.path.abspath(lib_path))
+    source_dir = os.path.abspath(os.path.dirname(__file__))
 
-    os.makedirs(build_dir)
-    os.makedirs(os.path.dirname(lib_path))
-    os.chdir(build_dir)
+    # ensure involved directories exist
+    if not os.path.exists(build_dir):
+        os.makedirs(build_dir)
+    if not os.path.exists(full_lib_path):
+        os.makedirs(full_lib_path)
 
-    try:
-        distutils.spawn.spawn([
-            'cmake', '-DSKIP_DOC=TRUE', '-DSKIP_TESTS=TRUE',
-            source_dir
-        ])
-        distutils.spawn.spawn(['make'])
-        shutil.copy('src/python%d/gfal2.so' % sys.version_info[0], full_lib_path)
-    finally:
-        os.chdir(pwd)
+    # build the cmake command
+    major = sys.version_info[0]
+    cmake_cmd = ['cmake', '-DSKIP_DOC=TRUE', '-DSKIP_TESTS=TRUE']
+    if major == 3:
+        cmake_cmd += ['-DPYTHON_EXECUTABLE_3=%s' % sys.executable]
+    cmake_cmd += [source_dir]
+
+    # run the cmake command and make
+    check_call(cmake_cmd, cwd=build_dir)
+    check_call(['make'], cwd=build_dir)
+
+    # install
+    shutil.copy(os.path.join(build_dir, 'src/python%d/gfal2.so' % major), full_lib_path)
 
 
 class build_ext(_build_ext.build_ext):
