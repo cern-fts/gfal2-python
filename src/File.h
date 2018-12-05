@@ -17,6 +17,7 @@
 #ifndef GFILE_H_
 #define GFILE_H_
 
+#include "Python.h"
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <string>
@@ -27,16 +28,17 @@ namespace PyGfal2 {
 class Gfal2Context;
 class GfalContextWrapper;
 
-
 class File: protected boost::noncopyable
 {
 public:
     File(const Gfal2Context & context, const std::string & path,
             const std::string & flag);
     virtual ~File();
-
-    /// wrapper to the gfal_read call
+#if PY_MAJOR_VERSION >= 3 /* workaround for https://github.com/boostorg/python/issues/85 */
+    const char * read(size_t count);
+#else /* python 2.x */
     std::string read(size_t count);
+#endif
     /// position independent read call
     std::string pread(off_t offset, size_t count);
     /// wrapper to the gfal_write call

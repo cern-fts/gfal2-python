@@ -57,6 +57,20 @@ File::~File()
 }
 
 
+#if PY_MAJOR_VERSION >= 3 /* workaround for https://github.com/boostorg/python/issues/85 */
+const char * File::read(size_t count) 
+{
+    ScopedGILRelease unlock;
+    GError* tmp_err = NULL;
+    std::vector<char> buf(count + 1); // vector on the heap for massive buffer size
+    ssize_t ret = gfal2_read(cont->get(), fd, &(buf.front()), count, &tmp_err);
+    if (ret < 0)
+        GErrorWrapper::throwOnError(&tmp_err);
+
+    buf[ret] = '\0';
+    return std::string(&(buf.front()), ret).c_str();
+}
+#else /* python 2.x */
 std::string File::read(size_t count)
 {
     ScopedGILRelease unlock;
@@ -69,7 +83,7 @@ std::string File::read(size_t count)
     buf[ret] = '\0';
     return std::string(&(buf.front()), ret);
 }
-
+#endif
 
 std::string File::pread(off_t offset, size_t count)
 {
