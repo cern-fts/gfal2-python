@@ -36,7 +36,7 @@
 
 Name:			gfal2-python
 Version:		1.10.0
-Release:		1%{?dist}
+Release:		2%{?dist}
 Summary:		Python bindings for gfal 2
 Group:			Applications/Internet
 License:		ASL 2.0
@@ -176,6 +176,42 @@ make DESTDIR=%{buildroot} install
 %endif
 
 %changelog
+* Mon Jan 28 2019 Andrea Manzi <amanzi@cern.ch> - 1.10.0-2
+- Added CDMI integration
+
+* Thu Oct 25 2018 Andrea Manzi <amanzi@cern.ch> - 1.9.5-2
+- Added python3 subpackage
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Sun Aug 20 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.3-5
+- Add Provides for the old name without %%_isa
+
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.3-4
+- Python 2 binary package renamed to python2-gfal2
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
+* Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+- Rebuild with binutils fix for ppc64le (#1475636)
+
+* Wed Jul 26 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.9.3-1
+- Update for release 1.9.3
+
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Thu Jul 20 2017 Kalev Lember <klember@redhat.com> - 1.9.2-3
+- Rebuilt for Boost 1.64
+
+* Fri Jul 07 2017 Igor Gnatenko <ignatenko@redhat.com> - 1.9.2-2
+- Rebuild due to bug in RPM (RHBZ #1468476)
+
+* Mon Apr 03 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.9.2-1
+- Update for release 1.9.2
+
 * Mon Feb 20 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.9.1-1
 - Update for release 1.9.0
 
