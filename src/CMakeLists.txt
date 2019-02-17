@@ -18,7 +18,7 @@ link_directories (
 add_library(gfal-py MODULE ${src_python})
 target_link_libraries(gfal-py
     ${Boost_LIBRARIES} ${GLIB2_LIBRARIES}  ${GTHREAD2_LIBRARIES}
-    ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES_2.7}
+    ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES}
 )
 set_target_properties(gfal-py
     PROPERTIES
@@ -28,12 +28,12 @@ set_target_properties(gfal-py
         LIBRARY_OUTPUT_DIRECTORY python2
 )
 set_property(TARGET gfal-py
-    APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH_2.7}
+    APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH}
 ) 
 
 install(TARGETS gfal-py 
 	    RUNTIME		DESTINATION ${CMAKE_INSTALL_PREFIX}
-	    LIBRARY		DESTINATION ${PYTHON_SITE_PACKAGES_2.7}
+	    LIBRARY		DESTINATION ${PYTHON_SITE_PACKAGES}
 )
 
 # If available, Python3
