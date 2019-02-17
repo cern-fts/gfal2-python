@@ -16,7 +16,7 @@ include(CMakeGeneratePkgConfig REQUIRED)
 
 set(Boost_NO_BOOST_CMAKE ON)
 
-find_package(Boost COMPONENTS python REQUIRED)
+find_package(Boost COMPONENTS python27 REQUIRED)
 find_package(PythonEasy REQUIRED)
 
 message("Python: ${PYTHON_EXECUTABLE}")
