@@ -74,8 +74,8 @@ Requires:		gfal2-core >= 2.13.0
 
 # Python 3
 %if 0%{?with_python3} 
-BuildRequires:      python34-devel
-BuildRequires:      boost-python34-devel
+BuildRequires:      python36-devel
+BuildRequires:      boost-python36-devel
 %endif
 
 %description
