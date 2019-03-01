@@ -41,7 +41,7 @@ if (Boost_PYTHON_3_LIBRARY)
     add_library(gfal-py3 MODULE ${src_python})
     target_link_libraries(gfal-py3
         ${Boost_PYTHON_3_LIBRARY} ${GLIB2_LIBRARIES} ${GTHREAD_LIBRARIES}
-        ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES_3}
+        ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES_3.6}
     )
     set_target_properties(gfal-py3
         PROPERTIES
@@ -51,12 +51,12 @@ if (Boost_PYTHON_3_LIBRARY)
             LIBRARY_OUTPUT_DIRECTORY python3
     )
     set_property(TARGET gfal-py3
-        APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH_3}
+        APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH_3.6}
     )
 
     install(TARGETS gfal-py3
         RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}
-        LIBRARY DESTINATION ${PYTHON_SITE_PACKAGES_3}
+        LIBRARY DESTINATION ${PYTHON_SITE_PACKAGES_3.6}
     )
 endif ()
 

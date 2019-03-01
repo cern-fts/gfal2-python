@@ -21,9 +21,9 @@ find_package(PythonEasy REQUIRED)
 
 message("Python: ${PYTHON_EXECUTABLE}")
 
-if (PYTHON_EXECUTABLE_3)
+if (PYTHON_EXECUTABLE_3.6)
     message("Python 3 installed! ${PYTHON3_CURRENT_VERSION}")
-    message("Python 3: ${PYTHON_EXECUTABLE_3}")
+    message("Python 3: ${PYTHON_EXECUTABLE_3.6}")
 
     string(REPLACE "." "" Boost_PYTHON_3_SUFFIX "${PYTHON3_CURRENT_VERSION}")
 
