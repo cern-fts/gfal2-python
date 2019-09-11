@@ -28,7 +28,7 @@ if (PYTHON_EXECUTABLE_3)
     string(REPLACE "." "" Boost_PYTHON_3_SUFFIX "${PYTHON3_CURRENT_VERSION}")
 
     find_library(Boost_PYTHON_3_LIBRARY
-        NAMES boost_python3 boost_python-py${Boost_PYTHON_3_SUFFIX}
+        NAMES boost_python3 boost_python${Boost_PYTHON_3_SUFFIX} boost_python-py${Boost_PYTHON_3_SUFFIX}
         HINTS
             ${Boost_LIBRARYDIR}
             "/usr/lib"
