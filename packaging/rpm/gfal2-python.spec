@@ -74,8 +74,8 @@ Requires:		gfal2-core >= 2.17.0
 
 # Python 3
 %if 0%{?with_python3} 
-BuildRequires:      python34-devel
-BuildRequires:      boost-python34-devel
+BuildRequires:      python36-devel
+BuildRequires:      boost-python36-devel
 %endif
 
 %description
@@ -173,6 +173,7 @@ make DESTDIR=%{buildroot} install
 %files -n gfal2-python3
 %defattr (-,root,root)
 %{python3_sitearch}/gfal2.so
+#/usr/lib64/python3.6/site-packages/gfal2.so
 %endif
 
 %changelog
