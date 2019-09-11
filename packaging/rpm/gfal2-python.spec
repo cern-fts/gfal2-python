@@ -172,8 +172,8 @@ make DESTDIR=%{buildroot} install
 %if %{with python3}
 %files -n gfal2-python3
 %defattr (-,root,root)
-#%{python3_sitearch}/gfal2.so
-/usr/lib64/python3.6/site-packages/gfal2.so
+%{python3_sitearch}/gfal2.so
+#/usr/lib64/python3.6/site-packages/gfal2.so
 %endif
 
 %changelog
