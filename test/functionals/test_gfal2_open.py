@@ -22,12 +22,6 @@ class Testgfal2_file(unittest.TestCase):
 		v= get_val(url);
                 a= self.context.open(v,flags);
 		return a;
-				
-	def test_read_simple_lfn(self):
-		a= self.file_valid("TEST_LFN_READ_VALID","r");
-		rs = a.read(500).strip();
-		var = str(get_val("TEST_FILE_CONTENT"));
-		self.assertTrue(rs == var, "must be %s but is %s."%(var, rs));
 			
 	def test_read_simple_srm(self):
 		a= self.file_valid("TEST_SRM_READ_VALID",'r');

@@ -33,10 +33,6 @@ class Testgfal2_mkrmdir(unittest.TestCase):
 		cmpl= str(time.time())
 		return ''.join([v, "/testmkdir_random", cmpl])
 		
-	def test_mkrmdir_lfn(self):
-		f = self.get_valid_file("TEST_LFN_BASE");
-		self.mkrmdir_valid(f)
-			
 	def test_mkrmdir_srm(self):
 		f = self.get_valid_file("TEST_SRM_BASE");
 		self.mkrmdir_valid(f)

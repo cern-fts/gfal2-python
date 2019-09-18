@@ -32,9 +32,6 @@ class Testgfal2_link(unittest.TestCase):
 		except gfal2.GError, e:
 			self.assertTrue( e.code() == errno.ENOENT, "must not reach here, this url must not be a existing one")			
 	
-	def test_link_lfn(self):
-		self.link_valid(get_val("TEST_LFN_READ_VALID"))
-			
 	def test_lstat_srm(self):
 		pass
 

@@ -26,10 +26,6 @@ class Testgfal2_stat(unittest.TestCase):
 		except gfal2.GError, e:
 			self.assertTrue(e.code() == errno.ENOENT, " must be a non existing file");	
 
-	def test_stat_lfn(self):
-		self.stat_valid("TEST_LFN_LSTAT_VALID");
-		self.stat_enoent("TEST_LFN_LSTAT_VALID");
-			
 	def test_lstat_srm(self):
 		self.stat_valid("TEST_SRM_LSTAT_VALID");
 		self.stat_enoent("TEST_SRM_LSTAT_VALID");
