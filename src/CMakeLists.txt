@@ -15,26 +15,28 @@ link_directories (
 )
 
 # Python 2
-add_library(gfal-py MODULE ${src_python})
-target_link_libraries(gfal-py
-    ${Boost_LIBRARIES} ${GLIB2_LIBRARIES}  ${GTHREAD2_LIBRARIES}
-    ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES}
-)
-set_target_properties(gfal-py
-    PROPERTIES
-        CLEAN_DIRECT_OUTPUT 1
-        PREFIX ""
-        OUTPUT_NAME gfal2
-        LIBRARY_OUTPUT_DIRECTORY python2
-)
-set_property(TARGET gfal-py
-    APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH}
-) 
+if (PYTHON2)
+    add_library(gfal-py MODULE ${src_python})
+    target_link_libraries(gfal-py
+        ${Boost_LIBRARIES} ${GLIB2_LIBRARIES}  ${GTHREAD2_LIBRARIES}
+        ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES_2.7}
+    )
+    set_target_properties(gfal-py
+        PROPERTIES
+            CLEAN_DIRECT_OUTPUT 1
+            PREFIX ""
+            OUTPUT_NAME gfal2
+            LIBRARY_OUTPUT_DIRECTORY python2
+    )
+    set_property(TARGET gfal-py
+        APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH_2.7}
+    ) 
 
-install(TARGETS gfal-py 
+    install(TARGETS gfal-py 
 	    RUNTIME		DESTINATION ${CMAKE_INSTALL_PREFIX}
-	    LIBRARY		DESTINATION ${PYTHON_SITE_PACKAGES}
-)
+	    LIBRARY		DESTINATION ${PYTHON_SITE_PACKAGES_2.7}
+    )
+endif ()
 
 # If available, Python3
 if (Boost_PYTHON_3_LIBRARY)

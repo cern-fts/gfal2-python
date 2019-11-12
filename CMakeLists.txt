@@ -16,7 +16,10 @@ include(CMakeGeneratePkgConfig REQUIRED)
 
 set(Boost_NO_BOOST_CMAKE ON)
 
-find_package(Boost COMPONENTS python REQUIRED)
+if (PYTHON2) 
+    find_package(Boost COMPONENTS python27 REQUIRED)
+endif(PYTHON2)
+
 find_package(PythonEasy REQUIRED)
 
 message("Python: ${PYTHON_EXECUTABLE}")
@@ -28,7 +31,7 @@ if (PYTHON_EXECUTABLE_3.6)
     string(REPLACE "." "" Boost_PYTHON_3_SUFFIX "${PYTHON3_CURRENT_VERSION}")
 
     find_library(Boost_PYTHON_3_LIBRARY
-        NAMES boost_python3 boost_python${Boost_PYTHON_3_SUFFIX} boost_python-py${Boost_PYTHON_3_SUFFIX}
+        NAMES boost_python3 boost_python${Boost_PYTHON_3_SUFFIX}  boost_python-py${Boost_PYTHON_3_SUFFIX}
         HINTS
             ${Boost_LIBRARYDIR}
             "/usr/lib"

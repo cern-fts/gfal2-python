@@ -1,24 +1,18 @@
 # Use static linking against boost
 %bcond_with static_boost_python
 
-# Python 3
-%if %{?fedora}%{!?fedora:0} >= 23 || %{?rhel}%{!?rhel:0} >= 7
-%global with_python3 1
-%endif
-
 # Doc directory
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
-#include boost > 141 for EL5
-%if 0%{?el5}
-%global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include/boost141 -DBOOST_LIBRARYDIR=%{_libdir}/boost141
-%else
 %global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include
+
+# Python 3
+%if 0%{?fedora} >= 23  || %{?rhel}%{!?rhel:0} >= 7
+%global with_python3 1
 %endif
 
-
 # python path discovery
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%{!?python2_sitearch: %define python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 %if 0%{?with_python3}
 %{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
@@ -27,50 +21,35 @@
 # python modules filtering
 %if 0%{?el6} || 0%{?el5}
 %{?filter_setup:
-%filter_provides_in %{python_sitearch}/.*\.so$ 
+%filter_provides_in %{python2_sitearch}/.*\.so$ 
 %filter_setup
 }
 %else
-%global __provides_exclude_from ^((%{python_sitearch})|(%{python3_sitearch})/.*\\.so)$
+%global __provides_exclude_from ^((%{python2_sitearch})|(%{python3_sitearch})/.*\\.so)$
 %endif
 
 Name:			gfal2-python
-Version:		1.9.5
-Release:		2%{?dist}
+Version:		1.9.6
+Release:		1%{?dist}
 Summary:		Python bindings for gfal 2
-Group:			Applications/Internet
 License:		ASL 2.0
 URL:			http://dmc.web.cern.ch/
-# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.4
-# pushd gfal2-python-1.9.4
-# git checkout v1.9.4
+# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.5
+# pushd gfal2-python-1.9.5
+# git checkout v1.9.5
 # popd
-# tar czf gfal2-python-1.9.4.tar.gz --exclude-vcs gfal2-python-1.9.4
+# tar czf gfal2-python-1.9.5.tar.gz --exclude-vcs gfal2-python-1.9.5
 Source0:		%{name}-%{version}.tar.gz
-BuildRoot:		%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-%if 0%{?el5}
-BuildRequires:      cmake28
-%else
-BuildRequires:      cmake
-%endif
-BuildRequires:		gfal2-devel >= 2.13.0
-%if 0%{?el5}
-BuildRequires:		boost141-devel
-%else
+BuildRequires:          gcc-c++
+BuildRequires:          cmake
+BuildRequires:		gfal2-devel >= 2.17.0
 BuildRequires:		boost-devel
-%endif
-%if 0%{?with_static_boost_python}
-%if 0%{?el5}
-BuildRequires:      boost141-static
-%else
-BuildRequires:      boost-static
-%endif
-%endif
+%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+BuildRequires:          boost-python2-devel
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
-
-Requires:		gfal2-core >= 2.13.0
+%endif
 
 # Python 3
 %if 0%{?with_python3} 
@@ -78,27 +57,43 @@ BuildRequires:      python36-devel
 BuildRequires:      boost-python36-devel
 %endif
 
-%description
-Python bindings for gfal2.
-GFAL2 offers an a single, simple and portable API
+%global _description\
+Python bindings for gfal2.\
+GFAL2 offers an a single, simple and portable API\
 for the file operations in grids and cloud environments.
+
+%description %_description
+
+%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+%package -n python2-gfal2
+Summary: %summary
+Requires:		gfal2-core >= 2.17.0
+%{?python_provide:%python_provide python2-gfal2}
+# Remove before F30
+Provides: gfal2-python = %{version}-%{release}
+Provides: gfal2-python%{?_isa} = %{version}-%{release}
+Obsoletes: gfal2-python < %{version}-%{release}
+
+%description -n python2-gfal2 %_description
 
 %package doc
 Summary:			Documentation for %{name}
-Group:				Applications/Internet
 %if 0%{?fedora} > 10 || 0%{?rhel}>5
 BuildArch:			noarch
 %endif
 
+
 %description doc
 Documentation files for %{name}.
+%endif
 
 %if 0%{?with_python3}
-%package -n gfal2-python3
-Summary:            gfal2 python birngins for Python 3
-Group:              Applications/Internet
+%package -n python3-gfal2
+Summary:            gfal2 python bindings for Python 3
+Provides: gfal2-python3 = %{version}-%{release}
+Obsoletes: gfal2-python3 <= 1.9.5-5
 
-%description -n gfal2-python3
+%description -n python3-gfal2
 Python 3 bindings for gfal2.
 GFAL2 offers an a single, simple and portable API
 for the file operations in grids and cloud environments.
@@ -122,63 +117,104 @@ if [ "$gfal2_python_cmake_ver=" != "$gfal2_python_spec_ver=" ]; then
     exit 1
 fi
 
-%if 0%{?el5}
-    %cmake28 \
+%cmake \
      -DDOC_INSTALL_DIR=%{_pkgdocdir} \
      %{boost_cmake_flags} \
 %if 0%{?with_static_boost_python}
      -DBoost_USE_STATIC_LIBS=ON \
 %endif
-     -DUNIT_TESTS=TRUE .
+%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8)) 
+     -DPYTHON2=TRUE \
 %else
-    %cmake \
-     -DDOC_INSTALL_DIR=%{_pkgdocdir} \
-     %{boost_cmake_flags} \
-%if 0%{?with_static_boost_python}
-     -DBoost_USE_STATIC_LIBS=ON \
+     -DPYTHON2=FALSE \
+     -DSKIP_DOC=TRUE  \
 %endif
      -DUNIT_TESTS=TRUE .
-%endif
 
 make %{?_smp_mflags}
+
+%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
 make doc
+%endif
 
 %check
-%if 0%{?el5}
-    ctest28 -V -T Test .
-%else
-    ctest -V -T Test .
-%endif
+ctest -V -T Test .
 
 %install
 rm -rf %{buildroot}
 make DESTDIR=%{buildroot} install
 
-%files
-%defattr (-,root,root)
-%{python_sitearch}/gfal2.so
+%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+%files -n python2-gfal2
+%{python2_sitearch}/gfal2.so
 %{_pkgdocdir}/LICENSE
 %{_pkgdocdir}/RELEASE-NOTES
 %{_pkgdocdir}/README
 
 %files doc
-%defattr (-,root,root)
 %{_pkgdocdir}/readme.html
 %dir %{_pkgdocdir}/html
 %dir %{_pkgdocdir}/examples
 %{_pkgdocdir}/html/*
 %{_pkgdocdir}/examples/*
+%endif
 
-%if %{with python3}
-%files -n gfal2-python3
-%defattr (-,root,root)
+%if 0%{?with_python3}
+%files -n python3-gfal2
 %{python3_sitearch}/gfal2.so
 #/usr/lib64/python3.6/site-packages/gfal2.so
 %endif
 
 %changelog
+* Mon Sep 16 2019 Andrea Manzi <amanzi@cern.ch> - 1.9.5-5
+- rename python3 package
+- remove python2 package from f32 on
+- remove el5 compilation 
+
+* Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 1.9.5-4
+- Rebuilt for Python 3.8
+
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.5-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Thu Oct 25 2018 Andrea Manzi <amanzi@cern.ch> - 1.9.5-2
+- Update for release 1.9.5
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Sun Aug 20 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.3-5
+- Add Provides for the old name without %%_isa
+
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.3-4
+- Python 2 binary package renamed to python2-gfal2
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
+* Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+- Rebuild with binutils fix for ppc64le (#1475636)
+
+* Wed Jul 26 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.9.3-1
+- Update for release 1.9.3
+
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Thu Jul 20 2017 Kalev Lember <klember@redhat.com> - 1.9.2-3
+- Rebuilt for Boost 1.64
+
+* Fri Jul 07 2017 Igor Gnatenko <ignatenko@redhat.com> - 1.9.2-2
+- Rebuild due to bug in RPM (RHBZ #1468476)
+
+* Mon Apr 03 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.9.2-1
+- Update for release 1.9.2
+
 * Mon Feb 20 2017 Alejandro Alvarez <aalvarez@cern.ch> - 1.9.1-1
-- Update for release 1.9.0
+- Update for release 1.9.1
 
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.5-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
