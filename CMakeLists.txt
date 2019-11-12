@@ -23,6 +23,7 @@ if (PYTHON2)
       find_package(Boost COMPONENTS python REQUIRED)  
     else()
       find_package(Boost COMPONENTS python27 REQUIRED)
+    endif()
 endif(PYTHON2)
 
 find_package(PythonEasy REQUIRED)

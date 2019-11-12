@@ -18,12 +18,13 @@ link_directories (
 if (PYTHON2)
    
     if(RHEL STREQUAL "6")
-      set(PYTHON2_VER "")
-     elseif(RHEL STREQUAL "7")
-      set(PYTHON2_VER "")
-     else()
-      set(PYTHON2_VER "_${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}")
-  
+       set(PYTHON2_VER "")
+    elseif(RHEL STREQUAL "7")
+       set(PYTHON2_VER "")
+    else()
+       set(PYTHON2_VER "_${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}")
+    endif()
+
     set(PYTHON2_LIBRARIES "PYTHON_LIBRARIES${PYTHON2_VER}"
     set(PYTHON2_INCLUDEPATH "PYTHON_INCLUDE_PATH${PYTHON2_VER}"
     set(PYTHON2_SITE_PACKAGES "PYTHON_SITE_PACKAGES${PYTHON2_VER}"
