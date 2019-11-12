@@ -16,10 +16,22 @@ link_directories (
 
 # Python 2
 if (PYTHON2)
+   
+    if(RHEL STREQUAL "6")
+      set(PYTHON2_VER "")
+     elseif(RHEL STREQUAL "7")
+      set(PYTHON2_VER "")
+     else()
+      set(PYTHON2_VER "_${Python2_VERSION_MAJOR}.${Python2_VERSION_MINOR}")
+  
+    set(PYTHON2_LIBRARIES "PYTHON_LIBRARIES${PYTHON2_VER}"
+    set(PYTHON2_INCLUDEPATH "PYTHON_INCLUDE_PATH${PYTHON2_VER}"
+    set(PYTHON2_SITE_PACKAGES "PYTHON_SITE_PACKAGES${PYTHON2_VER}"
+
     add_library(gfal-py MODULE ${src_python})
     target_link_libraries(gfal-py
         ${Boost_LIBRARIES} ${GLIB2_LIBRARIES}  ${GTHREAD2_LIBRARIES}
-        ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES_2.7}
+        ${GFAL2_LIBRARIES} ${PYTHON2_LIBRARIES}
     )
     set_target_properties(gfal-py
         PROPERTIES
@@ -29,12 +41,12 @@ if (PYTHON2)
             LIBRARY_OUTPUT_DIRECTORY python2
     )
     set_property(TARGET gfal-py
-        APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH_2.7}
+        APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON2_INCLUDE_PATH}
     ) 
 
     install(TARGETS gfal-py 
 	    RUNTIME		DESTINATION ${CMAKE_INSTALL_PREFIX}
-	    LIBRARY		DESTINATION ${PYTHON_SITE_PACKAGES_2.7}
+	    LIBRARY		DESTINATION ${PYTHON2_SITE_PACKAGES}
     )
 endif ()
 
