@@ -8,6 +8,11 @@ set(CMAKE_BUILD_TYPE "RelWithDebInfo"
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
 # global options
 
+# Find out details if we're on a redhat style platform
+execute_process (COMMAND rpm -E "%{?fedora}" OUTPUT_VARIABLE FEDORA OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND rpm -E "%{?rhel}" OUTPUT_VARIABLE RHEL OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+
 # load module
 include(DefineInstallationPaths REQUIRED)
 include(MacroCopyFile REQUIRED)
