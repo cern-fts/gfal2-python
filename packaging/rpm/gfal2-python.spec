@@ -11,8 +11,14 @@
 %global with_python3 1
 %endif
 
+%if 0%{?fedora} >= 30  || %{?rhel}%{!?rhel:0} >= 8
 # python path discovery
 %{!?python2_sitearch: %define python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%endif
+%if 0%{?fedora} < 30  || %{?rhel}%{!?rhel:0} < 8
+# python path discovery
+%{!?python_sitearch: %define python_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%endif
 
 %if 0%{?with_python3}
 %{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
@@ -145,7 +151,11 @@ make DESTDIR=%{buildroot} install
 
 %if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
 %files -n python2-gfal2
+%if 0%{?fedora} >= 30  || %{?rhel}%{!?rhel:0} >= 8
 %{python2_sitearch}/gfal2.so
+%else
+%{python_sitearch}/gfal2.so
+%endif
 %{_pkgdocdir}/LICENSE
 %{_pkgdocdir}/RELEASE-NOTES
 %{_pkgdocdir}/README
@@ -161,7 +171,6 @@ make DESTDIR=%{buildroot} install
 %if 0%{?with_python3}
 %files -n python3-gfal2
 %{python3_sitearch}/gfal2.so
-#/usr/lib64/python3.6/site-packages/gfal2.so
 %endif
 
 %changelog
