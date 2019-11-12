@@ -17,7 +17,12 @@ include(CMakeGeneratePkgConfig REQUIRED)
 set(Boost_NO_BOOST_CMAKE ON)
 
 if (PYTHON2) 
-    find_package(Boost COMPONENTS python27 REQUIRED)
+    if(RHEL STREQUAL "6")
+      find_package(Boost COMPONENTS python REQUIRED)
+    elseif(RHEL STREQUAL "7")
+      find_package(Boost COMPONENTS python REQUIRED)  
+    else()
+      find_package(Boost COMPONENTS python27 REQUIRED)
 endif(PYTHON2)
 
 find_package(PythonEasy REQUIRED)
