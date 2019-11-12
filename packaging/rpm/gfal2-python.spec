@@ -46,7 +46,6 @@ BuildRequires:          cmake
 BuildRequires:		gfal2-devel >= 2.17.0
 BuildRequires:		boost-devel
 %if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
-BuildRequires:          boost-python2-devel
 BuildRequires:		python2-devel
 BuildRequires:		epydoc
 %endif
