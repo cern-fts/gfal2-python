@@ -96,7 +96,8 @@ Documentation files for %{name}.
 %package -n python3-gfal2
 Summary:            gfal2 python bindings for Python 3
 Provides: gfal2-python3 = %{version}-%{release}
-Obsoletes: gfal2-python3 <= 1.9.5-5
+Provides: gfal2-python3%{?_isa} = %{version}-%{release}
+Obsoletes: gfal2-python3 < %{version}-%{release}
 
 %description -n python3-gfal2
 Python 3 bindings for gfal2.
