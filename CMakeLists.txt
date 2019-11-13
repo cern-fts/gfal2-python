@@ -21,7 +21,11 @@ include(CMakeGeneratePkgConfig REQUIRED)
 
 set(Boost_NO_BOOST_CMAKE ON)
 
-if (PYTHON2) 
+find_package(PythonEasy REQUIRED)
+
+message("Python: ${PYTHON_EXECUTABLE}")
+
+if (PYTHON_EXECUTABLE) 
     if(RHEL STREQUAL "6")
       find_package(Boost COMPONENTS python REQUIRED)
     elseif(RHEL STREQUAL "7")
@@ -29,15 +33,11 @@ if (PYTHON2)
     else()
       find_package(Boost COMPONENTS python27 REQUIRED)
     endif()
-endif(PYTHON2)
+endif(PYTHON_EXECUTABLE)
 
-find_package(PythonEasy REQUIRED)
 
-message("Python: ${PYTHON_EXECUTABLE}")
-
-if (PYTHON_EXECUTABLE_3.6)
+if (PYTHON3_CURRENT_VERSION)
     message("Python 3 installed! ${PYTHON3_CURRENT_VERSION}")
-    message("Python 3: ${PYTHON_EXECUTABLE_3.6}")
 
     string(REPLACE "." "" Boost_PYTHON_3_SUFFIX "${PYTHON3_CURRENT_VERSION}")
 

@@ -15,7 +15,7 @@ link_directories (
 )
 
 # Python 2
-if (PYTHON2)
+if (Boost_LIBRARIES)
      
     if(RHEL STREQUAL "6")
       set(PYTHON2_VER "")
