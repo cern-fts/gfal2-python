@@ -424,19 +424,19 @@ boost::python::list Gfal2Context::qos_check_classes(const std::string& url, cons
 
     GError* tmp_err = NULL;
     boost::python::list qos_classes;
-    const char* result = gfal2_qos_check_classes(cont->get(), url.c_str(), type.c_str(), &tmp_err);
-
-    if (result == NULL)
+    char buffer[MAX_BUFFER_SIZE];
+    const ssize_t ret = gfal2_qos_check_classes(cont->get(), url.c_str(), type.c_str(),
+                                                buffer, MAX_BUFFER_SIZE, &tmp_err);
+    if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
-    if (result != NULL) {
-        std::string classes(result);
-        std::istringstream iss(classes);
-		std::string classToken;
-		while (std::getline(iss, classToken, ','))
-		{
-			qos_classes.append(classToken);
-		}
-	}
+
+    std::string classes(buffer);
+    std::istringstream iss(classes);
+    std::string classToken;
+    while (std::getline(iss, classToken, ',')) {
+        qos_classes.append(classToken);
+    }
+
     return qos_classes;
 }
 
@@ -445,14 +445,13 @@ std::string Gfal2Context::check_file_qos(const std::string& fileUrl)
     ScopedGILRelease unlock;
 
     GError* tmp_err = NULL;
-    const char* result = gfal2_check_file_qos(cont->get(), fileUrl.c_str(), &tmp_err);
-    if (result == NULL)
+    char buffer[MAX_BUFFER_SIZE];
+    ssize_t ret = gfal2_check_file_qos(cont->get(), fileUrl.c_str(),
+                                       buffer, MAX_BUFFER_SIZE, &tmp_err);
+    if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
-    if (result != NULL) {
-        std::string qos(result);
-        return qos;
-	}
-    return NULL;
+
+    return std::string(buffer);
 }
 
 boost::python::list Gfal2Context::check_available_qos_transitions(const std::string& qosClassUrl)
@@ -461,19 +460,19 @@ boost::python::list Gfal2Context::check_available_qos_transitions(const std::str
 
     GError* tmp_err = NULL;
     boost::python::list qos_transitions;
-    const char* result = gfal2_check_available_qos_transitions(cont->get(), qosClassUrl.c_str(), &tmp_err);
-
-    if (result == NULL)
+    char buffer[MAX_BUFFER_SIZE];
+    ssize_t ret = gfal2_check_available_qos_transitions(cont->get(), qosClassUrl.c_str(),
+                                                        buffer, MAX_BUFFER_SIZE, &tmp_err);
+    if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
-    if (result != NULL) {
-        std::string transitions(result);
-        std::istringstream iss(transitions);
+
+    std::string transitions(buffer);
+    std::istringstream iss(transitions);
 		std::string transitionToken;
-		while (std::getline(iss, transitionToken, ','))
-		{
+		while (std::getline(iss, transitionToken, ',')) {
 			qos_transitions.append(transitionToken);
 		}
-	}
+
     return qos_transitions;
 }
 
@@ -482,14 +481,13 @@ std::string Gfal2Context::check_target_qos(const std::string& fileUrl)
     ScopedGILRelease unlock;
 
     GError* tmp_err = NULL;
-    const char* result = gfal2_check_target_qos(cont->get(), fileUrl.c_str(), &tmp_err);
-    if (result == NULL)
+    char buffer[MAX_BUFFER_SIZE];
+    ssize_t ret = gfal2_check_target_qos(cont->get(), fileUrl.c_str(),
+                                         buffer, MAX_BUFFER_SIZE, &tmp_err);
+    if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
-    if (result != NULL) {
-        std::string target_qos(result);
-        return target_qos;
-	}
-    return "";
+
+    return std::string(buffer);
 }
 
 int Gfal2Context::change_object_qos(const std::string& fileUrl, const std::string& newQosClass)
@@ -497,9 +495,11 @@ int Gfal2Context::change_object_qos(const std::string& fileUrl, const std::strin
     ScopedGILRelease unlock;
 
     GError* tmp_err = NULL;
-    int result = -1;
-    result = gfal2_change_object_qos(cont->get(), fileUrl.c_str(), newQosClass.c_str(), &tmp_err);
-    return result;
+    int ret = gfal2_change_object_qos(cont->get(), fileUrl.c_str(), newQosClass.c_str(), &tmp_err);
+    if (ret < 0)
+        GErrorWrapper::throwOnError(&tmp_err);
+
+    return ret;
 }
 
 int Gfal2Context::bring_online_poll(const std::string& path, const std::string& token)
