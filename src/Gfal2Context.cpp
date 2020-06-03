@@ -418,6 +418,89 @@ boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t 
     return boost::python::make_tuple(ret, std::string(token));
 }
 
+boost::python::list Gfal2Context::qos_check_classes(const std::string& url, const std::string& type)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    boost::python::list qos_classes;
+    const char* result = gfal2_qos_check_classes(cont->get(), url.c_str(), type.c_str(), &tmp_err);
+
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string classes(result);
+        std::istringstream iss(classes);
+		std::string classToken;
+		while (std::getline(iss, classToken, ','))
+		{
+			qos_classes.append(classToken);
+		}
+	}
+    return qos_classes;
+}
+
+std::string Gfal2Context::check_file_qos(const std::string& fileUrl)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    const char* result = gfal2_check_file_qos(cont->get(), fileUrl.c_str(), &tmp_err);
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string qos(result);
+        return qos;
+	}
+    return NULL;
+}
+
+boost::python::list Gfal2Context::check_available_qos_transitions(const std::string& qosClassUrl)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    boost::python::list qos_transitions;
+    const char* result = gfal2_check_available_qos_transitions(cont->get(), qosClassUrl.c_str(), &tmp_err);
+
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string transitions(result);
+        std::istringstream iss(transitions);
+		std::string transitionToken;
+		while (std::getline(iss, transitionToken, ','))
+		{
+			qos_transitions.append(transitionToken);
+		}
+	}
+    return qos_transitions;
+}
+
+std::string Gfal2Context::check_target_qos(const std::string& fileUrl)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    const char* result = gfal2_check_target_qos(cont->get(), fileUrl.c_str(), &tmp_err);
+    if (result == NULL)
+        GErrorWrapper::throwOnError(&tmp_err);
+    if (result != NULL) {
+        std::string target_qos(result);
+        return target_qos;
+	}
+    return "";
+}
+
+int Gfal2Context::change_object_qos(const std::string& fileUrl, const std::string& newQosClass)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    int result = -1;
+    result = gfal2_change_object_qos(cont->get(), fileUrl.c_str(), newQosClass.c_str(), &tmp_err);
+    return result;
+}
 
 int Gfal2Context::bring_online_poll(const std::string& path, const std::string& token)
 {

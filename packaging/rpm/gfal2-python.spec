@@ -27,7 +27,7 @@
 # python modules filtering
 %if 0%{?el6} || 0%{?el5}
 %{?filter_setup:
-%filter_provides_in %{python2_sitearch}/.*\.so$ 
+%filter_provides_in %{python2_sitearch}/.*\.so$
 %filter_setup
 }
 %else
@@ -35,7 +35,7 @@
 %endif
 
 Name:			gfal2-python
-Version:		1.9.6
+Version:		1.10.0
 Release:		1%{?dist}
 Summary:		Python bindings for gfal 2
 License:		ASL 2.0
@@ -129,7 +129,7 @@ fi
 %if 0%{?with_static_boost_python}
      -DBoost_USE_STATIC_LIBS=ON \
 %endif
-%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8)) 
+%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
      -DPYTHON2=TRUE \
 %else
      -DPYTHON2=FALSE \
@@ -178,7 +178,7 @@ make DESTDIR=%{buildroot} install
 * Mon Sep 16 2019 Andrea Manzi <amanzi@cern.ch> - 1.9.5-5
 - rename python3 package
 - remove python2 package from f32 on
-- remove el5 compilation 
+- remove el5 compilation
 
 * Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 1.9.5-4
 - Rebuilt for Python 3.8
