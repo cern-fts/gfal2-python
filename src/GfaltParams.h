@@ -115,8 +115,10 @@ public:
     bool                 get_create_parent(void);
     void                 set_tcp_buffersize(uint64_t buffersize);
     uint64_t             get_tcp_buffersize(void);
+    void                 set_strict_copy(bool strict_copy);
     bool                 get_strict_copy(void);
-    void                 set_strict_copy(bool val);
+    void                 set_proxy_delegation(bool proxy_delegation);
+    bool                 get_proxy_delegation(void);
 
     void set_checksum(gfalt_checksum_mode_t mode, const std::string &type, const std::string &value);
     boost::python::tuple get_checksum();

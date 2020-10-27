@@ -383,8 +383,14 @@ BOOST_PYTHON_MODULE (gfal2)
             &PyGfal2::GfaltParams::set_tcp_buffersize,
             "TCP Buffersize"
         )
-        .add_property("strict_copy", &PyGfal2::GfaltParams::get_strict_copy, &PyGfal2::GfaltParams::set_strict_copy,
-            "If set to True, do only copy, and ignore checksum, parent creation, overwrite...")
+        .add_property("strict_copy", &PyGfal2::GfaltParams::get_strict_copy,
+            &PyGfal2::GfaltParams::set_strict_copy,
+            "If set to True, do only copy, and ignore checksum, parent creation, overwrite..."
+        )
+        .add_property("proxy_delegation", &PyGfal2::GfaltParams::get_proxy_delegation,
+            &PyGfal2::GfaltParams::set_proxy_delegation,
+            "Enable or disable TPC with proxy delegation (default enabled)"
+        )
         .add_property("event_callback", &PyGfal2::GfaltParams::get_event_callback,
             &PyGfal2::GfaltParams::set_event_callback,
             "Callback for event handling"

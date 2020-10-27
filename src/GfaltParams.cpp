@@ -254,6 +254,14 @@ uint64_t GfaltParams::get_tcp_buffersize(void)
 }
 
 
+void GfaltParams::set_strict_copy(bool strict_copy)
+{
+  GError * tmp_err = NULL;
+  gfalt_set_strict_copy_mode(params, strict_copy, &tmp_err);
+  GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
 bool GfaltParams::get_strict_copy(void)
 {
     GError * tmp_err = NULL;
@@ -263,13 +271,21 @@ bool GfaltParams::get_strict_copy(void)
 }
 
 
-void GfaltParams::set_strict_copy(bool val)
+void GfaltParams::set_proxy_delegation(bool proxy_delegation)
 {
     GError * tmp_err = NULL;
-    gfalt_set_strict_copy_mode(params, val, &tmp_err);
+    gfalt_set_use_proxy_delegation(params, proxy_delegation, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
 }
 
+
+bool GfaltParams::get_proxy_delegation(void)
+{
+    GError * tmp_err = NULL;
+    bool proxy_delegation = gfalt_get_use_proxy_delegation(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return proxy_delegation;
+}
 
 void GfaltParams::set_checksum(gfalt_checksum_mode_t mode, const std::string &type, const std::string &value)
 {
