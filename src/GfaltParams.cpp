@@ -287,6 +287,24 @@ bool GfaltParams::get_proxy_delegation(void)
     return proxy_delegation;
 }
 
+
+void GfaltParams::set_local_transfers(bool local_transfers)
+{
+    GError * tmp_err = NULL;
+    gfalt_set_local_transfer_perm(params, local_transfers, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
+bool GfaltParams::get_local_transfers(void)
+{
+    GError * tmp_err = NULL;
+    bool local_transfers = gfalt_get_local_transfer_perm(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return local_transfers;
+}
+
+
 void GfaltParams::set_checksum(gfalt_checksum_mode_t mode, const std::string &type, const std::string &value)
 {
     GError *tmp_err = NULL;

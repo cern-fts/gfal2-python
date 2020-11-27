@@ -391,6 +391,10 @@ BOOST_PYTHON_MODULE (gfal2)
             &PyGfal2::GfaltParams::set_proxy_delegation,
             "Enable or disable TPC with proxy delegation (default enabled)"
         )
+        .add_property("local_transfers", &PyGfal2::GfaltParams::get_local_transfers,
+            &PyGfal2::GfaltParams::set_local_transfers,
+            "Permission flag to enable or disable transfers via local streaming (default enabled)"
+        )
         .add_property("event_callback", &PyGfal2::GfaltParams::get_event_callback,
             &PyGfal2::GfaltParams::set_event_callback,
             "Callback for event handling"
