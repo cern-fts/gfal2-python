@@ -1,3 +1,30 @@
+GFAL2-PYTHON RELEASE NOTES
+==========================
+
+* Fri Dec 04 2020 Mihai Patrascoiu <mipatras at cern.ch> - 1.10.0
+** Bug
+- [DMC-1128] - gfal2-python cannot be installed with python 3.6 and 3.7
+** Task
+- [DMC-1059] - Extend the gfal2 HTTP plugin to implement CDMI QoS operations
+- [DMC-1180] - merge f29+ and EPEL8 changes to develop
+** Improvement
+- [DMC-1229] - Introduce Gfal2 transfer parameter to enable/disable proxy delegation
+- [DMC-1232] - Expose local transfers permission flag in Gfal2 transfer parameters
+** Interface
+- This version exposes the QoS Gfal2 API
+
+* Thu Oct 25 2018 Andrea Manzi <amanzi at cern.ch> - 1.9.5
+** Bug
+- [DMC-1104] - [python 3] gfal2-python segfaults when freeing the context
+- [DMC-1105] - [python 3] The gfal2-python examples have python2 only syntax
+** Task
+- [DMC-1079] - Add gfal2-python3 to EPEL7
+
+* Tue Aug 28 2018 Andrea Manzi <amanzi at cern.ch> - 1.9.4
+** Task
+- [DMC-980] - Build gfal2-python for Python 3 in CC7
+- [DMC-1045] - Add support for multiple credentials on gfal2-python
+
 * Wed Jun 21 2017 Alejandro Álvarez <aalvarez at cern.ch> - 1.9.3
 ** Bug
 - [DMC-930] - Avoid "no handlers could be found for logger gfal2"
@@ -100,7 +127,5 @@ system stdc++ and statically against boost python
  - add pydoc
  - convert to off_t =64 bits on the 32 bits plateform
 
-
 * Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1
  - initial 1.0 release for gfal 2.0 python bindings
-
