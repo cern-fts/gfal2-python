@@ -8,3 +8,4 @@
 *.gz
 *.dsc
 *.egg-info
+*.pyc
