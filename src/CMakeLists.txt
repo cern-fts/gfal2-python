@@ -28,7 +28,7 @@ if (Boost_LIBRARIES)
     add_library(gfal-py MODULE ${src_python})
     target_link_libraries(gfal-py
         ${Boost_LIBRARIES} ${GLIB2_LIBRARIES}  ${GTHREAD2_LIBRARIES}
-        ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES${PYTHON2_VER}}
+        ${GFAL2_LIBRARIES}
     )
     set_target_properties(gfal-py
         PROPERTIES
@@ -39,7 +39,10 @@ if (Boost_LIBRARIES)
     )
     set_property(TARGET gfal-py
         APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH${PYTHON2_VER}}
-    ) 
+    )
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        set_property(TARGET gfal-py APPEND PROPERTY LINK_FLAGS "-undefined dynamic_lookup")
+    endif()
 
     install(TARGETS gfal-py 
 	    RUNTIME		DESTINATION ${CMAKE_INSTALL_PREFIX}
@@ -62,7 +65,7 @@ if (Boost_PYTHON_3_LIBRARY)
     add_library(gfal-py3 MODULE ${src_python})
     target_link_libraries(gfal-py3
         ${Boost_PYTHON_3_LIBRARY} ${GLIB2_LIBRARIES} ${GTHREAD_LIBRARIES}
-        ${GFAL2_LIBRARIES} ${PYTHON_LIBRARIES${PYTHON3_VER}}
+        ${GFAL2_LIBRARIES}
     )
     set_target_properties(gfal-py3
         PROPERTIES
@@ -74,6 +77,9 @@ if (Boost_PYTHON_3_LIBRARY)
     set_property(TARGET gfal-py3
         APPEND PROPERTY INCLUDE_DIRECTORIES ${PYTHON_INCLUDE_PATH${PYTHON3_VER}}
     )
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        set_property(TARGET gfal-py3 APPEND PROPERTY LINK_FLAGS "-undefined dynamic_lookup")
+    endif()
 
     install(TARGETS gfal-py3
         RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}
