@@ -55,38 +55,23 @@ void register_shared_ptr(void)
     }
 }
 
-int gfal2_cred_set_wrapper(PyGfal2::Gfal2Context *ctx, const char *url_prefix, const gfal2_cred_t *cred){
-
-  gfal2_context_t handle = ctx->getContext()->get();
-
-  GError* error = NULL;
-  int res = gfal2_cred_set(handle, url_prefix, cred, &error);
-    if (res != 0) {
-      PyGfal2::GErrorWrapper::throwOnError(&error);
-    }
-}
-
-int gfal2_cred_clean_wrapper(PyGfal2::Gfal2Context *ctx) {
-
-  gfal2_context_t handle = ctx->getContext()->get();
-
-  GError* error = NULL;
-  int res = gfal2_cred_clean(handle, &error);
-  if (res != 0) {
-    PyGfal2::GErrorWrapper::throwOnError(&error);
-  }
-}
-
-std::string const gfal2_cred_t_get_value(gfal2_cred_t const& c)
+boost::shared_ptr<PyGfal2::Cred> gfal2_cred_new_wrapper(const std::string& type, const std::string& value)
 {
-  return (c.value);
+    fprintf(stderr, "Deprecated: Please use context.cred_new() instead!\n");
+    return boost::shared_ptr<PyGfal2::Cred>(new PyGfal2::Cred(type, value));
 }
 
-std::string const gfal2_cred_t_get_type(gfal2_cred_t const& c)
+int gfal2_cred_set_wrapper(PyGfal2::Gfal2Context* ctx, const std::string& url_prefix, const PyGfal2::Cred& cred)
 {
-  return (c.type);
+    fprintf(stderr, "Deprecated: Please use context.cred_set() instead!\n");
+    return ctx->cred_set(url_prefix, cred);
 }
 
+int gfal2_cred_clean_wrapper(PyGfal2::Gfal2Context* ctx)
+{
+    fprintf(stderr, "Deprecated: Please use context.cred_clean() instead!\n");
+    return ctx->cred_clean();
+}
 
 BOOST_PYTHON_MODULE (gfal2)
 {
@@ -115,16 +100,12 @@ BOOST_PYTHON_MODULE (gfal2)
     boost::python::def("creat_context", &PyGfal2::Gfal2Context::creat_context, "Create a gfal2 context");
     boost::python::def("get_version", &gfal_version_wrapper, "Get the gfal2 version");
 
-    // functions to enable setting different credentials per url
+    // Credential object wrappers - kept to provide backwards compatibility
+    // (deprecated: new versions should use Gfal2Context methods)
     boost::python::def("cred_set", &gfal2_cred_set_wrapper, "Set credentials");
-    boost::python::def("cred_new", &gfal2_cred_new, boost::python::return_value_policy<boost::python::manage_new_object>(), "Define credentials");
+    boost::python::def("cred_new", &gfal2_cred_new_wrapper, "Define credentials");
     boost::python::def("cred_clean", &gfal2_cred_clean_wrapper, "Clean credentials");
-    // register gfal2_cred_t
-    boost::python::class_<gfal2_cred_t>
-       ("gfal2_cred", "A struct holding a credential type and value")
-        .add_property("type", boost::python::make_function(gfal2_cred_t_get_type))
-        .add_property("value", boost::python::make_function(gfal2_cred_t_get_value));
- 
+
     boost::python::enum_<GLogLevelFlags>("verbose_level")
         .value("normal", G_LOG_LEVEL_CRITICAL)
         .value("warning", G_LOG_LEVEL_WARNING)
@@ -182,7 +163,7 @@ BOOST_PYTHON_MODULE (gfal2)
             "Creates a directory and its parents if needed"
         )
         .def("rmdir", &PyGfal2::Gfal2Context::rmdir,
-        "Removes a directory"
+            "Removes a directory"
         )
         .def("listdir", &PyGfal2::Gfal2Context::listdir,
             "Returns the content of a directory as a list of file names"
@@ -214,9 +195,9 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("listxattr", &PyGfal2::Gfal2Context::listxattr,
             "List known/supported extended attributes"
         )
-	.def("remove_opt", &PyGfal2::Gfal2Context::remove_opt, 
-           "remove an option"
-	)
+	      .def("remove_opt", &PyGfal2::Gfal2Context::remove_opt,
+            "remove an option"
+	      )
         .def("get_opt_integer", &PyGfal2::Gfal2Context::get_opt_integer,
             "Returns the integer value assigned to a configuration parameter"
         )
@@ -322,12 +303,18 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("check_target_qos", &PyGfal2::Gfal2Context::check_target_qos,
             "Check the target QoS of a specific file")
         .def("change_object_qos", &PyGfal2::Gfal2Context::change_object_qos,
-            "Change the QoS of an object, either dir or file");
+            "Change the QoS of an object, either dir or file")
+        .def("cred_set", &PyGfal2::Gfal2Context::cred_set,
+            "Set credentials of specified type for given URL")
+        .def("cred_get", &PyGfal2::Gfal2Context::cred_get,
+            "Get credential of specified type for given URL")
+        .def("cred_clean", &PyGfal2::Gfal2Context::cred_clean,
+            "Clean credential mapping");
 
     // register stat struct
     boost::python::class_<PyGfal2::Stat>
         ("Stat", "Please, note that not all fields make sense for all protocols")
-        .add_property("st_dev", &PyGfal2::Stat::get_st_dev, "Device of contatining file")
+        .add_property("st_dev", &PyGfal2::Stat::get_st_dev, "Device of containing file")
         .add_property("st_ino", &PyGfal2::Stat::get_st_ino, "Inode")
         .add_property("st_mode", &PyGfal2::Stat::get_st_mode, "Protection mode")
         .add_property("st_nlink", &PyGfal2::Stat::get_st_nlink, "Number of hard links")
@@ -337,7 +324,6 @@ BOOST_PYTHON_MODULE (gfal2)
         .add_property("st_gid", &PyGfal2::Stat::get_st_gid, "Group ID")
         .add_property("st_uid", &PyGfal2::Stat::get_st_uid, "User ID")
         .add_property("st_size", &PyGfal2::Stat::get_st_size, "Size")
-
         .def("__str__", &PyGfal2::Stat::__str__)
         .def("__repr__", &PyGfal2::Stat::__str__);
 
@@ -346,10 +332,21 @@ BOOST_PYTHON_MODULE (gfal2)
         ("Dirent", "Please, note that not all fields make sense for all protocols")
         .add_property("d_ino", &PyGfal2::Dirent::get_d_ino, "Inode")
         .add_property("d_off", &PyGfal2::Dirent::get_d_off, "Offset to the next dirent")
-        .add_property("d_reclen", &PyGfal2::Dirent::get_d_reclen, "Lenght of this record")
+        .add_property("d_reclen", &PyGfal2::Dirent::get_d_reclen, "Length of this record")
         .add_property("d_type", &PyGfal2::Dirent::get_d_type, "Type of file")
         .add_property("d_name", &PyGfal2::Dirent::get_d_name, "Entry name")
         .def("__nonzero__", &PyGfal2::Dirent::isValid);
+
+    // register Gfal2 credential struct
+    boost::python::class_<PyGfal2::Cred>
+        ("Credential", "Credential object holding type and value",
+            boost::python::init<const std::string &, const std::string &>())
+        .add_property("type", &PyGfal2::Cred::get_type, "Credential type")
+        .add_property("value", &PyGfal2::Cred::get_value, "Credential value");
+
+    register_shared_ptr<PyGfal2::Cred>();
+
+    boost::python::scope().attr("cred_new") = boost::python::scope().attr("Credential");
 
     // Transfer parameters
     boost::python::class_<PyGfal2::GfaltParams>("TransferParameters", "filecopy parameters")

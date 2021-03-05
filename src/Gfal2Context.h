@@ -37,6 +37,7 @@
 #include "File.h"
 #include "GfaltParams.h"
 #include "Stat.h"
+#include "Cred.h"
 #include "pyGIL.h"
 
 namespace PyGfal2 {
@@ -219,10 +220,21 @@ public:
 
     // QoS
     boost::python::list qos_check_classes(const std::string& url, const std::string& type);
+
     std::string check_file_qos(const std::string& fileUrl);
+
     boost::python::list check_available_qos_transitions(const std::string& qosClassUrl);
+
     std::string check_target_qos(const std::string& fileUrl);
+
     int change_object_qos(const std::string& fileUrl, const std::string& newQosClass);
+
+    // Cred object
+    int cred_set(const std::string& url_prefix, const Cred& c);
+
+    boost::python::tuple cred_get(const std::string& type, const std::string& url);
+
+    int cred_clean();
 };
 
 int gfal_set_verbose_enum(GLogLevelFlags lvls);

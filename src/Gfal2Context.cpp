@@ -887,6 +887,41 @@ boost::python::dict Gfal2Context::get_client_info(void)
     return dictionary;
 }
 
+
+int Gfal2Context::cred_set(const std::string& url_prefix, const Cred& c)
+{
+    ScopedGILRelease unlock;
+    GError* error = NULL;
+    int res = gfal2_cred_set(cont->get(), url_prefix.c_str(), c.cred, &error);
+    GErrorWrapper::throwOnError(&error);
+    return res;
+}
+
+
+boost::python::tuple Gfal2Context::cred_get(const std::string& type, const std::string& url)
+{
+    ScopedGILRelease unlock;
+    GError* error = NULL;
+    const char* prefix_match = NULL;
+    const char* value = gfal2_cred_get(cont->get(), type.c_str(), url.c_str(),
+                                       &prefix_match, &error);
+    GErrorWrapper::throwOnError(&error);
+    std::string svalue = (value) ? value : "";
+    std::string sprefix_match = (prefix_match) ? prefix_match : "";
+    return boost::python::make_tuple(svalue, sprefix_match);
+}
+
+
+int Gfal2Context::cred_clean()
+{
+    ScopedGILRelease unlock;
+    GError* error = NULL;
+    int res = gfal2_cred_clean(cont->get(), &error);
+    GErrorWrapper::throwOnError(&error);
+    return res;
+}
+
+
 void Gfal2Context::free()
 {
     cont->free();
