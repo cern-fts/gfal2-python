@@ -441,6 +441,8 @@ BOOST_PYTHON_MODULE (gfal2)
             boost::python::init<PyGfal2::Gfal2Context, const std::string &, const std::string &>())
         .def("read", &PyGfal2::File::read)
         .def("pread", &PyGfal2::File::pread)
+        .def("read_bytes", &PyGfal2::File::read_bytes)
+        .def("pread_bytes", &PyGfal2::File::pread_bytes)
         .def("write", &PyGfal2::File::write)
         .def("pwrite", &PyGfal2::File::pwrite)
         .def("lseek", &PyGfal2::File::lseek);

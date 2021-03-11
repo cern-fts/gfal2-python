@@ -17,8 +17,7 @@
 #ifndef GFILE_H_
 #define GFILE_H_
 
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <boost/python.hpp>
 #include <string>
 #include <sys/stat.h>
 
@@ -39,6 +38,10 @@ public:
     std::string read(size_t count);
     /// position independent read call
     std::string pread(off_t offset, size_t count);
+    /// bytes version of gfal_read call
+    PyObject* read_bytes(size_t count);
+    /// bytes version of position independent read call
+    PyObject* pread_bytes(off_t offset, size_t count);
     /// wrapper to the gfal_write call
     ssize_t write(const std::string & str);
     /// position independent write call

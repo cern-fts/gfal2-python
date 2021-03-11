@@ -85,6 +85,20 @@ std::string File::pread(off_t offset, size_t count)
 }
 
 
+PyObject* File::read_bytes(size_t count)
+{
+    std::string result = read(count);
+    return PyBytes_FromStringAndSize(result.c_str(), result.size());
+}
+
+
+PyObject* File::pread_bytes(off_t offset, size_t count)
+{
+    std::string result = pread(offset, count);
+    return PyBytes_FromStringAndSize(result.c_str(), result.size());
+}
+
+
 ssize_t File::write(const std::string & str)
 {
     ScopedGILRelease unlock;
