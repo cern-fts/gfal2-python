@@ -35,7 +35,7 @@
 %endif
 
 Name:			gfal2-python
-Version:		1.10.0
+Version:		1.10.1
 Release:		1%{?dist}
 Summary:		Python bindings for gfal 2
 License:		ASL 2.0
@@ -175,6 +175,13 @@ make DESTDIR=%{buildroot} install
 %endif
 
 %changelog
+* Wed Mar 24 2021 Mihai Patrascoiu <mipatras@cern.ch> - 1.10.1-1
+- New upstream release
+
+* Fri Dec 04 2020 Mihai Patrascoiu <mipatras@cern.ch> - 1.10.0-1
+- Introduces the QoS API
+- Enhancements to transfer parameters
+
 * Mon Sep 16 2019 Andrea Manzi <amanzi@cern.ch> - 1.9.5-5
 - rename python3 package
 - remove python2 package from f32 on

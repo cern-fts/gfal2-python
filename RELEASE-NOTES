@@ -1,6 +1,11 @@
 GFAL2-PYTHON RELEASE NOTES
 ==========================
 
+* Wed Mar 24 2021 Mihai Patrascoiu <mipatras at cern.ch> - 1.10.1
+** Bug
+- [DMC-1241] - Segfault when using cred set/clean methods (gfal2-python bindings)
+- [DMC-1242] - UnicodeDecodeError encountered in Python3 on File read/pread methods (gfal2-python bindings)
+
 * Fri Dec 04 2020 Mihai Patrascoiu <mipatras at cern.ch> - 1.10.0
 ** Bug
 - [DMC-1128] - gfal2-python cannot be installed with python 3.6 and 3.7
