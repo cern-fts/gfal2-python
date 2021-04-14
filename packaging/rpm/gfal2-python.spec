@@ -35,7 +35,7 @@
 %endif
 
 Name:			gfal2-python
-Version:		1.10.1
+Version:		1.11.0
 Release:		1%{?dist}
 Summary:		Python bindings for gfal 2
 License:		ASL 2.0
@@ -49,7 +49,7 @@ Source0:		%{name}-%{version}.tar.gz
 
 BuildRequires:          gcc-c++
 BuildRequires:          cmake
-BuildRequires:		gfal2-devel >= 2.19.0
+BuildRequires:		gfal2-devel >= 2.20.0
 BuildRequires:		boost-devel
 %if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
 BuildRequires:		python2-devel
@@ -72,7 +72,7 @@ for the file operations in grids and cloud environments.
 %if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
 %package -n python2-gfal2
 Summary: %summary
-Requires:		gfal2-core >= 2.19.0
+Requires:		gfal2-core >= 2.20.0
 %{?python_provide:%python_provide python2-gfal2}
 # Remove before F30
 Provides: gfal2-python = %{version}-%{release}
