@@ -304,6 +304,16 @@ BOOST_PYTHON_MODULE (gfal2)
             "Check the target QoS of a specific file")
         .def("change_object_qos", &PyGfal2::Gfal2Context::change_object_qos,
             "Change the QoS of an object, either dir or file")
+        .def("token_retrieve",
+             static_cast<std::string (PyGfal2::Gfal2Context::*)(const std::string& url, const std::string& issuer,
+                                                                unsigned validity, bool write_access)>
+                                                                (&PyGfal2::Gfal2Context::token_retrieve),
+             "Retrieve SE-issued token for given resource (uses predefined activities based on read/write access flag)")
+        .def("token_retrieve",
+             static_cast<std::string (PyGfal2::Gfal2Context::*)(const std::string& url, const std::string& issuer,
+                                                                unsigned validity, const boost::python::list &)>
+                                                                (&PyGfal2::Gfal2Context::token_retrieve),
+             "Retrieve SE-issued token for given resource (uses user-defined activities)")
         .def("cred_set", &PyGfal2::Gfal2Context::cred_set,
             "Set credentials of specified type for given URL")
         .def("cred_get", &PyGfal2::Gfal2Context::cred_get,

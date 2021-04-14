@@ -502,6 +502,55 @@ int Gfal2Context::change_object_qos(const std::string& fileUrl, const std::strin
     return ret;
 }
 
+
+std::string Gfal2Context::token_retrieve(const std::string& url, const std::string& issuer,
+                                         unsigned validity, bool write_access)
+{
+    boost::python::list no_activities;
+    return token_retrieve(url, issuer, validity, write_access, no_activities);
+}
+
+
+std::string Gfal2Context::token_retrieve(const std::string& url, const std::string& issuer,
+                                         unsigned validity, const boost::python::list& pyactivities)
+{
+    size_t n_activities = boost::python::len(pyactivities);
+    if (n_activities == 0)
+        throw GErrorWrapper("Empty list of activities", EINVAL);
+
+    return token_retrieve(url, issuer, validity, false, pyactivities);
+}
+
+
+std::string Gfal2Context::token_retrieve(const std::string& url, const std::string& issuer,
+                                         unsigned validity, bool write_access,
+                                         const boost::python::list& pyactivities)
+{
+    // Increase size to account for final NULL element
+    size_t n_activities = boost::python::len(pyactivities) + 1;
+    std::vector<std::string> activities(n_activities);
+    const char* activities_ptr[n_activities];
+    char buffer[MAX_BUFFER_SIZE];
+    GError* tmp_err = NULL;
+
+    for (size_t i = 0; i < n_activities - 1; i++) {
+        activities.push_back(boost::python::extract<std::string>(pyactivities[i]));
+        activities_ptr[i] = activities.back().c_str();
+    }
+    activities_ptr[n_activities - 1] = NULL;
+
+
+    ScopedGILRelease unlock;
+    ssize_t ret = gfal2_token_retrieve(cont->get(), url.c_str(), issuer.c_str(),
+                                       write_access, validity, activities_ptr,
+                                       buffer, MAX_BUFFER_SIZE, &tmp_err);
+    if (ret < 0)
+        GErrorWrapper::throwOnError(&tmp_err);
+
+    return std::string(buffer);
+}
+
+
 int Gfal2Context::bring_online_poll(const std::string& path, const std::string& token)
 {
     ScopedGILRelease unlock;
