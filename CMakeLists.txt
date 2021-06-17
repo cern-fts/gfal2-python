@@ -30,8 +30,6 @@ if (PYTHON_EXECUTABLE)
       find_package(Boost COMPONENTS python REQUIRED)
     elseif(RHEL STREQUAL "7")
       find_package(Boost COMPONENTS python REQUIRED)
-    else()
-      find_package(Boost COMPONENTS python27 REQUIRED)
     endif()
 endif(PYTHON_EXECUTABLE)
 
@@ -59,13 +57,13 @@ endif ()
 set(PROJECT_NAME_MAIN "gfal2-python")
 
 # EPYDOC definition for EPEL5 support
-if (NOT SKIP_DOC)
+if (BUILDDOCS)
     set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/python2/gfal2.so")
     set(EPYDOC_MODULE_URL  "http://dmc.web.cern.ch/projects/gfal2-python")
     set(EPYDOC_MODULE_NAME "gfal2")
 
     include(MacroAddepydoc REQUIRED)
-endif (NOT SKIP_DOC)
+endif (BUILDDOCS)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 10)
@@ -81,10 +79,10 @@ find_package (GTHREAD2 REQUIRED)
 find_package(GFAL2 REQUIRED)
 
 # Install doc license
-if (NOT SKIP_DOC)
+if (BUILDDOCS)
 install(FILES "LICENSE" "RELEASE-NOTES" "README" "readme.html"
                         DESTINATION ${DOC_INSTALL_DIR})
-endif (NOT SKIP_DOC)
+endif (BUILDDOCS)
 
 add_definitions( -D_FILE_OFFSET_BITS=64 )
 
@@ -95,10 +93,10 @@ if (NOT SKIP_TESTS)
   add_subdirectory (test)
 endif (NOT SKIP_TESTS)
 
-if (NOT SKIP_DOC)
+if (BUILDDOCS)
   add_subdirectory(doc)
   # Install examples
   install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/example/python/"
             DESTINATION ${DOC_INSTALL_DIR}/examples)
-endif (NOT SKIP_DOC)
+endif (BUILDDOCS)
 

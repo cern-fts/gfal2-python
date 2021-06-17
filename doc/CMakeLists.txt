@@ -6,7 +6,7 @@ SET(MAIN_DOC TRUE
 ##
 ## execute make doc for doc generation
 #
-IF(MAIN_DOC)
+IF(MAIN_DOC AND BUILDDOCS)
 
         file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/")
         addEpydocGeneration("epydoc_config.in")
@@ -17,4 +17,4 @@ IF(MAIN_DOC)
                         DESTINATION ${DOC_INSTALL_DIR}/html/) # install examples
 
 
-ENDIF(MAIN_DOC)
+ENDIF(MAIN_DOC AND BUILDDOCS)

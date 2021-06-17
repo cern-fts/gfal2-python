@@ -24,7 +24,7 @@ INCLUDE(FindPackageHandleStandardArgs)
 
  # main version executable
  FIND_PROGRAM(PYTHON_EXECUTABLE
-  NAMES python
+  NAMES python | python3
   HINTS
   ${ALT_PYTHON_LOCATION}/bin
   PATHS
@@ -34,7 +34,7 @@ INCLUDE(FindPackageHandleStandardArgs)
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.6\\InstallPath]
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.5\\InstallPath]
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.4\\InstallPath]
-  [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.3\\InstallPath]
+  [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.3\\InstallPath] 
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.2\\InstallPath]
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.1\\InstallPath]
   [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.0\\InstallPath]

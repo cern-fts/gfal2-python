@@ -11,6 +11,14 @@
 %global with_python3 1
 %endif
 
+# Docs
+%if %{?rhel}%{!?rhel:0} <= 7
+%global with_docs 1
+%else
+%global with_docs 0
+%endif
+
+
 %if 0%{?fedora} >= 30  || %{?rhel}%{!?rhel:0} >= 8
 # python path discovery
 %{!?python2_sitearch: %define python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -21,7 +29,7 @@
 %endif
 
 %if 0%{?with_python3}
-%{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%{!?python_sitearch: %define python_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
 # python modules filtering
@@ -36,7 +44,7 @@
 
 Name:			gfal2-python
 Version:		1.10.1
-Release:		1%{?dist}
+Release: r2106161447git42d78ae%{?dist}
 Summary:		Python bindings for gfal 2
 License:		ASL 2.0
 URL:			http://dmc.web.cern.ch/
@@ -53,13 +61,21 @@ BuildRequires:		gfal2-devel >= 2.19.0
 BuildRequires:		boost-devel
 %if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
 BuildRequires:		python2-devel
-BuildRequires:		epydoc
+%endif
+
+# Epydoc
+%if 0%{?with_docs}
+BuildRequires:          epydoc
 %endif
 
 # Python 3
 %if 0%{?with_python3} 
 BuildRequires:      python36-devel
+%if (0%{?fedora} && (0%{?fedora} < 31)) || (0%{?rhel} && (0%{?rhel} < 8))
 BuildRequires:      boost-python36-devel
+%else
+BuildRequires:      boost-python3-devel
+%endif
 %endif
 
 %global _description\
@@ -80,13 +96,14 @@ Provides: gfal2-python%{?_isa} = %{version}-%{release}
 Obsoletes: gfal2-python < %{version}-%{release}
 
 %description -n python2-gfal2 %_description
+%endif
 
+%if 0%{?with_docs}
 %package doc
 Summary:			Documentation for %{name}
 %if 0%{?fedora} > 10 || 0%{?rhel}>5
 BuildArch:			noarch
 %endif
-
 
 %description doc
 Documentation files for %{name}.
@@ -129,17 +146,21 @@ fi
 %if 0%{?with_static_boost_python}
      -DBoost_USE_STATIC_LIBS=ON \
 %endif
-%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+%if 0%{?with_docs}
+     -DBUILDDOCS=TRUE \
+%else
+     -DBUILDDOCS=FALSE \
+%endif
+%if (0%{?fedora} && (0%{?fedora} < 31)) || (0%{?rhel} && (0%{?rhel} < 8))
      -DPYTHON2=TRUE \
 %else
      -DPYTHON2=FALSE \
-     -DSKIP_DOC=TRUE  \
 %endif
      -DUNIT_TESTS=TRUE .
 
 make %{?_smp_mflags}
 
-%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+%if 0%{?with_docs}
 make doc
 %endif
 
@@ -150,13 +171,12 @@ ctest -V -T Test .
 rm -rf %{buildroot}
 make DESTDIR=%{buildroot} install
 
-%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+%if (0%{?fedora} && (0%{?fedora} < 31)) || (0%{?rhel} && (0%{?rhel} < 8))
 %files -n python2-gfal2
-%if 0%{?fedora} >= 30  || %{?rhel}%{!?rhel:0} >= 8
-%{python2_sitearch}/gfal2.so
-%else
 %{python_sitearch}/gfal2.so
 %endif
+
+%if 0%{?with_docs}
 %{_pkgdocdir}/LICENSE
 %{_pkgdocdir}/RELEASE-NOTES
 %{_pkgdocdir}/README
