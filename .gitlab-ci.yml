@@ -24,3 +24,8 @@ stages:
 cc7:
   image: gitlab-registry.cern.ch/linuxsupport/cc7-base
   <<: *build-template_definition
+
+
+centos8:
+  image: gitlab-registry.cern.ch/linuxsupport/c8-base
+  <<: *build-template_definition
