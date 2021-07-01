@@ -164,9 +164,6 @@ make %{?_smp_mflags}
 make doc
 %endif
 
-%check
-ctest -V -T Test .
-
 %install
 rm -rf %{buildroot}
 make DESTDIR=%{buildroot} install

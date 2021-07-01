@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - publish
 
 #--------------------------
@@ -30,6 +31,32 @@ cc7:
 centos8:
   image: gitlab-registry.cern.ch/linuxsupport/c8-base
   <<: *build-template_definition
+
+
+#--------------------------
+# Test jobs
+#--------------------------
+
+cc7-test:
+  stage: test
+  image: gitlab-registry.cern.ch/linuxsupport/cc7-base
+  dependencies:
+    - cc7
+  script:
+    - cp -v ci/repo/dmc-devel-el7.repo /etc/yum.repos.d/
+    - yum install -y cc7/RPMS/*/*.rpm
+    - python test/unit/creat_instance_all.py
+
+centos8-test:
+  stage: test
+  image: gitlab-registry.cern.ch/linuxsupport/c8-base
+  dependencies:
+    - centos8
+  script:
+    - dnf install -y epel-release python3
+    - cp -v ci/repo/dmc-gitlabci-el8.repo /etc/yum.repos.d/
+    - dnf install -y centos8/RPMS/*/*.rpm
+    - python3 test/unit/creat_instance_all.py
 
 #--------------------------
 # Publish templates

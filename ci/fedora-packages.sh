@@ -2,6 +2,7 @@
 set -e
 
 if [[ -f /usr/bin/dnf ]]; then
+  dnf update -y
   dnf install -y dnf-plugins-core git rpm-build tree which python2 \
                  cmake make gcc gcc-c++
 else
