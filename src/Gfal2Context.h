@@ -229,6 +229,15 @@ public:
 
     int change_object_qos(const std::string& fileUrl, const std::string& newQosClass);
 
+    // Token
+    std::string token_retrieve(const std::string& url, const std::string& issuer,
+                               unsigned validity, bool write_access);
+    std::string token_retrieve(const std::string& url, const std::string& issuer,
+                               unsigned validity, const boost::python::list& pyactivities);
+    std::string token_retrieve(const std::string& url, const std::string& issuer,
+                               unsigned validity, bool write_access,
+                               const boost::python::list& pyactivities);
+
     // Cred object
     int cred_set(const std::string& url_prefix, const Cred& c);
 
