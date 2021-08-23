@@ -171,14 +171,14 @@ make DESTDIR=%{buildroot} install
 %if (0%{?fedora} && (0%{?fedora} < 31)) || (0%{?rhel} && (0%{?rhel} < 8))
 %files -n python2-gfal2
 %{python_sitearch}/gfal2.so
+%doc LICENSE
 %endif
 
 %if 0%{?with_docs}
+%files doc
 %{_pkgdocdir}/LICENSE
 %{_pkgdocdir}/RELEASE-NOTES
 %{_pkgdocdir}/README
-
-%files doc
 %{_pkgdocdir}/readme.html
 %dir %{_pkgdocdir}/html
 %dir %{_pkgdocdir}/examples
@@ -189,6 +189,7 @@ make DESTDIR=%{buildroot} install
 %if 0%{?with_python3}
 %files -n python3-gfal2
 %{python3_sitearch}/gfal2.so
+%doc LICENSE
 %endif
 
 %changelog
