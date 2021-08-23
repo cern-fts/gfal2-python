@@ -55,17 +55,17 @@ URL:			http://dmc.web.cern.ch/
 # tar czf gfal2-python-1.9.5.tar.gz --exclude-vcs gfal2-python-1.9.5
 Source0:		%{name}-%{version}.tar.gz
 
-BuildRequires:          gcc-c++
-BuildRequires:          cmake
-BuildRequires:		gfal2-devel >= 2.20.0
-BuildRequires:		boost-devel
+BuildRequires:      gcc-c++
+BuildRequires:      cmake
+BuildRequires:      gfal2-devel >= 2.20.0
+BuildRequires:      boost-devel
 %if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
-BuildRequires:		python2-devel
+BuildRequires:      python2-devel
 %endif
 
 # Epydoc
 %if 0%{?with_docs}
-BuildRequires:          epydoc
+BuildRequires:      epydoc
 %endif
 
 # Python 3
@@ -78,9 +78,9 @@ BuildRequires:      boost-python3-devel
 %endif
 %endif
 
-%global _description\
-Python bindings for gfal2.\
-GFAL2 offers an a single, simple and portable API\
+%global _description \
+Python bindings for gfal2. \
+GFAL2 offers an a single, simple and portable API \
 for the file operations in grids and cloud environments.
 
 %description %_description
@@ -150,11 +150,6 @@ fi
      -DBUILDDOCS=TRUE \
 %else
      -DBUILDDOCS=FALSE \
-%endif
-%if (0%{?fedora} && (0%{?fedora} < 31)) || (0%{?rhel} && (0%{?rhel} < 8))
-     -DPYTHON2=TRUE \
-%else
-     -DPYTHON2=FALSE \
 %endif
      -DUNIT_TESTS=TRUE .
 
@@ -317,17 +312,14 @@ make DESTDIR=%{buildroot} install
 - Rebuild for boost 1.55.0
 
 * Fri Feb 28 2014 Adrien Devresse <adevress at cern.ch> - 1.4.1-1
- - Release 1.4.1 of gfal2 python bindings, see RELEASE-NOTES for details
+- Release 1.4.1 of gfal2 python bindings, see RELEASE-NOTES for details
 
 * Sat Nov 16 2013 Ville Skyttä <ville.skytta@iki.fi> - 1.3.0-2
 - Install docs to %%{_pkgdocdir} where available (#993774).
 - Own doc dirs.
 
 * Fri Nov 01 2013 Adrien Devresse <adevress at cern.ch> - 1.3.0-1  
- - Release 1.3.0 of gfal2 python bindings, see RELEASE-NOTES for details
+- Release 1.3.0 of gfal2 python bindings, see RELEASE-NOTES for details
 
 * Wed May 08 2013 Adrien Devresse <adevress at cern.ch> - 1.2.1-1 
- - First release compatible for EPEL
-
-
-
+- First release compatible for EPEL
