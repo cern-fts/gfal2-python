@@ -4,10 +4,6 @@ set -e
 VERSION=`rpm --eval %{centos_ver}`
 
 cp -v ci/repo/dmc-devel-el${VERSION}.repo /etc/yum.repos.d/
-if [[ $VERSION == 8 ]]; then
-  rm /etc/yum.repos.d/dmc-devel-el${VERSION}.repo -f
-  cp -v ci/repo/dmc-gitlabci-el${VERSION}.repo /etc/yum.repos.d/
-fi
 
 TIMESTAMP=`date +%y%m%d%H%M`
 GITREF=`git rev-parse --short HEAD`
