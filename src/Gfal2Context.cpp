@@ -383,11 +383,14 @@ int Gfal2Context::setxattr(const std::string & file, const std::string & key,
 
 boost::python::list Gfal2Context::listxattr(const std::string & file)
 {
-    ScopedGILRelease unlock;
     GError* tmp_err = NULL;
     char buffer[MAX_BUFFER_SIZE];
-    const ssize_t ret = gfal2_listxattr(cont->get(), file.c_str(), buffer,
-            MAX_BUFFER_SIZE, &tmp_err);
+    ssize_t ret;
+    {
+        ScopedGILRelease unlock;
+        ret = gfal2_listxattr(cont->get(), file.c_str(), buffer,
+                MAX_BUFFER_SIZE, &tmp_err);
+    }
     if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
 
@@ -405,12 +408,14 @@ boost::python::list Gfal2Context::listxattr(const std::string & file)
 boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t pintime,
         time_t timeout, bool async)
 {
-    ScopedGILRelease unlock;
-
     GError* tmp_err = NULL;
     char token[128] = { 0 };
-    int ret = gfal2_bring_online(cont->get(), path.c_str(), pintime, timeout, token,
-            sizeof(token), async, &tmp_err);
+    int ret;
+    {
+        ScopedGILRelease unlock;
+        ret = gfal2_bring_online(cont->get(), path.c_str(), pintime, timeout, token,
+                sizeof(token), async, &tmp_err);
+    }
 
     if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
@@ -420,19 +425,21 @@ boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t 
 
 boost::python::list Gfal2Context::qos_check_classes(const std::string& url, const std::string& type)
 {
-    ScopedGILRelease unlock;
-
     GError* tmp_err = NULL;
-    boost::python::list qos_classes;
     char buffer[MAX_BUFFER_SIZE];
-    const ssize_t ret = gfal2_qos_check_classes(cont->get(), url.c_str(), type.c_str(),
-                                                buffer, MAX_BUFFER_SIZE, &tmp_err);
+    ssize_t ret;
+    {
+        ScopedGILRelease unlock;
+        ret = gfal2_qos_check_classes(cont->get(), url.c_str(), type.c_str(),
+                                      buffer, MAX_BUFFER_SIZE, &tmp_err);
+    }
     if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
 
     std::string classes(buffer);
     std::istringstream iss(classes);
     std::string classToken;
+    boost::python::list qos_classes;
     while (std::getline(iss, classToken, ',')) {
         qos_classes.append(classToken);
     }
@@ -456,13 +463,15 @@ std::string Gfal2Context::check_file_qos(const std::string& fileUrl)
 
 boost::python::list Gfal2Context::check_available_qos_transitions(const std::string& qosClassUrl)
 {
-    ScopedGILRelease unlock;
-
     GError* tmp_err = NULL;
     boost::python::list qos_transitions;
     char buffer[MAX_BUFFER_SIZE];
-    ssize_t ret = gfal2_check_available_qos_transitions(cont->get(), qosClassUrl.c_str(),
-                                                        buffer, MAX_BUFFER_SIZE, &tmp_err);
+    ssize_t ret;
+    {
+        ScopedGILRelease unlock;
+        ret = gfal2_check_available_qos_transitions(cont->get(), qosClassUrl.c_str(),
+                                                    buffer, MAX_BUFFER_SIZE, &tmp_err);
+    }
     if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
 
@@ -761,13 +770,17 @@ std::string Gfal2Context::get_opt_string(const std::string & nmspace,
 
 boost::python::list Gfal2Context::get_opt_string_list(const std::string & nmspace, const std::string & key)
 {
-    ScopedGILRelease unlock;
     GError * tmp_err = NULL;
     gsize size = 0;
-    boost::python::list result;
-    char** res = gfal2_get_opt_string_list(cont->get(), nmspace.c_str(), key.c_str(),
-            &size, &tmp_err);
+    char** res;
+    {
+        ScopedGILRelease unlock;
+        res = gfal2_get_opt_string_list(cont->get(), nmspace.c_str(), key.c_str(),
+                &size, &tmp_err);
+    }
     GErrorWrapper::throwOnError(&tmp_err);
+
+    boost::python::list result;
     if (res) {
         for (size_t i = 0; i < size; i++)
             result.append(std::string(res[i]));
@@ -854,7 +867,6 @@ int Gfal2Context::load_opts_from_file(const std::string & path)
 
 boost::python::list Gfal2Context::get_plugin_names(void)
 {
-    ScopedGILRelease unlock;
     boost::python::list pyplugins;
     gchar** plugins = gfal2_get_plugin_names(cont->get());
     int nplugins = g_strv_length(plugins);
@@ -880,9 +892,11 @@ int Gfal2Context::set_user_agent(const std::string & agent, const std::string & 
 
 boost::python::tuple Gfal2Context::get_user_agent(void)
 {
-    ScopedGILRelease unlock;
     const char* agent, *version;
-    gfal2_get_user_agent(cont->get(), &agent, &version);
+    {
+        ScopedGILRelease unlock;
+        gfal2_get_user_agent(cont->get(), &agent, &version);
+    }
     return boost::python::make_tuple(agent, version);
 }
 
@@ -919,7 +933,6 @@ int Gfal2Context::clear_client_info(void)
 
 boost::python::dict Gfal2Context::get_client_info(void)
 {
-    ScopedGILRelease unlock;
     boost::python::dict dictionary;
 
     GError* tmp_err = NULL;
@@ -949,11 +962,14 @@ int Gfal2Context::cred_set(const std::string& url_prefix, const Cred& c)
 
 boost::python::tuple Gfal2Context::cred_get(const std::string& type, const std::string& url)
 {
-    ScopedGILRelease unlock;
     GError* error = NULL;
     const char* prefix_match = NULL;
-    const char* value = gfal2_cred_get(cont->get(), type.c_str(), url.c_str(),
-                                       &prefix_match, &error);
+    const char* value;
+    {
+        ScopedGILRelease unlock;
+        const char* value = gfal2_cred_get(cont->get(), type.c_str(), url.c_str(),
+                                           &prefix_match, &error);
+    }
     GErrorWrapper::throwOnError(&error);
     std::string svalue = (value) ? value : "";
     std::string sprefix_match = (prefix_match) ? prefix_match : "";
