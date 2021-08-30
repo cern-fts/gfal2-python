@@ -77,8 +77,10 @@ BOOST_PYTHON_MODULE (gfal2)
 {
     Py_Initialize();
 
-    // initialize multi-threading
+#if PY_VERSION_HEX < 0x3070000
+    // initialize multi-threading, unused since Python 3.7
     PyEval_InitThreads();
+#endif
 
     boost::python::scope gfal2Scope = boost::python::scope();
 
