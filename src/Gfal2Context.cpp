@@ -214,8 +214,8 @@ boost::python::list Gfal2Context::unlink_list(const boost::python::list& pyfiles
     }
 
     {
-	ScopedGILRelease unlock;
-	gfal2_unlink_list(cont->get(), nbfiles, files_ptr, errors.data());
+        ScopedGILRelease unlock;
+        gfal2_unlink_list(cont->get(), nbfiles, files_ptr, errors.data());
     }
 
     boost::python::list pyerrors;
@@ -607,9 +607,9 @@ boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& 
     char token[128] = { 0 };
 
     {
-	ScopedGILRelease unlock;
-	gfal2_bring_online_list(cont->get(), nbfiles, files_ptr, pintime, timeout, token,
-			sizeof(token), async, errors.data());
+        ScopedGILRelease unlock;
+        gfal2_bring_online_list(cont->get(), nbfiles, files_ptr, pintime, timeout, token,
+                                sizeof(token), async, errors.data());
     }
 
     boost::python::list pyerrors;
@@ -634,9 +634,9 @@ boost::python::list Gfal2Context::bring_online_poll_list(const boost::python::li
     }
 
     {
-	ScopedGILRelease unlock;
-	gfal2_bring_online_poll_list(cont->get(), nbfiles, files_ptr, token.c_str(),
-			errors.data());
+        ScopedGILRelease unlock;
+        gfal2_bring_online_poll_list(cont->get(), nbfiles, files_ptr, token.c_str(),
+                                     errors.data());
     }
 
     boost::python::list pyerrors;
@@ -662,9 +662,9 @@ boost::python::list Gfal2Context::release_list(const boost::python::list& pyfile
     }
 
     {
-	ScopedGILRelease unlock;
-	gfal2_release_file_list(cont->get(), nbfiles, files_ptr, token.c_str(),
-			errors.data());
+        ScopedGILRelease unlock;
+        gfal2_release_file_list(cont->get(), nbfiles, files_ptr, token.c_str(),
+                                errors.data());
     }
 
     boost::python::list pyerrors;
@@ -703,9 +703,9 @@ boost::python::list Gfal2Context::abort_bring_online_list(
     }
 
     {
-	ScopedGILRelease unlock;
-	gfal2_abort_files(cont->get(), nbfiles, files_ptr, token.c_str(),
-			errors.data());
+        ScopedGILRelease unlock;
+        gfal2_abort_files(cont->get(), nbfiles, files_ptr, token.c_str(),
+                          errors.data());
     }
 
     boost::python::list pyerrors;
@@ -867,9 +867,14 @@ int Gfal2Context::load_opts_from_file(const std::string & path)
 
 boost::python::list Gfal2Context::get_plugin_names(void)
 {
-    boost::python::list pyplugins;
-    gchar** plugins = gfal2_get_plugin_names(cont->get());
+    gchar** plugins;
+    {
+        ScopedGILRelease unlock;
+        plugins = gfal2_get_plugin_names(cont->get());
+    }
+
     int nplugins = g_strv_length(plugins);
+    boost::python::list pyplugins;
 
     for (int i = 0; i < nplugins; ++i) {
         pyplugins.append(std::string(plugins[i]));
@@ -933,11 +938,15 @@ int Gfal2Context::clear_client_info(void)
 
 boost::python::dict Gfal2Context::get_client_info(void)
 {
-    boost::python::dict dictionary;
-
     GError* tmp_err = NULL;
-    size_t nitems = gfal2_get_client_info_count(cont->get(), &tmp_err);
+    size_t nitems;
+    {
+        ScopedGILRelease unlock;
+        nitems = gfal2_get_client_info_count(cont->get(), &tmp_err);
+    }
+
     GErrorWrapper::throwOnError(&tmp_err);
+    boost::python::dict dictionary;
 
     for (size_t i = 0; i < nitems; ++i) {
         const char *key, *value;
