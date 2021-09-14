@@ -48,14 +48,14 @@ if (Boost_LIBRARIES)
     )
 endif ()
 
-# If available, Python3
+# Python3
 if (Boost_PYTHON_3_LIBRARY)
 
     set(PYTHON3_VER "_${PYTHON3_CURRENT_VERSION}")
-    message("${PYTHON3_VER}")
-    message("${PYTHON_INCLUDE_PATH${PYTHON3_VER}}")
-    message("${PYTHON_LIBRARIES${PYTHON3_VER}}")
-    message("${PYTHON_SITE_PACKAGES${PYTHON3_VER}}")
+    message(STATUS "Python${PYTHON3_CURRENT_VERSION} include: ${PYTHON_INCLUDE_PATH${PYTHON3_VER}}")
+    message(STATUS "Python${PYTHON3_CURRENT_VERSION} libraries: ${PYTHON_LIBRARIES${PYTHON3_VER}}")
+    message(STATUS "Python${PYTHON3_CURRENT_VERSION} site-packages: ${PYTHON_SITE_PACKAGES${PYTHON3_VER}}")
+
     add_library(gfal-py3 MODULE ${src_python})
     target_link_libraries(gfal-py3
         ${Boost_PYTHON_3_LIBRARY} ${GLIB2_LIBRARIES} ${GTHREAD_LIBRARIES}

@@ -12,7 +12,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
 execute_process (COMMAND rpm -E "%{?fedora}" OUTPUT_VARIABLE FEDORA OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process (COMMAND rpm -E "%{?rhel}" OUTPUT_VARIABLE RHEL OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-
 # load module
 include(DefineInstallationPaths REQUIRED)
 include(MacroCopyFile REQUIRED)
@@ -23,8 +22,6 @@ set(Boost_NO_BOOST_CMAKE ON)
 
 find_package(PythonEasy REQUIRED)
 
-message("Python: ${PYTHON_EXECUTABLE}")
-
 if (PYTHON_EXECUTABLE)
     if(RHEL STREQUAL "7")
       find_package(Boost COMPONENTS python REQUIRED)
@@ -33,8 +30,6 @@ endif(PYTHON_EXECUTABLE)
 
 
 if (PYTHON3_CURRENT_VERSION)
-    message("Python 3 installed! ${PYTHON3_CURRENT_VERSION}")
-
     string(REPLACE "." "" Boost_PYTHON_3_SUFFIX "${PYTHON3_CURRENT_VERSION}")
 
     find_library(Boost_PYTHON_3_LIBRARY
@@ -44,12 +39,13 @@ if (PYTHON3_CURRENT_VERSION)
             "/usr/lib"
             "/usr/lib64"
     )
+
     if (Boost_PYTHON_3_LIBRARY)
-        message("Boost Python3 library found! ${Boost_PYTHON_3_LIBRARY}")
+        message(STATUS "Boost Python3 library: ${Boost_PYTHON_3_LIBRARY}")
     else()
-        message("Boost Python3 library not found")
-    endif ()
-endif ()
+        message(WARNING "Boost Python3 library not found")
+    endif()
+endif()
 
 #define PROJECT vars
 set(PROJECT_NAME_MAIN "gfal2-python")

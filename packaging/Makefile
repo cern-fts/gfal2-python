@@ -50,7 +50,7 @@ clean:
 	rm -rfv "$(RPMBUILD)"
 
 dist: clean
-	tar vczf "$(NAME)-$(VERSION).tar.gz" --exclude="packaging" --exclude-vcs --exclude="*.pyc" --exclude="setup.py" --transform="s,^,$(NAME)-$(VERSION)/," ..
+	tar vczf "$(NAME)-$(VERSION).tar.gz" --exclude="packaging" --exclude-vcs --exclude=".git*" --exclude="ci/repo" --exclude="*.pyc" --exclude="setup.py" --transform="s,^,$(NAME)-$(VERSION)/," ..
 
 $(RPMBUILD):
 	mkdir -p "$(RPMBUILD)"
