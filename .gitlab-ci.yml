@@ -51,8 +51,6 @@ fedora-rawhide:
 
 .test-template: &test-template_definition
   stage: test
-  before_script:
-    - alias python=python3
   script:
     - declare -A DISTMAP=( [cc7]=el7 [centos8]=el8 [fedora-33]=fc33 [fedora-34]=fc34 )
     - PLATFORM=${CI_JOB_NAME%-*}
@@ -60,6 +58,7 @@ fedora-rawhide:
     - if [[ "$CI_COMMIT_TAG" != null ]]; then BUILD="devel" ; else BUILD="rc" ; fi
     - cp -v ci/repo/dmc-${BUILD}-${DIST}.repo /etc/yum.repos.d/
     - dnf install -y ${PLATFORM}/RPMS/*/*.rpm
+    - python --version &>/dev/null || alias python=python3
     - python test/unit/creat_instance_all.py
 
 #--------------------------
@@ -70,18 +69,17 @@ cc7-test:
   image: gitlab-registry.cern.ch/linuxsupport/cc7-base
   dependencies:
     - cc7
-  <<: *test-template_definition
   before_script:
     - yum install -y dnf epel-release
+  <<: *test-template_definition
 
 centos8-test:
   image: gitlab-registry.cern.ch/linuxsupport/c8-base
   dependencies:
     - centos8
-  <<: *test-template_definition
   before_script:
     - dnf install -y epel-release
-    - alias python=python3
+  <<: *test-template_definition
 
 fedora-33-test:
   image: fedora:33
