@@ -17,9 +17,7 @@ link_directories (
 # Python 2
 if (Boost_LIBRARIES)
      
-    if(RHEL STREQUAL "6")
-      set(PYTHON2_VER "")
-    elseif(RHEL STREQUAL "7")
+    if(RHEL STREQUAL "7")
       set(PYTHON2_VER "")
     else()
       set(PYTHON2_VER "_${PYTHON_CURRENT_VERSION}")
@@ -53,11 +51,7 @@ endif ()
 # If available, Python3
 if (Boost_PYTHON_3_LIBRARY)
 
-    if(RHEL STREQUAL "6")
-      set(PYTHON3_VER "")
-    else()
-      set(PYTHON3_VER "_${PYTHON3_CURRENT_VERSION}")
-    endif()
+    set(PYTHON3_VER "_${PYTHON3_CURRENT_VERSION}")
     message("${PYTHON3_VER}")
     message("${PYTHON_INCLUDE_PATH${PYTHON3_VER}}")
     message("${PYTHON_LIBRARIES${PYTHON3_VER}}")
