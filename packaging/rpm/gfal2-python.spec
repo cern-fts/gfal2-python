@@ -1,79 +1,74 @@
+# Unversionned doc dir F20 change https://fedoraproject.org/wiki/Changes/UnversionedDocdirs
+%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
+
 # Use static linking against boost
 %bcond_with static_boost_python
 
-# Doc directory
-%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
+#-------------------------------------------------------------------------------
+# Configure python2/3 according to platform and passed-in parameter
+#-------------------------------------------------------------------------------
 
-%global boost_cmake_flags -DBOOST_INCLUDEDIR=/usr/include
+# Require --without=python3 in order to disable python3 build package
+%bcond_without python3
 
-# Python 3
-%if 0%{?fedora} >= 23  || %{?rhel}%{!?rhel:0} >= 7
-%global with_python3 1
+# Require --without=python2 in order to disable python2 build package on RHEL7
+%if 0%{?rhel} == 7
+%bcond_without python2
 %endif
 
-# Docs
-%if %{?rhel}%{!?rhel:0} <= 7
-%global with_docs 1
+# Require --without=docs in order to disable gfal2-python-doc package on RHEL7
+%if 0%{?rhel} == 7
+%bcond_without docs
+%endif
+
+# Python path discovery
+%if 0%{?with_python2}
+%if 0%{?rhel} == 7
+%{!?python_sitearch: %define python_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %else
-%global with_docs 0
-%endif
-
-
-%if 0%{?fedora} >= 30  || %{?rhel}%{!?rhel:0} >= 8
-# python path discovery
 %{!?python2_sitearch: %define python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %endif
-%if 0%{?fedora} < 30  || %{?rhel}%{!?rhel:0} < 8
-# python path discovery
-%{!?python_sitearch: %define python_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %endif
 
 %if 0%{?with_python3}
-%{!?python_sitearch: %define python_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
-# python modules filtering
-%if 0%{?el6} || 0%{?el5}
-%{?filter_setup:
-%filter_provides_in %{python2_sitearch}/.*\.so$
-%filter_setup
-}
-%else
+# Python modules filtering
 %global __provides_exclude_from ^((%{python2_sitearch})|(%{python3_sitearch})/.*\\.so)$
-%endif
 
-Name:			gfal2-python
-Version:		1.11.0
-Release:		1%{?dist}
-Summary:		Python bindings for gfal 2
-License:		ASL 2.0
-URL:			http://dmc.web.cern.ch/
+Name:               gfal2-python
+Version:            1.11.0
+Release:            1%{?dist}
+Summary:            Python bindings for gfal 2
+License:            ASL 2.0
+URL:                http://dmc.web.cern.ch/
 # git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.5
 # pushd gfal2-python-1.9.5
 # git checkout v1.9.5
 # popd
 # tar czf gfal2-python-1.9.5.tar.gz --exclude-vcs gfal2-python-1.9.5
-Source0:		%{name}-%{version}.tar.gz
+Source0:            %{name}-%{version}.tar.gz
 
 BuildRequires:      gcc-c++
 BuildRequires:      cmake
 BuildRequires:      gfal2-devel >= 2.20.0
 BuildRequires:      boost-devel
-%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+# Python 2
+%if 0%{?with_python2}
 BuildRequires:      python2-devel
 %endif
-
 # Epydoc
 %if 0%{?with_docs}
 BuildRequires:      epydoc
 %endif
-
 # Python 3
-%if 0%{?with_python3} 
+%if 0%{?with_python3}
+%if 0%{?rhel} == 7
 BuildRequires:      python36-devel
-%if (0%{?fedora} && (0%{?fedora} < 31)) || (0%{?rhel} && (0%{?rhel} < 8))
 BuildRequires:      boost-python36-devel
 %else
+BuildRequires:      python3-devel
 BuildRequires:      boost-python3-devel
 %endif
 %endif
@@ -85,36 +80,27 @@ for the file operations in grids and cloud environments.
 
 %description %_description
 
-%if (0%{?fedora} && (0%{?fedora} <= 31)) || (0%{?rhel} && (0%{?rhel} <= 8))
+%if 0%{?with_python2}
 %package -n python2-gfal2
-Summary: %summary
-Requires:		gfal2-core >= 2.20.0
+Summary:            %summary
+Requires:           gfal2-core >= 2.20.0
 %{?python_provide:%python_provide python2-gfal2}
 # Remove before F30
-Provides: gfal2-python = %{version}-%{release}
-Provides: gfal2-python%{?_isa} = %{version}-%{release}
-Obsoletes: gfal2-python < %{version}-%{release}
+Provides:           gfal2-python = %{version}-%{release}
+Provides:           gfal2-python%{?_isa} = %{version}-%{release}
+Obsoletes:          gfal2-python < %{version}-%{release}
 
 %description -n python2-gfal2 %_description
-%endif
-
-%if 0%{?with_docs}
-%package doc
-Summary:			Documentation for %{name}
-%if 0%{?fedora} > 10 || 0%{?rhel}>5
-BuildArch:			noarch
-%endif
-
-%description doc
-Documentation files for %{name}.
 %endif
 
 %if 0%{?with_python3}
 %package -n python3-gfal2
 Summary:            gfal2 python bindings for Python 3
-Provides: gfal2-python3 = %{version}-%{release}
-Provides: gfal2-python3%{?_isa} = %{version}-%{release}
-Obsoletes: gfal2-python3 < %{version}-%{release}
+Requires:           gfal2-core >= 2.20.0
+# Remove before F30
+Provides:           gfal2-python3 = %{version}-%{release}
+Provides:           gfal2-python3%{?_isa} = %{version}-%{release}
+Obsoletes:          gfal2-python3 < %{version}-%{release}
 
 %description -n python3-gfal2
 Python 3 bindings for gfal2.
@@ -122,9 +108,17 @@ GFAL2 offers an a single, simple and portable API
 for the file operations in grids and cloud environments.
 %endif
 
+%if 0%{?with_docs}
+%package doc
+Summary:            Documentation for %{name}
+BuildArch:          noarch
+
+%description doc
+Documentation files for %{name}.
+%endif
+
 %clean
-rm -rf %{buildroot};
-make clean
+%cmake3_build --target clean
 
 %prep
 %setup -q
@@ -142,30 +136,32 @@ fi
 
 %cmake \
      -DDOC_INSTALL_DIR=%{_pkgdocdir} \
-     %{boost_cmake_flags} \
 %if 0%{?with_static_boost_python}
      -DBoost_USE_STATIC_LIBS=ON \
 %endif
 %if 0%{?with_docs}
      -DBUILDDOCS=TRUE \
-%else
-     -DBUILDDOCS=FALSE \
 %endif
      -DUNIT_TESTS=TRUE .
 
-make %{?_smp_mflags}
+%cmake3_build
 
 %if 0%{?with_docs}
-make doc
+%cmake3_build --target doc
 %endif
 
 %install
-rm -rf %{buildroot}
-make DESTDIR=%{buildroot} install
+%cmake3_install
 
-%if (0%{?fedora} && (0%{?fedora} < 31)) || (0%{?rhel} && (0%{?rhel} < 8))
+%if 0%{?with_python2}
 %files -n python2-gfal2
 %{python_sitearch}/gfal2.so
+%doc LICENSE
+%endif
+
+%if 0%{?with_python3}
+%files -n python3-gfal2
+%{python3_sitearch}/gfal2.so
 %doc LICENSE
 %endif
 
@@ -179,12 +175,6 @@ make DESTDIR=%{buildroot} install
 %dir %{_pkgdocdir}/examples
 %{_pkgdocdir}/html/*
 %{_pkgdocdir}/examples/*
-%endif
-
-%if 0%{?with_python3}
-%files -n python3-gfal2
-%{python3_sitearch}/gfal2.so
-%doc LICENSE
 %endif
 
 %changelog
