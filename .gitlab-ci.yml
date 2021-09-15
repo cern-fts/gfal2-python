@@ -58,6 +58,7 @@ fedora-rawhide:
     - if [[ "$CI_COMMIT_TAG" != null ]]; then BUILD="devel" ; else BUILD="rc" ; fi
     - cp -v ci/repo/dmc-${BUILD}-${DIST}.repo /etc/yum.repos.d/
     - dnf install -y ${PLATFORM}/RPMS/*/*.rpm
+    - shopt -s expand_aliases
     - python --version &>/dev/null || alias python=python3
     - python test/unit/creat_instance_all.py
 
