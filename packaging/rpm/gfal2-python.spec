@@ -84,6 +84,7 @@ for the file operations in grids and cloud environments.
 %package -n python2-gfal2
 Summary:            %summary
 Requires:           gfal2-core >= 2.20.0
+Requires:           python2
 %{?python_provide:%python_provide python2-gfal2}
 # Remove before F30
 Provides:           gfal2-python = %{version}-%{release}
@@ -97,6 +98,7 @@ Obsoletes:          gfal2-python < %{version}-%{release}
 %package -n python3-gfal2
 Summary:            gfal2 python bindings for Python 3
 Requires:           gfal2-core >= 2.20.0
+Requires:           python3
 # Remove before F30
 Provides:           gfal2-python3 = %{version}-%{release}
 Provides:           gfal2-python3%{?_isa} = %{version}-%{release}
