@@ -27,6 +27,8 @@ stages:
 
 cc7:
   image: gitlab-registry.cern.ch/linuxsupport/cc7-base
+  before_script:
+    - if [[ -z "$CI_COMMIT_TAG" ]]; then export RPMBUILD_FLAGS="--without docs" ; fi
   <<: *build-template_definition
 
 centos8:
