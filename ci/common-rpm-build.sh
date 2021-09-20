@@ -36,7 +36,7 @@ DISTNAME=${DIST}
 [[ "${DISTNAME}" == "fc36" ]] && DISTNAME="fc-rawhide"
 
 # Fetch repository files from fts/build-utils
-./ci/fetch_repo_files.sh
+./ci/fetch-repo-files.sh
 
 REPO_FILE="${BUILD}/dmc-${BUILD}-${DISTNAME}.repo"
 print_info
