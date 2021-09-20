@@ -57,7 +57,7 @@ fedora-rawhide:
   stage: test
   script:
     - dnf install -y git
-    - ci/fetch_repo_files.sh
+    - ci/fetch-repo-files.sh
     - declare -A DISTMAP=( [cc7]=el7 [centos8]=el8 [fedora-33]=fc33 [fedora-34]=fc34 )
     - PLATFORM=${CI_JOB_NAME%-*}
     - DIST=${DISTMAP[${PLATFORM}]}
