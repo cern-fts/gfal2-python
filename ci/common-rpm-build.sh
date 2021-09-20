@@ -9,6 +9,7 @@ function print_info {
   printf "Branch:\t\t%s\n" "${BRANCH}"
   printf "Release:\t%s\n" "${RELEASE}"
   printf "DMC Repository:\t%s\n" "${REPO_FILE}"
+  printf "RPM build flags:\t%s\n" "${RPMBUILD_FLAGS}"
   printf "======================\n"
 }
 
@@ -49,7 +50,7 @@ RPMBUILD=${PWD}/build
 SRPMS=${RPMBUILD}/SRPMS
 
 cd packaging/
-make srpm RELEASE=${RELEASE} RPMBUILD=${RPMBUILD} SRPMS=${SRPMS}
+make srpm RELEASE=${RELEASE} RPMBUILD=${RPMBUILD} SRPMS=${SRPMS} RPMBUILD_SRC_EXTRA_FLAGS="${RPMBUILD_FLAGS}"
 
 if [[ -f /usr/bin/dnf ]]; then
   dnf install -y epel-release || true
@@ -58,4 +59,4 @@ else
   yum-builddep -y ${SRPMS}/*
 fi
 
-rpmbuild --rebuild --define="_topdir ${RPMBUILD}" ${SRPMS}/*
+rpmbuild --rebuild --define="_topdir ${RPMBUILD}" ${RPMBUILD_FLAGS} ${SRPMS}/*
