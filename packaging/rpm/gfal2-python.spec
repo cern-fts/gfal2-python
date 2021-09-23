@@ -180,6 +180,10 @@ fi
 %endif
 
 %changelog
+* Thu Sep 23 2021 Joao Lopes <batistal@cern.ch> - 1.11.0-1
+- New upstream release
+- Introduces SE-Token retrieval
+
 * Wed Mar 24 2021 Mihai Patrascoiu <mipatras@cern.ch> - 1.10.1-1
 - New upstream release
 

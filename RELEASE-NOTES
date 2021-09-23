@@ -1,6 +1,17 @@
 GFAL2-PYTHON RELEASE NOTES
 ==========================
 
+* Thu Sep 23 2021 Joao Lopes <batistal@cern.ch> - 1.11.0-1
+** Epic
+- [DMC-1249] - Migrate CI infrastructure to gitlab-CI
+** Bug
+- [DMC-1263] - Gfal2 bindings segfault on Python3.9 due to improper GIL release
+** New Feature
+- [DMC-1265] - Export SE token retrieval in Gfal2 Python binding
+** Task
+- [DMC-1250] - Gfal2 packages for Centos8
+- [DMC-1264] - Gfal2 packages for Fedora >= 33
+
 * Wed Mar 24 2021 Mihai Patrascoiu <mipatras at cern.ch> - 1.10.1
 ** Bug
 - [DMC-1241] - Segfault when using cred set/clean methods (gfal2-python bindings)
