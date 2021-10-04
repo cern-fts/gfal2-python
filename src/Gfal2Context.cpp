@@ -976,8 +976,8 @@ boost::python::tuple Gfal2Context::cred_get(const std::string& type, const std::
     const char* value;
     {
         ScopedGILRelease unlock;
-        const char* value = gfal2_cred_get(cont->get(), type.c_str(), url.c_str(),
-                                           &prefix_match, &error);
+        value = gfal2_cred_get(cont->get(), type.c_str(), url.c_str(),
+                               &prefix_match, &error);
     }
     GErrorWrapper::throwOnError(&error);
     std::string svalue = (value) ? value : "";
