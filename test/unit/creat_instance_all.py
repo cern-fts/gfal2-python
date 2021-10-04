@@ -41,6 +41,27 @@ class unit_test_instance(unittest.TestCase):
         (value, prefix) = context.cred_get("X509_CERT", "https://example.host/path/file")
         self.assertEqual((value, prefix), ("/tmp/proxy", "https://example.host/path/"))
 
+    def test_cred_delete(self):
+        context = gfal2.creat_context()
+        cred = context.cred_new("BEARER", "mytoken")
+        cred2 = context.cred_new("BEARER", "mytoken2")
+        cred3 = context.cred_new("BEARER", "mytoken3")
+
+        context.cred_set("https://example.host/path", cred)
+        context.cred_set("https://example.host/path/", cred2)
+        context.cred_set("https://example.host/path/file", cred3)
+
+        (value, prefix) = context.cred_get("BEARER", "https://example.host/path/file.tpc")
+        self.assertEqual((value, prefix), ("mytoken2", "https://example.host/path/"))
+        
+        context.cred_del("BEARER", "https://example.host/path/")
+        (value, prefix) = context.cred_get("BEARER", "https://example.host/path/file.tpc")
+        self.assertEqual((value, prefix), ("mytoken", "https://example.host/path"))
+        
+        context.cred_del("BEARER", "https://example.host/path")
+        (value, prefix) = context.cred_get("BEARER", "https://example.host/path/file.tpc")
+        self.assertEqual((value, prefix), ("", ""))
+
 
 if __name__ == '__main__':
     unittest.main()
