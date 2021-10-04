@@ -27,7 +27,7 @@ from subprocess import check_call
 from setuptools import Extension, setup
 
 # Change this when there are changes in the setup.py or MANIFEST.in
-RELEASE = 3
+RELEASE = 4
 
 
 def get_version():
@@ -66,7 +66,7 @@ def _run_make(build_dir, lib_path):
 
     # build the cmake command
     major = sys.version_info[0]
-    cmake_cmd = ['cmake', '-DSKIP_DOC=TRUE', '-DSKIP_TESTS=TRUE']
+    cmake_cmd = ['cmake', '-DSKIP_TESTS=TRUE']
     if major == 3:
         cmake_cmd += ['-DPYTHON_EXECUTABLE_3=%s' % sys.executable]
     cmake_cmd += [source_dir]
