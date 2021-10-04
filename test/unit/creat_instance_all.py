@@ -27,6 +27,20 @@ class unit_test_instance(unittest.TestCase):
         t.src_spacetoken = "TOKENDTEAM"
         self.assertEqual(t.src_spacetoken, "TOKENDTEAM")
 
+    def test_multiple_cred(self):
+        context = gfal2.creat_context()
+        cred_x509 = context.cred_new("X509_CERT", "/tmp/proxy")
+        cred_bearer = context.cred_new("BEARER", "mytoken")
+
+        context.cred_set("https://example.host/path/", cred_x509)
+        context.cred_set("https://example.host/path/file", cred_bearer)
+
+        (value, prefix) = context.cred_get("BEARER", "https://example.host/path/file")
+        self.assertEqual((value, prefix), ("mytoken", "https://example.host/path/file"))
+
+        (value, prefix) = context.cred_get("X509_CERT", "https://example.host/path/file")
+        self.assertEqual((value, prefix), ("/tmp/proxy", "https://example.host/path/"))
+
 
 if __name__ == '__main__':
     unittest.main()
