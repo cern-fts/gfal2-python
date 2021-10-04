@@ -986,6 +986,16 @@ boost::python::tuple Gfal2Context::cred_get(const std::string& type, const std::
 }
 
 
+int Gfal2Context::cred_del(const std::string& type, const std::string& url)
+{
+    ScopedGILRelease unlock;
+    GError* error = NULL;
+    int res = gfal2_cred_del(cont->get(), type.c_str(), url.c_str(), &error);
+    GErrorWrapper::throwOnError(&error);
+    return res;
+}
+
+
 int Gfal2Context::cred_clean()
 {
     ScopedGILRelease unlock;

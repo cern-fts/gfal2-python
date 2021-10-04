@@ -243,6 +243,8 @@ public:
 
     boost::python::tuple cred_get(const std::string& type, const std::string& url);
 
+    int cred_del(const std::string& type, const std::string& url);
+
     int cred_clean();
 };
 

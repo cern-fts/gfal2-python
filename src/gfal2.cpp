@@ -320,6 +320,8 @@ BOOST_PYTHON_MODULE (gfal2)
             "Set credentials of specified type for given URL")
         .def("cred_get", &PyGfal2::Gfal2Context::cred_get,
             "Get credential of specified type for given URL")
+        .def("cred_del", &PyGfal2::Gfal2Context::cred_del,
+            "Delete credential of specified type for given URL")
         .def("cred_clean", &PyGfal2::Gfal2Context::cred_clean,
             "Clean credential mapping");
 
