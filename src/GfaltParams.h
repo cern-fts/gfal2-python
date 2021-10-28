@@ -119,6 +119,8 @@ public:
     bool                 get_strict_copy(void);
     void                 set_proxy_delegation(bool proxy_delegation);
     bool                 get_proxy_delegation(void);
+    void                 set_cleanup_on_failure(bool cleanup_on_failure);
+    bool                 get_cleanup_on_failure(void);
     void                 set_local_transfers(bool local_transfers);
     bool                 get_local_transfers(void);
 

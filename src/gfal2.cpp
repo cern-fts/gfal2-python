@@ -402,6 +402,10 @@ BOOST_PYTHON_MODULE (gfal2)
             &PyGfal2::GfaltParams::set_proxy_delegation,
             "Enable or disable TPC with proxy delegation (default enabled)"
         )
+        .add_property("cleanup_on_failure", &PyGfal2::GfaltParams::get_cleanup_on_failure,
+            &PyGfal2::GfaltParams::set_cleanup_on_failure,
+            "Enable or disable destination file cleanup on transfer failure"
+        )
         .add_property("local_transfers", &PyGfal2::GfaltParams::get_local_transfers,
             &PyGfal2::GfaltParams::set_local_transfers,
             "Permission flag to enable or disable transfers via local streaming (default enabled)"

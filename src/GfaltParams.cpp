@@ -288,6 +288,23 @@ bool GfaltParams::get_proxy_delegation(void)
 }
 
 
+void GfaltParams::set_cleanup_on_failure(bool cleanup_on_failure)
+{
+    GError * tmp_err = NULL;
+    gfalt_set_cleanup_on_failure(params, cleanup_on_failure, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
+bool GfaltParams::get_cleanup_on_failure(void)
+{
+    GError * tmp_err = NULL;
+    bool cleanup_on_failure = gfalt_get_cleanup_on_failure(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return cleanup_on_failure;
+}
+
+
 void GfaltParams::set_local_transfers(bool local_transfers)
 {
     GError * tmp_err = NULL;
