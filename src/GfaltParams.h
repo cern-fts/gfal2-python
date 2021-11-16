@@ -119,6 +119,8 @@ public:
     bool                 get_strict_copy(void);
     void                 set_proxy_delegation(bool proxy_delegation);
     bool                 get_proxy_delegation(void);
+    void                 set_evict(bool evict);
+    bool                 get_evict(void);
     void                 set_local_transfers(bool local_transfers);
     bool                 get_local_transfers(void);
 

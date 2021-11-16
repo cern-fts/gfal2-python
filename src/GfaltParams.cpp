@@ -288,6 +288,23 @@ bool GfaltParams::get_proxy_delegation(void)
 }
 
 
+void GfaltParams::set_evict(bool evict)
+{
+    GError * tmp_err = NULL;
+    gfalt_set_use_evict(params, evict, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
+bool GfaltParams::get_evict(void)
+{
+    GError * tmp_err = NULL;
+    bool evict = gfalt_get_use_evict(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return evict;
+}
+
+
 void GfaltParams::set_local_transfers(bool local_transfers)
 {
     GError * tmp_err = NULL;
