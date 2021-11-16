@@ -402,6 +402,10 @@ BOOST_PYTHON_MODULE (gfal2)
             &PyGfal2::GfaltParams::set_proxy_delegation,
             "Enable or disable TPC with proxy delegation (default enabled)"
         )
+        .add_property("evict", &PyGfal2::GfaltParams::get_evict,
+            &PyGfal2::GfaltParams::set_evict,
+            "Enable or disable source file eviction from disk buffer when the transfer is finished"
+        )
         .add_property("local_transfers", &PyGfal2::GfaltParams::get_local_transfers,
             &PyGfal2::GfaltParams::set_local_transfers,
             "Permission flag to enable or disable transfers via local streaming (default enabled)"
