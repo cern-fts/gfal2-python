@@ -2,7 +2,6 @@
 set -e
 
 GITREF=`git rev-parse --short HEAD`
-BUILD="devel"
 
 if [[ -z ${BRANCH} ]]; then
   BRANCH=`git name-rev $GITREF --name-only`
@@ -10,8 +9,10 @@ else
   printf "Using environment set variable BRANCH=%s\n" "${BRANCH}"
 fi
 
-if [[ $BRANCH =~ ^(tags/)?(v)[.0-9]+(-[0-9]+)?$ ]]; then
+if [[ $BRANCH =~ ^(tags/)?(v)[.0-9]+(-(rc)?([0-9]+))?$ ]]; then
   BUILD="rc"
+else
+  BUILD="${BRANCH}"
 fi
 
 DIST=$(rpm --eval "%{dist}" | cut -d. -f2)
@@ -23,16 +24,16 @@ DISTNAME=${DIST}
 
 if [[ ${BUILD} == "rc" ]]; then
 	REPO_PATH="${BUILD}/${DISTNAME}/\$basearch"
-elif [[ ${BRANCH} == "develop" ]]; then
+elif [[ ${BUILD} == "develop" ]]; then
 	REPO_PATH="testing/${DISTNAME}/\$basearch"
 else
-	REPO_PATH="testing/${BRANCH}/${DISTNAME}/\$basearch"
+	REPO_PATH="testing/${BUILD}/${DISTNAME}/\$basearch"
 fi
 
-printf "Installing dmc-%s-%s in /etc/yum.repo.d/\n" ${BRANCH} ${DISTNAME}
-cat <<- EOF > /etc/yum.repos.d/dmc-${BRANCH}-${DISTNAME}.repo
-	[dmc-${BRANCH}-${DISTNAME}]
-	name=DMC Development Repository
+echo "Installing /etc/yum.repo.d/dmc-${BUILD}-${DISTNAME}.repo"
+cat <<- EOF > "/etc/yum.repos.d/dmc-${BUILD}-${DISTNAME}.repo"
+	[dmc-${BUILD}-${DISTNAME}]
+	name=DMC Repository
 	baseurl=http://dmc-repo.web.cern.ch/dmc-repo/${REPO_PATH}
 	gpgcheck=0
 	enabled=1
