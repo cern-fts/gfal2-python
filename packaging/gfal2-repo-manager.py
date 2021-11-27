@@ -90,7 +90,7 @@ def construct_location(platform, arch, filename):
     return "{0}/{1}/{2}".format(platform, arch, filename)
 
 def is_tag(ref):
-    return (re.compile("""^(v)(\d+)\.(\d+)\.(\d+)$""").match(ref) != None or
+    return (re.compile("""^(v)(\d+)\.(\d+)\.(\d+)(-(rc)?(\d+))?$""").match(ref) != None or
            re.compile("""^(v)(\d+)\.(\d+)$""").match(ref) != None)
 
 def mkdir_p(path):
