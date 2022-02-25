@@ -588,6 +588,7 @@ int Gfal2Context::release(const std::string& path, const std::string& token)
     return ret;
 }
 
+
 boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& pyfiles,
         time_t pintime, time_t timeout, bool async)
 {
