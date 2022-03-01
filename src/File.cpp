@@ -63,8 +63,14 @@ std::string File::read(size_t count)
     GError* tmp_err = NULL;
     std::vector<char> buf(count + 1); // vector on the heap for massive buffer size
     ssize_t ret = gfal2_read(cont->get(), fd, &(buf.front()), count, &tmp_err);
-    if (ret < 0)
+    if (ret < 0) {
         GErrorWrapper::throwOnError(&tmp_err);
+    }
+    else if (ret > count) {
+        std::stringstream errmsg;
+        errmsg << "Read returned " << ret << " bytes, higher than expected " << count;
+        throw GErrorWrapper(errmsg.str(), ENOMEM);
+    }
 
     buf[ret] = '\0';
     return std::string(&(buf.front()), ret);
@@ -77,13 +83,14 @@ std::string File::pread(off_t offset, size_t count)
     GError* tmp_err = NULL;
     std::vector<char> buf(count + 1); // vector on the heap for massive buffer size
     ssize_t ret = gfal2_pread(cont->get(), fd, &(buf.front()), count, offset, &tmp_err);
-    if (ret > count) {
+    if (ret < 0) {
+        GErrorWrapper::throwOnError(&tmp_err);
+    }
+    else if (ret > count) {
         std::stringstream errmsg;
         errmsg << "Positional read returned " << ret << " bytes, higher than expected " << count;
         throw GErrorWrapper(errmsg.str(), ENOMEM);
     }
-    if (ret < 0)
-        GErrorWrapper::throwOnError(&tmp_err);
 
     buf[ret] = '\0';
     return std::string(&(buf.front()), ret);
