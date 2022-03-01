@@ -37,9 +37,7 @@ DISTNAME=${DIST}
 [[ "${DISTNAME}" == "fc36" ]] && DISTNAME="fc-rawhide"
 
 # Write repository files to /etc/yum.repos.d/ based on the branch name
-./ci/write-repo-file.sh
-
-REPO_FILE="${BUILD}/dmc-${BUILD}-${DISTNAME}.repo"
+REPO_FILE=$(./ci/write-repo-file.sh)
 print_info
 
 RPMBUILD=${PWD}/build
