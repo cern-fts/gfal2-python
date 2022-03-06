@@ -144,7 +144,7 @@ fi
 %if 0%{?with_docs}
      -DBUILDDOCS=TRUE \
 %endif
-     -DUNIT_TESTS=TRUE .
+     -DUNIT_TESTS=TRUE
 
 %cmake3_build
 
