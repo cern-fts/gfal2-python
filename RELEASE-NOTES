@@ -1,6 +1,14 @@
 GFAL2-PYTHON RELEASE NOTES
 ==========================
 
+* Mon Mar 07 2022 Mihai Patrascoiu <mipatras@cern.ch> - 1.11.1-1
+** Bug
+- [DMC-1277] - Use of uninitialized variable in "cred_get" method
+- [DMC-1287] - GridFTP SEGV during positional read on CentOS 7
+** Improvement
+- [DMC-1274] - Provide credential delete method in the Gfal2 credential API
+- [DMC-1308] - Move Data Management Clients to Fedora 34 & 35
+
 * Thu Sep 23 2021 Joao Lopes <batistal@cern.ch> - 1.11.0-1
 ** Epic
 - [DMC-1249] - Migrate CI infrastructure to gitlab-CI

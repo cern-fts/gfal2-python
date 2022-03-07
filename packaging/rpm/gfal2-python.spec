@@ -38,16 +38,16 @@
 %global __provides_exclude_from ^((%{python2_sitearch})|(%{python3_sitearch})/.*\\.so)$
 
 Name:               gfal2-python
-Version:            1.11.0
+Version:            1.11.1
 Release:            1%{?dist}
 Summary:            Python bindings for gfal 2
 License:            ASL 2.0
 URL:                http://dmc.web.cern.ch/
-# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.9.5
-# pushd gfal2-python-1.9.5
-# git checkout v1.9.5
+# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.11.0
+# pushd gfal2-python-1.11.0
+# git checkout v1.11.0
 # popd
-# tar czf gfal2-python-1.9.5.tar.gz --exclude-vcs gfal2-python-1.9.5
+# tar czf gfal2-python-1.11.0.tar.gz --exclude-vcs gfal2-python-1.11.0
 Source0:            %{name}-%{version}.tar.gz
 
 BuildRequires:      gcc-c++
@@ -180,6 +180,9 @@ fi
 %endif
 
 %changelog
+* Mon Mar 07 2022 Mihai Patrascoiu <mipatras@cern.ch> - 1.11.1-1
+- New upstream release
+
 * Thu Sep 23 2021 Joao Lopes <batistal@cern.ch> - 1.11.0-1
 - New upstream release
 - Introduces SE-Token retrieval
