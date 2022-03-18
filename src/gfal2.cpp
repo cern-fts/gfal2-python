@@ -278,7 +278,14 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll,
             "Polls the status for asynchronous bring_online operations"
         )
-        .def("release", &PyGfal2::Gfal2Context::release,
+        .def("release",
+            static_cast<int (PyGfal2::Gfal2Context::*)(
+                const std::string &)>(&PyGfal2::Gfal2Context::release),
+            "Shortcut for release(path, token = '')"
+        )
+        .def("release",
+            static_cast<int (PyGfal2::Gfal2Context::*)(const std::string& path,
+                const std::string& token)>(&PyGfal2::Gfal2Context::release),
             "Releases a file pinned by a bring_online call"
         )
         .def("bring_online", &PyGfal2::Gfal2Context::bring_online_list,
@@ -287,7 +294,14 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll_list,
             "Performs a bulk bring online poll operation"
         )
-        .def("release", &PyGfal2::Gfal2Context::release_list,
+        .def("release",
+            static_cast<boost::python::list (PyGfal2::Gfal2Context::*)(
+                const boost::python::list &)>(&PyGfal2::Gfal2Context::release_list),
+            "Shortcut for release (paths[], token = '')"
+        )
+        .def("release",
+            static_cast<boost::python::list (PyGfal2::Gfal2Context::*)(
+                const boost::python::list& files, const std::string& token)>(&PyGfal2::Gfal2Context::release_list),
             "Releases a set of files pinned by a bring_online call"
         )
         .def("abort_bring_online", &PyGfal2::Gfal2Context::abort_bring_online,

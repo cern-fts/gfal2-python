@@ -577,12 +577,23 @@ int Gfal2Context::bring_online_poll(const std::string& path, const std::string& 
 }
 
 
+int Gfal2Context::release(const std::string& path)
+{
+    return release(path, "");
+}
+
+
 int Gfal2Context::release(const std::string& path, const std::string& token)
 {
     ScopedGILRelease unlock;
 
     GError* tmp_err = NULL;
-    int ret = gfal2_release_file(cont->get(), path.c_str(), token.c_str(), &tmp_err);
+    const char* token_ptr = NULL;
+    if (!token.empty()) {
+        token_ptr = token.c_str();
+    }
+
+    int ret = gfal2_release_file(cont->get(), path.c_str(), token_ptr, &tmp_err);
     if (ret < 0)
         GErrorWrapper::throwOnError(&tmp_err);
     return ret;
@@ -646,6 +657,12 @@ boost::python::list Gfal2Context::bring_online_poll_list(const boost::python::li
 }
 
 
+boost::python::list Gfal2Context::release_list(const boost::python::list& pyfiles)
+{
+    return release_list(pyfiles, "");
+}
+
+
 boost::python::list Gfal2Context::release_list(const boost::python::list& pyfiles,
         const std::string& token)
 {
@@ -662,9 +679,14 @@ boost::python::list Gfal2Context::release_list(const boost::python::list& pyfile
         files_ptr[i] = files.back().c_str();
     }
 
+    const char* token_ptr = NULL;
+    if (!token.empty()) {
+      token_ptr = token.c_str();
+    }
+
     {
         ScopedGILRelease unlock;
-        gfal2_release_file_list(cont->get(), nbfiles, files_ptr, token.c_str(),
+        gfal2_release_file_list(cont->get(), nbfiles, files_ptr, token_ptr,
                                 errors.data());
     }
 
