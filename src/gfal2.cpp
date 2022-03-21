@@ -278,6 +278,9 @@ BOOST_PYTHON_MODULE (gfal2)
         .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll,
             "Polls the status for asynchronous bring_online operations"
         )
+        .def("archive_poll", &PyGfal2::Gfal2Context::archive_poll,
+            "Polls the status for asynchronous archive operations"
+        )
         .def("release",
             static_cast<int (PyGfal2::Gfal2Context::*)(
                 const std::string &)>(&PyGfal2::Gfal2Context::release),
@@ -293,6 +296,9 @@ BOOST_PYTHON_MODULE (gfal2)
         )
         .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll_list,
             "Performs a bulk bring online poll operation"
+        )
+        .def("archive_poll", &PyGfal2::Gfal2Context::archive_poll_list,
+            "Performs a bulk archive poll operation"
         )
         .def("release",
             static_cast<boost::python::list (PyGfal2::Gfal2Context::*)(

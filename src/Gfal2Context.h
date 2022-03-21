@@ -205,6 +205,8 @@ public:
 
     int bring_online_poll(const std::string& path, const std::string& token);
 
+    int archive_poll(const std::string& path);
+
     int release(const std::string& path);
     int release(const std::string& path, const std::string& token);
 
@@ -212,6 +214,8 @@ public:
             time_t timeout, bool async);
 
     boost::python::list bring_online_poll_list(const boost::python::list& files, const std::string& token);
+
+    boost::python::list archive_poll_list(const boost::python::list& files);
 
     boost::python::list release_list(const boost::python::list& files);
     boost::python::list release_list(const boost::python::list& files, const std::string& token);

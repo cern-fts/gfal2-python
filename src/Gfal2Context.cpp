@@ -577,6 +577,22 @@ int Gfal2Context::bring_online_poll(const std::string& path, const std::string& 
 }
 
 
+int Gfal2Context::archive_poll(const std::string& path)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    int ret = gfal2_archive_poll(cont->get(), path.c_str(), &tmp_err);
+    if (ret < 0 && tmp_err->code == EAGAIN) {
+        g_error_free(tmp_err);
+        ret = 0;
+    }
+    if (ret < 0)
+        GErrorWrapper::throwOnError(&tmp_err);
+    return ret;
+}
+
+
 int Gfal2Context::release(const std::string& path)
 {
     return release(path, "");
@@ -649,6 +665,32 @@ boost::python::list Gfal2Context::bring_online_poll_list(const boost::python::li
         ScopedGILRelease unlock;
         gfal2_bring_online_poll_list(cont->get(), nbfiles, files_ptr, token.c_str(),
                                      errors.data());
+    }
+
+    boost::python::list pyerrors;
+    GError2PyError(pyerrors, nbfiles, errors.data());
+    return pyerrors;
+}
+
+
+boost::python::list Gfal2Context::archive_poll_list(const boost::python::list& pyfiles)
+{
+    size_t nbfiles = boost::python::len(pyfiles);
+    if (nbfiles == 0)
+        throw GErrorWrapper("Empty list of files", EINVAL);
+
+    std::vector<std::string> files(nbfiles);
+    std::vector<GError*> errors(nbfiles, NULL);
+    const char* files_ptr[nbfiles];
+
+    for (size_t i = 0; i < nbfiles; ++i) {
+        files.push_back(boost::python::extract<std::string>(pyfiles[i]));
+        files_ptr[i] = files.back().c_str();
+    }
+
+    {
+        ScopedGILRelease unlock;
+        gfal2_archive_poll_list(cont->get(), nbfiles, files_ptr, errors.data());
     }
 
     boost::python::list pyerrors;
