@@ -141,7 +141,7 @@ public:
     int symlink(const std::string & oldpath, const std::string & newpath);
 
     std::string checksum(const std::string & uri, const std::string & chk_type,
-                     off_t start_offset, size_t data_length);
+                         off_t start_offset, size_t data_length);
 
     std::string checksum(const std::string & uri, const std::string & chk_type);
 
@@ -192,12 +192,12 @@ public:
     int filecopy(const GfaltParams & p, const std::string & src, const std::string & dst);
 
     boost::python::object filecopy(const boost::python::list& srcs,
-            const boost::python::list& dsts);
+                                   const boost::python::list& dsts);
     boost::python::object filecopy(const GfaltParams & p, const boost::python::list& srcs,
-            const boost::python::list& dsts);
+                                   const boost::python::list& dsts);
     boost::python::object filecopy(const GfaltParams & p, const boost::python::list& srcs,
-            const boost::python::list& dsts,
-            const boost::python::list& checksums);
+                                   const boost::python::list& dsts,
+                                   const boost::python::list& checksums);
 
     // bring online and related
     boost::python::tuple bring_online(const std::string& path, time_t pintime, time_t timeout, bool async);
@@ -213,10 +213,10 @@ public:
     int release(const std::string& path, const std::string& token);
 
     boost::python::tuple bring_online_list(const boost::python::list& files, time_t pintime,
-            time_t timeout, bool async);
+                                           time_t timeout, bool async);
 
     boost::python::tuple bring_online_list(const boost::python::list& files, const boost::python::list& metadata,
-            time_t pintime, time_t timeout, bool async);
+                                           time_t pintime, time_t timeout, bool async);
 
     boost::python::list bring_online_poll_list(const boost::python::list& files, const std::string& token);
 

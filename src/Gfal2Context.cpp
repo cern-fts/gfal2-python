@@ -668,8 +668,8 @@ boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& 
 
 
 boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& pyfiles,
-                                                     const boost::python::list& pymetadata, time_t pintime,
-                                                     time_t timeout, bool async)
+                                                     const boost::python::list& pymetadata,
+                                                     time_t pintime, time_t timeout, bool async)
 {
     size_t nbfiles = boost::python::len(pyfiles);
     if (nbfiles == 0)

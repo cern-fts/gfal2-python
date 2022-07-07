@@ -274,14 +274,14 @@ BOOST_PYTHON_MODULE (gfal2)
             "Cancel running operations")
         .def("bring_online",
             static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
-            const std::string& path, time_t pintime,
-            time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online),
+                const std::string& path, time_t pintime,
+                time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online),
             "Performs a bring online operation (only for protocols that support this operation)"
         )
         .def("bring_online",
             static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
-            const std::string& path, const std::string& metadata, time_t pintime,
-            time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online),
+                const std::string& path, const std::string& metadata, time_t pintime,
+                time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online),
             "Performs a bring online operation (only for protocols that support this operation)"
         )
         .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll,
@@ -304,7 +304,7 @@ BOOST_PYTHON_MODULE (gfal2)
             static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
                 const boost::python::list& files, time_t pintime,
                 time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online_list),
-                "Performs a bring online operation (only for protocols that support this operation)"
+            "Performs a bring online operation (only for protocols that support this operation)"
         )
         .def("bring_online",
             static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
