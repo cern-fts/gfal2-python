@@ -406,7 +406,7 @@ boost::python::list Gfal2Context::listxattr(const std::string & file)
 
 
 boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t pintime,
-        time_t timeout, bool async)
+                                                time_t timeout, bool async)
 {
     GError* tmp_err = NULL;
     char token[128] = { 0 };
@@ -422,6 +422,27 @@ boost::python::tuple Gfal2Context::bring_online(const std::string& path, time_t 
 
     return boost::python::make_tuple(ret, std::string(token));
 }
+
+
+boost::python::tuple Gfal2Context::bring_online(const std::string& path, const std::string& metadata,
+                                                time_t pintime, time_t timeout, bool async)
+{
+    GError* tmp_err = NULL;
+    char token[128] = { 0 };
+    int ret;
+    {
+        ScopedGILRelease unlock;
+        ret = gfal2_bring_online_v2(cont->get(), path.c_str(), metadata.c_str(),
+                                    pintime, timeout, token, sizeof(token), async,
+                                    &tmp_err);
+    }
+
+    if (ret < 0)
+        GErrorWrapper::throwOnError(&tmp_err);
+
+    return boost::python::make_tuple(ret, std::string(token));
+}
+
 
 boost::python::list Gfal2Context::qos_check_classes(const std::string& url, const std::string& type)
 {
@@ -577,6 +598,22 @@ int Gfal2Context::bring_online_poll(const std::string& path, const std::string& 
 }
 
 
+int Gfal2Context::archive_poll(const std::string& path)
+{
+    ScopedGILRelease unlock;
+
+    GError* tmp_err = NULL;
+    int ret = gfal2_archive_poll(cont->get(), path.c_str(), &tmp_err);
+    if (ret < 0 && tmp_err->code == EAGAIN) {
+        g_error_free(tmp_err);
+        ret = 0;
+    }
+    if (ret < 0)
+        GErrorWrapper::throwOnError(&tmp_err);
+    return ret;
+}
+
+
 int Gfal2Context::release(const std::string& path)
 {
     return release(path, "");
@@ -601,7 +638,7 @@ int Gfal2Context::release(const std::string& path, const std::string& token)
 
 
 boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& pyfiles,
-        time_t pintime, time_t timeout, bool async)
+                                                     time_t pintime, time_t timeout, bool async)
 {
     size_t nbfiles = boost::python::len(pyfiles);
     if (nbfiles == 0)
@@ -630,6 +667,47 @@ boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& 
 }
 
 
+boost::python::tuple Gfal2Context::bring_online_list(const boost::python::list& pyfiles,
+                                                     const boost::python::list& pymetadata,
+                                                     time_t pintime, time_t timeout, bool async)
+{
+    size_t nbfiles = boost::python::len(pyfiles);
+    if (nbfiles == 0)
+        throw GErrorWrapper("Empty list of files", EINVAL);
+
+    size_t nbmetadata = boost::python::len(pymetadata);
+    if (nbfiles != nbmetadata)
+        throw GErrorWrapper("List of urls and list of metadata with different sizes", EINVAL);
+
+    std::vector<std::string> files(nbfiles);
+    std::vector<GError*> errors(nbfiles, NULL);
+    const char* files_ptr[nbfiles];
+
+    std::vector<std::string> metadata(nbfiles);
+    const char* metadata_ptr[nbfiles];
+
+    for (size_t i = 0; i < nbfiles; ++i) {
+        files.push_back(boost::python::extract<std::string>(pyfiles[i]));
+        metadata.push_back(boost::python::extract<std::string>(pymetadata[i]));
+        files_ptr[i] = files.back().c_str();
+        metadata_ptr[i] = metadata.back().c_str();
+    }
+
+    char token[128] = { 0 };
+
+    {
+        ScopedGILRelease unlock;
+        gfal2_bring_online_list_v2(cont->get(), nbfiles, files_ptr, metadata_ptr,
+                                   pintime, timeout, token, sizeof(token), async,
+                                   errors.data());
+    }
+
+    boost::python::list pyerrors;
+    GError2PyError(pyerrors, nbfiles, errors.data());
+    return boost::python::make_tuple(pyerrors, std::string(token));
+}
+
+
 boost::python::list Gfal2Context::bring_online_poll_list(const boost::python::list& pyfiles, const std::string& token)
 {
     size_t nbfiles = boost::python::len(pyfiles);
@@ -649,6 +727,32 @@ boost::python::list Gfal2Context::bring_online_poll_list(const boost::python::li
         ScopedGILRelease unlock;
         gfal2_bring_online_poll_list(cont->get(), nbfiles, files_ptr, token.c_str(),
                                      errors.data());
+    }
+
+    boost::python::list pyerrors;
+    GError2PyError(pyerrors, nbfiles, errors.data());
+    return pyerrors;
+}
+
+
+boost::python::list Gfal2Context::archive_poll_list(const boost::python::list& pyfiles)
+{
+    size_t nbfiles = boost::python::len(pyfiles);
+    if (nbfiles == 0)
+        throw GErrorWrapper("Empty list of files", EINVAL);
+
+    std::vector<std::string> files(nbfiles);
+    std::vector<GError*> errors(nbfiles, NULL);
+    const char* files_ptr[nbfiles];
+
+    for (size_t i = 0; i < nbfiles; ++i) {
+        files.push_back(boost::python::extract<std::string>(pyfiles[i]));
+        files_ptr[i] = files.back().c_str();
+    }
+
+    {
+        ScopedGILRelease unlock;
+        gfal2_archive_poll_list(cont->get(), nbfiles, files_ptr, errors.data());
     }
 
     boost::python::list pyerrors;

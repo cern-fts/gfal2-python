@@ -272,11 +272,23 @@ BOOST_PYTHON_MODULE (gfal2)
         )
         .def("cancel", &PyGfal2::Gfal2Context::cancel,
             "Cancel running operations")
-        .def("bring_online", &PyGfal2::Gfal2Context::bring_online,
+        .def("bring_online",
+            static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
+                const std::string& path, time_t pintime,
+                time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online),
+            "Performs a bring online operation (only for protocols that support this operation)"
+        )
+        .def("bring_online",
+            static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
+                const std::string& path, const std::string& metadata, time_t pintime,
+                time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online),
             "Performs a bring online operation (only for protocols that support this operation)"
         )
         .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll,
             "Polls the status for asynchronous bring_online operations"
+        )
+        .def("archive_poll", &PyGfal2::Gfal2Context::archive_poll,
+            "Polls the status for asynchronous archive operations"
         )
         .def("release",
             static_cast<int (PyGfal2::Gfal2Context::*)(
@@ -288,11 +300,23 @@ BOOST_PYTHON_MODULE (gfal2)
                 const std::string& token)>(&PyGfal2::Gfal2Context::release),
             "Releases a file pinned by a bring_online call"
         )
-        .def("bring_online", &PyGfal2::Gfal2Context::bring_online_list,
-            "Performs a bulk bring online operation"
+        .def("bring_online",
+            static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
+                const boost::python::list& files, time_t pintime,
+                time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online_list),
+            "Performs a bring online operation (only for protocols that support this operation)"
+        )
+        .def("bring_online",
+            static_cast<boost::python::tuple (PyGfal2::Gfal2Context::*)(
+                const boost::python::list& files, const boost::python::list& metadata, time_t pintime,
+                time_t timeout, bool async)>(&PyGfal2::Gfal2Context::bring_online_list),
+            "Performs a bring online operation (only for protocols that support this operation)"
         )
         .def("bring_online_poll", &PyGfal2::Gfal2Context::bring_online_poll_list,
             "Performs a bulk bring online poll operation"
+        )
+        .def("archive_poll", &PyGfal2::Gfal2Context::archive_poll_list,
+            "Performs a bulk archive poll operation"
         )
         .def("release",
             static_cast<boost::python::list (PyGfal2::Gfal2Context::*)(
