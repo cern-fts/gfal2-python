@@ -180,6 +180,9 @@ fi
 %endif
 
 %changelog
+* Fri Jul 08 2022 Joao Lopes <batistal@cern.ch> - 1.12.0-1
+- New upstream release
+
 * Mon Mar 07 2022 Mihai Patrascoiu <mipatras@cern.ch> - 1.11.1-1
 - New upstream release
 

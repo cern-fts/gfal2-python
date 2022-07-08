@@ -1,5 +1,12 @@
 GFAL2-PYTHON RELEASE NOTES
 ==========================
+* Fri Jul 08 2022 Joao Lopes <batistal@cern.ch> - 1.12.0-1
+** Improvement
+- [DMC-1260] - Expose Gfal2 XRootD eviction via the file API
+- [DMC-1312] - Provide release file function without token argument in Gfal2 Python bindings
+- [DMC-1325] - Expose gfal2_archive_poll via Gfal2 Python bindings
+- [DMC-1326] - Expose gfal2_bring_online_v2 via Gfal2 Python bindings
+
 
 * Mon Mar 07 2022 Mihai Patrascoiu <mipatras@cern.ch> - 1.11.1-1
 ** Bug
