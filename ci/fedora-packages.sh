@@ -3,7 +3,7 @@ set -e
 
 if [[ -f /usr/bin/dnf ]]; then
   dnf update -y
-  dnf install -y dnf-plugins-core git rpm-build tree which python2 \
+  dnf install -y dnf-plugins-core git rpm-build tree which \
                  cmake make gcc gcc-c++
 else
   yum install -y yum-utils git rpm-build make tree which python2 \
