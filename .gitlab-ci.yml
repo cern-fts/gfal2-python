@@ -35,6 +35,10 @@ centos8:
   image: gitlab-registry.cern.ch/linuxsupport/c8-base
   <<: *build-template_definition
 
+cs9:
+  image: gitlab-registry.cern.ch/linuxsupport/cs9-base
+  <<: *build-template_definition
+
 fedora-34:
   image: fedora:34
   <<: *build-template_definition
@@ -86,6 +90,14 @@ centos8-test:
     - dnf install -y epel-release
   <<: *test-template_definition
 
+cs9-test:
+  image: gitlab-registry.cern.ch/linuxsupport/cs9-base
+  needs:
+    - job: cs9
+  before_script:
+    - dnf install -y epel-release
+  <<: *test-template_definition
+
 fedora-34-test:
   image: fedora:34
   needs:
@@ -108,6 +120,7 @@ fedora-35-test:
   dependencies:
     - cc7
     - centos8
+    - cs9
     - fedora-34
     - fedora-35
     - fedora-rawhide
@@ -117,7 +130,7 @@ fedora-35-test:
     - cat "$repo_passwd" | kinit "$repo_user"
     - eosfusebind
     - |
-        for platform in cc7 centos8 fedora-34 fedora-35 fedora-rawhide; do
+        for platform in cc7 centos8 cs9 fedora-34 fedora-35 fedora-rawhide; do
           if [[ "${platform}" == "fedora-rawhide" ]] && [[ ! -d ${platform} ]] ; then
             echo "Skipping ${platform} packages..." ;
             continue ;
