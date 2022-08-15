@@ -1,5 +1,5 @@
-# Unversionned doc dir F20 change https://fedoraproject.org/wiki/Changes/UnversionedDocdirs
-%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
+%undefine __cmake_in_source_build
+%undefine __cmake3_in_source_build
 
 # Use static linking against boost
 %bcond_with static_boost_python
@@ -43,15 +43,15 @@ Release:            1%{?dist}
 Summary:            Python bindings for gfal 2
 License:            ASL 2.0
 URL:                http://dmc.web.cern.ch/
-# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.11.0
-# pushd gfal2-python-1.11.0
-# git checkout v1.11.0
+# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.12.0
+# pushd gfal2-python-1.12.0
+# git checkout v1.12.0
 # popd
-# tar czf gfal2-python-1.11.0.tar.gz --exclude-vcs gfal2-python-1.11.0
+# tar czf gfal2-python-1.12.0.tar.gz --exclude-vcs gfal2-python-1.12.0
 Source0:            %{name}-%{version}.tar.gz
 
 BuildRequires:      gcc-c++
-BuildRequires:      cmake
+BuildRequires:      cmake3
 BuildRequires:      gfal2-devel >= 2.21.0
 BuildRequires:      boost-devel
 # Python 2
@@ -136,7 +136,7 @@ if [ "$gfal2_python_cmake_ver=" != "$gfal2_python_spec_ver=" ]; then
     exit 1
 fi
 
-%cmake \
+%cmake3 \
      -DDOC_INSTALL_DIR=%{_pkgdocdir} \
 %if 0%{?with_static_boost_python}
      -DBoost_USE_STATIC_LIBS=ON \
