@@ -96,6 +96,7 @@ setup(
     name='gfal2-python',
     version=get_version(),
     description='Python bindings for gfal2',
+    long_description_content_type='text/markdown',
     requires=[],
     install_requires=[],
     url='https://dmc.web.cern.ch/',
