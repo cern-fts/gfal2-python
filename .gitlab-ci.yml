@@ -53,6 +53,22 @@ fedora-rawhide:
   allow_failure: true
   when: manual
 
+pypi:
+  stage: build
+  image: gitlab-registry.cern.ch/linuxsupport/cc7-base
+  when: manual
+  allow_failure: false
+  script:
+    - yum install -y git python3-pip tree
+    - python3 -m pip install --upgrade pip
+    - python3 -m pip install setuptools
+    - python3 setup.py sdist
+    - cp -rv dist ${CI_JOB_NAME}
+    - tree ${CI_JOB_NAME}
+  artifacts:
+    paths:
+      - "$CI_JOB_NAME"
+
 #--------------------------
 # Test templates
 #--------------------------
@@ -154,3 +170,21 @@ rpms:
     - if: '$CI_COMMIT_REF_NAME == "develop" || $CI_COMMIT_TAG != null'
     - if: '$CI_COMMIT_REF_NAME != "develop" && $CI_COMMIT_TAG == null'
       when: manual
+
+pypi-publish:
+  needs:
+    - job: pypi
+  stage: publish
+  image: gitlab-registry.cern.ch/linuxsupport/cc7-base
+  when: manual
+  script:
+    - PLATFORM=${CI_JOB_NAME%-*}
+    - yum install -y git python3-pip
+    - python3 -m pip install --upgrade pip
+    - python3 -m pip install setuptools twine
+    - twine check ${PLATFORM}/*
+    - python3 -m twine upload --repository-url ${PYPI_REPOSITORY} ${PLATFORM}/* --verbose
+  rules:
+    - if: '$CI_COMMIT_TAG != null'
+      when: manual
+    - when: never
