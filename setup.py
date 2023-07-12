@@ -26,12 +26,15 @@ from glob import glob
 from subprocess import check_call
 from setuptools import Extension, setup
 
-# Change this when there are changes in the setup.py or MANIFEST.in
-RELEASE = 4
+# Change this for a post release i.e when there are changes in the setup.py or MANIFEST.in but no version change
+POST_RELEASE = None
 
 
 def get_version():
-    ver_components = dict(VERSION_RELEASE=RELEASE)
+    ver_components = dict()
+    if POST_RELEASE:
+        ver_components['VERSION_RELEASE'] = POST_RELEASE
+
     with open('CMakeLists.txt') as cmake:
         for line in cmake:
             line = line.strip()
@@ -42,7 +45,12 @@ def get_version():
                     ver_components[varname] = varval
     if len(ver_components) == 0:
         raise ValueError('Could not find the version')
-    return "%(VERSION_MAJOR)s.%(VERSION_MINOR)s.%(VERSION_PATCH)s.post%(VERSION_RELEASE)s" % ver_components
+
+    version = "%(VERSION_MAJOR)s.%(VERSION_MINOR)s.%(VERSION_PATCH)s"
+    if POST_RELEASE:
+        version += ".post%(VERSION_RELEASE)s"
+
+    return version % ver_components
 
 
 def validate():
