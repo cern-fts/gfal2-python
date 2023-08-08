@@ -57,7 +57,7 @@ pypi:
   stage: build
   image: gitlab-registry.cern.ch/linuxsupport/cc7-base
   when: manual
-  allow_failure: false
+  allow_failure: true
   script:
     - yum install -y git python3-pip tree
     - python3 -m pip install --upgrade pip
