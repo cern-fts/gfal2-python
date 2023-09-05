@@ -24,14 +24,14 @@
 # Python path discovery
 %if 0%{?with_python2}
 %if 0%{?rhel} == 7
-%{!?python_sitearch: %define python_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%{!?python_sitearch: %define python_sitearch %(%{__python2} -c "from sysconfig import get_path; print get_path('platlib')")}
 %else
-%{!?python2_sitearch: %define python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%{!?python2_sitearch: %define python2_sitearch %(%{__python2} -c "from sysconfig import get_path; print get_path('platlib')")}
 %endif
 %endif
 
 %if 0%{?with_python3}
-%{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from sysconfig import get_path; print(get_path('platlib'))")}
 %endif
 
 # Python modules filtering
@@ -57,6 +57,7 @@ BuildRequires:      boost-devel
 # Python 2
 %if 0%{?with_python2}
 BuildRequires:      python2-devel
+BuildRequires:      python2-setuptools
 %endif
 # Epydoc
 %if 0%{?with_docs}
@@ -64,11 +65,11 @@ BuildRequires:      epydoc
 %endif
 # Python 3
 %if 0%{?with_python3}
+BuildRequires:      python3-devel
+BuildRequires:      python3-setuptools
 %if 0%{?rhel} == 7
-BuildRequires:      python36-devel
 BuildRequires:      boost-python36-devel
 %else
-BuildRequires:      python3-devel
 BuildRequires:      boost-python3-devel
 %endif
 %endif
