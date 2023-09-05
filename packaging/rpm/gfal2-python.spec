@@ -65,13 +65,9 @@ BuildRequires:      epydoc
 %endif
 # Python 3
 %if 0%{?with_python3}
-BuildRequires:      python3-devel
-BuildRequires:      python3-setuptools
-%if 0%{?rhel} == 7
-BuildRequires:      boost-python36-devel
-%else
-BuildRequires:      boost-python3-devel
-%endif
+BuildRequires:      python%{python3_pkgversion}-devel
+BuildRequires:      python%{python3_pkgversion}-setuptools
+BuildRequires:      boost-python%{python3_pkgversion}-devel
 %endif
 
 %global _description \
