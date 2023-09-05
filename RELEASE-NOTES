@@ -10,6 +10,7 @@ GFAL2-PYTHON RELEASE NOTES
 - [DMC-1379] - Move DMC projects to Alma8 and Alma9
 - [DMC-1385] - Support for Gfal2 Python bindings compiled with Python 3.12 (Fedora 39) (bugzilla#2220000)
 - [DMC-1387] - Data Management Clients for Fedora 38
+- [DMC-1389] - Port Gfal2 Python3 projects away from "distutils"
 
 * Fri Jul 08 2022 Joao Lopes <batistal@cern.ch> - 1.12.0-1
 ** Improvement
