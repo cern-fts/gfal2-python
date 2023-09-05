@@ -1,12 +1,22 @@
 GFAL2-PYTHON RELEASE NOTES
 ==========================
+
+* Tue Sep 05 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.1-1
+** Task
+- [DMC-1327] - DMC packages for Centos Stream 9
+- [DMC-1330] - Support for Gfal2 Python bindings compiled with Python 3.11 (Fedora 37)
+- [DMC-1336] - Data Management Clients for Fedora 36
+- [DMC-1359] - Data Management Clients for Fedora 37
+- [DMC-1379] - Move DMC projects to Alma8 and Alma9
+- [DMC-1385] - Support for Gfal2 Python bindings compiled with Python 3.12 (Fedora 39) (bugzilla#2220000)
+- [DMC-1387] - Data Management Clients for Fedora 38
+
 * Fri Jul 08 2022 Joao Lopes <batistal@cern.ch> - 1.12.0-1
 ** Improvement
 - [DMC-1260] - Expose Gfal2 XRootD eviction via the file API
 - [DMC-1312] - Provide release file function without token argument in Gfal2 Python bindings
 - [DMC-1325] - Expose gfal2_archive_poll via Gfal2 Python bindings
 - [DMC-1326] - Expose gfal2_bring_online_v2 via Gfal2 Python bindings
-
 
 * Mon Mar 07 2022 Mihai Patrascoiu <mipatras@cern.ch> - 1.11.1-1
 ** Bug
@@ -152,11 +162,11 @@ system stdc++ and statically against boost python
  - initial compatible EPEL release
 
 * Thu Nov 29 2012 Adrien Devresse <adevress at cern.ch> - 1.1.0-0 
- - bug correction for set interger function
+ - bug correction for set integer function
  - map the new parameter system properly
  - add verbose level management and new namespace to gfal python bindings
  - add pydoc
- - convert to off_t =64 bits on the 32 bits plateform
+ - convert to off_t =64 bits on the 32 bits platform
 
 * Fri Jul 20 2012 Adrien Devresse <adevress at cern.ch> - 1.0.0-1
  - initial 1.0 release for gfal 2.0 python bindings

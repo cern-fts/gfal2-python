@@ -38,16 +38,16 @@
 %global __provides_exclude_from ^((%{python2_sitearch})|(%{python3_sitearch})/.*\\.so)$
 
 Name:               gfal2-python
-Version:            1.12.0
+Version:            1.12.1
 Release:            1%{?dist}
 Summary:            Python bindings for gfal 2
 License:            ASL 2.0
 URL:                http://dmc.web.cern.ch/
-# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.12.0
-# pushd gfal2-python-1.12.0
-# git checkout v1.12.0
+# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.12.1
+# pushd gfal2-python-1.12.1
+# git checkout v1.12.1
 # popd
-# tar czf gfal2-python-1.12.0.tar.gz --exclude-vcs gfal2-python-1.12.0
+# tar czf gfal2-python-1.12.1.tar.gz --exclude-vcs gfal2-python-1.12.1
 Source0:            %{name}-%{version}.tar.gz
 
 BuildRequires:      gcc-c++
@@ -180,6 +180,9 @@ fi
 %endif
 
 %changelog
+* Tue Sep 05 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.1-1
+- New upstream release
+
 * Fri Jul 08 2022 Joao Lopes <batistal@cern.ch> - 1.12.0-1
 - New upstream release
 
