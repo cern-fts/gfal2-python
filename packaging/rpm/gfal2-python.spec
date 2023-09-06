@@ -38,7 +38,7 @@
 %global __provides_exclude_from ^((%{python2_sitearch})|(%{python3_sitearch})/.*\\.so)$
 
 Name:               gfal2-python
-Version:            1.12.1
+Version:            1.12.2
 Release:            1%{?dist}
 Summary:            Python bindings for gfal 2
 License:            ASL 2.0
@@ -52,7 +52,7 @@ Source0:            %{name}-%{version}.tar.gz
 
 BuildRequires:      gcc-c++
 BuildRequires:      cmake3
-BuildRequires:      gfal2-devel >= 2.21.0
+BuildRequires:      gfal2-devel >= 2.22.0
 BuildRequires:      boost-devel
 # Python 2
 %if 0%{?with_python2}
@@ -80,7 +80,7 @@ for the file operations in grids and cloud environments.
 %if 0%{?with_python2}
 %package -n python2-gfal2
 Summary:            %summary
-Requires:           gfal2-core >= 2.21.0
+Requires:           gfal2-core >= 2.22.0
 Requires:           python2
 %{?python_provide:%python_provide python2-gfal2}
 # Remove before F30
@@ -94,7 +94,7 @@ Obsoletes:          gfal2-python < %{version}-%{release}
 %if 0%{?with_python3}
 %package -n python3-gfal2
 Summary:            gfal2 python bindings for Python 3
-Requires:           gfal2-core >= 2.21.0
+Requires:           gfal2-core >= 2.22.0
 Requires:           python3
 # Remove before F30
 Provides:           gfal2-python3 = %{version}-%{release}
