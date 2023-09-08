@@ -288,6 +288,23 @@ bool GfaltParams::get_proxy_delegation(void)
 }
 
 
+void GfaltParams::set_scitag(guint scitag)
+{
+    GError * tmp_err = NULL;
+    gfalt_set_scitag(params, scitag, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
+guint GfaltParams::get_scitag(void)
+{
+    GError * tmp_err = NULL;
+    guint scitag = gfalt_get_scitag(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return scitag;
+}
+
+
 void GfaltParams::set_evict(bool evict)
 {
     GError * tmp_err = NULL;
