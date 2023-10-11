@@ -46,7 +46,7 @@ static void monitor_callback_wrapper(gfalt_transfer_status_t h, const char* src,
     if (callbacks->monitor_callback) {
         size_t avg     = gfalt_copy_get_average_baudrate(h, NULL);
         size_t inst    = gfalt_copy_get_instant_baudrate(h, NULL);
-        size_t trans   = gfalt_copy_get_bytes_transfered(h, NULL);
+        size_t trans   = gfalt_copy_get_bytes_transferred(h, NULL);
         time_t elapsed = gfalt_copy_get_elapsed_time(h, NULL);
 
         boost::python::call<void>(callbacks->monitor_callback.ptr(), src, dst, avg, inst, trans, elapsed);
@@ -285,6 +285,23 @@ bool GfaltParams::get_proxy_delegation(void)
     bool proxy_delegation = gfalt_get_use_proxy_delegation(params, &tmp_err);
     GErrorWrapper::throwOnError(&tmp_err);
     return proxy_delegation;
+}
+
+
+void GfaltParams::set_scitag(guint scitag)
+{
+    GError * tmp_err = NULL;
+    gfalt_set_scitag(params, scitag, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
+guint GfaltParams::get_scitag(void)
+{
+    GError * tmp_err = NULL;
+    guint scitag = gfalt_get_scitag(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return scitag;
 }
 
 

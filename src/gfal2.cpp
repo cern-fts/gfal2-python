@@ -440,6 +440,9 @@ BOOST_PYTHON_MODULE (gfal2)
             &PyGfal2::GfaltParams::set_proxy_delegation,
             "Enable or disable TPC with proxy delegation (default enabled)"
         )
+        .add_property("scitag", &PyGfal2::GfaltParams::get_scitag, &PyGfal2::GfaltParams::set_scitag,
+            "SciTag transfer flow"
+        )
         .add_property("evict", &PyGfal2::GfaltParams::get_evict,
             &PyGfal2::GfaltParams::set_evict,
             "Enable or disable source file eviction from disk buffer when the transfer is finished"
