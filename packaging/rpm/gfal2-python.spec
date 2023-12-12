@@ -177,6 +177,9 @@ fi
 %endif
 
 %changelog
+* Tue Dec 12 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.2-1
+- New upstream release
+
 * Tue Sep 05 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.1-1
 - New upstream release
 

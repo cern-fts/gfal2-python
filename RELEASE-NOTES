@@ -1,6 +1,12 @@
 GFAL2-PYTHON RELEASE NOTES
 ==========================
 
+* Tue Dec 12 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.2-1
+** New Feature
+- [DMC-1344] - Propagate Scitags during TPC transfers
+** Task
+- [DMC-1392] - Support for Gfal2 Python bindings + Python 3.13 (Fedora 41)
+
 * Tue Sep 05 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.1-1
 ** Task
 - [DMC-1327] - DMC packages for Centos Stream 9
