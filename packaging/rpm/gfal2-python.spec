@@ -4,38 +4,11 @@
 # Use static linking against boost
 %bcond_with static_boost_python
 
-#-------------------------------------------------------------------------------
-# Configure python2/3 according to platform and passed-in parameter
-#-------------------------------------------------------------------------------
-
-# Require --without=python3 in order to disable python3 build package
-%bcond_without python3
-
-# Require --without=python2 in order to disable python2 build package on RHEL7
-%if 0%{?rhel} == 7
-%bcond_without python2
-%endif
-
-# Require --without=docs in order to disable gfal2-python-doc package on RHEL7
-%if 0%{?rhel} == 7
-%bcond_without docs
-%endif
-
-# Python path discovery
-%if 0%{?with_python2}
-%if 0%{?rhel} == 7
-%{!?python_sitearch: %define python_sitearch %(%{__python2} -c "from sysconfig import get_path; print get_path('platlib')")}
-%else
-%{!?python2_sitearch: %define python2_sitearch %(%{__python2} -c "from sysconfig import get_path; print get_path('platlib')")}
-%endif
-%endif
-
-%if 0%{?with_python3}
+# Python sitearch
 %{!?python3_sitearch: %define python3_sitearch %(%{__python3} -c "from sysconfig import get_path; print(get_path('platlib'))")}
-%endif
 
 # Python modules filtering
-%global __provides_exclude_from ^((%{python2_sitearch})|(%{python3_sitearch})/.*\\.so)$
+%global __provides_exclude_from ^(%{python3_sitearch}/.*\\.so)$
 
 Name:               gfal2-python
 Version:            1.12.2
@@ -54,44 +27,17 @@ BuildRequires:      gcc-c++
 BuildRequires:      cmake3
 BuildRequires:      gfal2-devel >= 2.22.0
 BuildRequires:      boost-devel
-# Python 2
-%if 0%{?with_python2}
-BuildRequires:      python2-devel
-BuildRequires:      python2-setuptools
-%endif
-# Epydoc
-%if 0%{?with_docs}
-BuildRequires:      epydoc
-%endif
-# Python 3
-%if 0%{?with_python3}
 BuildRequires:      python%{python3_pkgversion}-devel
 BuildRequires:      python%{python3_pkgversion}-setuptools
 BuildRequires:      boost-python%{python3_pkgversion}-devel
-%endif
 
 %global _description \
-Python bindings for gfal2. \
-GFAL2 offers an a single, simple and portable API \
-for the file operations in grids and cloud environments.
+Python3 bindings for Gfal2. \
+Gfal2 offers a single, simple and portable API \
+for file operations in the Grid and Cloud environments.
 
 %description %_description
 
-%if 0%{?with_python2}
-%package -n python2-gfal2
-Summary:            %summary
-Requires:           gfal2-core >= 2.22.0
-Requires:           python2
-%{?python_provide:%python_provide python2-gfal2}
-# Remove before F30
-Provides:           gfal2-python = %{version}-%{release}
-Provides:           gfal2-python%{?_isa} = %{version}-%{release}
-Obsoletes:          gfal2-python < %{version}-%{release}
-
-%description -n python2-gfal2 %_description
-%endif
-
-%if 0%{?with_python3}
 %package -n python3-gfal2
 Summary:            gfal2 python bindings for Python 3
 Requires:           gfal2-core >= 2.22.0
@@ -101,20 +47,7 @@ Provides:           gfal2-python3 = %{version}-%{release}
 Provides:           gfal2-python3%{?_isa} = %{version}-%{release}
 Obsoletes:          gfal2-python3 < %{version}-%{release}
 
-%description -n python3-gfal2
-Python 3 bindings for gfal2.
-GFAL2 offers an a single, simple and portable API
-for the file operations in grids and cloud environments.
-%endif
-
-%if 0%{?with_docs}
-%package doc
-Summary:            Documentation for %{name}
-BuildArch:          noarch
-
-%description doc
-Documentation files for %{name}.
-%endif
+%description -n python3-gfal2 %_description
 
 %clean
 %cmake3_build --target clean
@@ -138,43 +71,16 @@ fi
 %if 0%{?with_static_boost_python}
      -DBoost_USE_STATIC_LIBS=ON \
 %endif
-%if 0%{?with_docs}
-     -DBUILDDOCS=TRUE \
-%endif
      -DUNIT_TESTS=TRUE
 
 %cmake3_build
 
-%if 0%{?with_docs}
-%cmake3_build --target doc
-%endif
-
 %install
 %cmake3_install
 
-%if 0%{?with_python2}
-%files -n python2-gfal2
-%{python_sitearch}/gfal2.so
-%doc LICENSE
-%endif
-
-%if 0%{?with_python3}
 %files -n python3-gfal2
 %{python3_sitearch}/gfal2.so
 %doc LICENSE
-%endif
-
-%if 0%{?with_docs}
-%files doc
-%{_pkgdocdir}/LICENSE
-%{_pkgdocdir}/RELEASE-NOTES
-%{_pkgdocdir}/README
-%{_pkgdocdir}/readme.html
-%dir %{_pkgdocdir}/html
-%dir %{_pkgdocdir}/examples
-%{_pkgdocdir}/html/*
-%{_pkgdocdir}/examples/*
-%endif
 
 %changelog
 * Tue Dec 12 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.2-1
