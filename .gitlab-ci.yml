@@ -25,12 +25,6 @@ stages:
 # Build jobs
 #--------------------------
 
-cc7:
-  image: gitlab-registry.cern.ch/linuxsupport/cc7-base
-  before_script:
-    - if [[ -z "$CI_COMMIT_TAG" ]]; then export RPMBUILD_FLAGS="--without docs" ; fi
-  <<: *build-template_definition
-
 alma8:
   image: gitlab-registry.cern.ch/linuxsupport/alma8-base
   <<: *build-template_definition
@@ -55,11 +49,11 @@ fedora-rawhide:
 
 pypi:
   stage: build
-  image: gitlab-registry.cern.ch/linuxsupport/cc7-base
+  image: gitlab-registry.cern.ch/linuxsupport/alma9-base
   when: manual
   allow_failure: true
   script:
-    - yum install -y git python3-pip tree
+    - dnf install -y git python3-pip tree
     - python3 -m pip install --upgrade pip
     - python3 -m pip install setuptools
     - python3 setup.py sdist
@@ -89,14 +83,6 @@ pypi:
 #--------------------------
 # Test jobs
 #--------------------------
-
-cc7-test:
-  image: gitlab-registry.cern.ch/linuxsupport/cc7-base
-  needs:
-    - job: cc7
-  before_script:
-    - yum install -y dnf epel-release
-  <<: *test-template_definition
 
 alma8-test:
   image: gitlab-registry.cern.ch/linuxsupport/alma8-base
@@ -134,7 +120,6 @@ fedora-40-test:
   stage: publish
   image: gitlab-registry.cern.ch/eos/gitlab-eos/alma9:latest
   dependencies:
-    - cc7
     - alma8
     - alma9
     - fedora-39
@@ -144,7 +129,7 @@ fedora-40-test:
     - automount
     - cat "$repo_passwd" | kinit "$repo_user"
     - |
-        for platform in cc7 alma8 alma9 fedora-39 fedora-40 fedora-rawhide; do
+        for platform in alma8 alma9 fedora-39 fedora-40 fedora-rawhide; do
           if [[ "${platform}" == "fedora-rawhide" ]] && [[ ! -d ${platform} ]] ; then
             echo "Skipping ${platform} packages..." ;
             continue ;
@@ -174,11 +159,10 @@ pypi-publish:
   needs:
     - job: pypi
   stage: publish
-  image: gitlab-registry.cern.ch/linuxsupport/cc7-base
-  when: manual
+  image: gitlab-registry.cern.ch/linuxsupport/alma9-base
   script:
     - PLATFORM=${CI_JOB_NAME%-*}
-    - yum install -y git python3-pip
+    - dnf install -y git python3 python3-pip
     - python3 -m pip install --upgrade pip
     - python3 -m pip install setuptools twine
     - twine check ${PLATFORM}/*
