@@ -117,6 +117,8 @@ public:
     uint64_t             get_tcp_buffersize(void);
     void                 set_strict_copy(bool strict_copy);
     bool                 get_strict_copy(void);
+    void                 set_transfer_cleanup(bool transfer_cleanup);
+    bool                 get_transfer_cleanup(void);
     void                 set_proxy_delegation(bool proxy_delegation);
     bool                 get_proxy_delegation(void);
     void                 set_scitag(guint scitag);

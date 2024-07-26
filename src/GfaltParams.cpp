@@ -271,6 +271,23 @@ bool GfaltParams::get_strict_copy(void)
 }
 
 
+void GfaltParams::set_transfer_cleanup(bool transfer_cleanup)
+{
+    GError * tmp_err = NULL;
+    gfalt_set_transfer_cleanup(params, transfer_cleanup, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+}
+
+
+bool GfaltParams::get_transfer_cleanup(void)
+{
+    GError * tmp_err = NULL;
+    const bool transfer_cleanup = gfalt_get_transfer_cleanup(params, &tmp_err);
+    GErrorWrapper::throwOnError(&tmp_err);
+    return transfer_cleanup;
+}
+
+
 void GfaltParams::set_proxy_delegation(bool proxy_delegation)
 {
     GError * tmp_err = NULL;
