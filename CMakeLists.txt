@@ -22,7 +22,7 @@ add_definitions(-DGFAL2_PYTHON_VERSION="${VERSION_STRING}")
 
 # Find build packages
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
-find_package(Boost COMPONENTS "python3${Python_VERSION_MINOR}" QUIET)
+find_package(Boost COMPONENTS "python3${Python_VERSION_MINOR}")
 if(NOT Boost_LIBRARIES)
   # Failed to find a specific Python3x version, fallback to Python3
   find_package(Boost COMPONENTS "python3" REQUIRED)
@@ -42,7 +42,7 @@ endif()
 if (BUILDDOCS)
   # Install docs and license
   install(FILES "LICENSE" "RELEASE-NOTES" "README.md" "readme.html"
-    DESTINATION ${DOC_INSTALL_DIR})
+            DESTINATION ${DOC_INSTALL_DIR})
 
   # Install examples
   add_subdirectory(doc)
