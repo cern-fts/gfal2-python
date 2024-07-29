@@ -81,19 +81,12 @@ def _run_make(build_dir, lib_path):
     if not os.path.exists(full_lib_path):
         os.makedirs(full_lib_path)
 
-    # build the cmake command
-    major = sys.version_info[0]
-    cmake_cmd = ['cmake', '-DSKIP_TESTS=TRUE']
-    if major == 3:
-        cmake_cmd += ['-DPYTHON_EXECUTABLE_3=%s' % sys.executable]
-    cmake_cmd += [source_dir]
-
-    # run the cmake command and make
-    check_call(cmake_cmd, cwd=build_dir)
+    # Run the cmake and make commands
+    check_call(['cmake', '-DSKIP_TESTS=TRUE', source_dir], cwd=build_dir)
     check_call(['make'], cwd=build_dir)
 
     # install
-    shutil.copy(os.path.join(build_dir, 'src/python%d/gfal2.so' % major), full_lib_path)
+    shutil.copy(os.path.join(build_dir, 'src/python3/gfal2.so'), full_lib_path)
 
 
 class build_ext(_build_ext.build_ext):
