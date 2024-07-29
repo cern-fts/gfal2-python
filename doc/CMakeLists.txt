@@ -1,20 +1,12 @@
 
-SET(MAIN_DOC TRUE
-	CACHE STRING "enable installation of the main library documentation")	
+SET(MAIN_DOC TRUE CACHE STRING "enable installation of the main library documentation")
 
-
-##
-## execute make doc for doc generation
-#
-IF(MAIN_DOC AND BUILDDOCS)
-
-        file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/")
-        addEpydocGeneration("epydoc_config.in")
-
-        SET( l_doc "${CMAKE_CURRENT_BINARY_DIR}/html/")
-
-        install(DIRECTORY ${l_doc}
-                        DESTINATION ${DOC_INSTALL_DIR}/html/) # install examples
-
-
-ENDIF(MAIN_DOC AND BUILDDOCS)
+# Execute "make doc" for doc generation
+if (MAIN_DOC AND BUILDDOCS)
+    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/")
+    addEpydocGeneration("epydoc_config.in")
+    # Install compiled examples
+    SET(l_doc "${CMAKE_CURRENT_BINARY_DIR}/html/")
+    install(DIRECTORY ${l_doc}
+              DESTINATION ${DOC_INSTALL_DIR}/html/)
+endif()

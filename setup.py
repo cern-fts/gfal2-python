@@ -26,7 +26,8 @@ from glob import glob
 from subprocess import check_call
 from setuptools import Extension, setup
 
-# Change this for a post release i.e when there are changes in the setup.py or MANIFEST.in but no version change
+# Change this for a post release
+# (i.e there are changes in the setup.py or MANIFEST.in but no version change)
 POST_RELEASE = None
 
 
@@ -39,10 +40,11 @@ def get_version():
         for line in cmake:
             line = line.strip()
             if line.startswith('set') and line.endswith(')'):
-                before, var, after = re.split(r'\(|\)', line)
-                varname, varval = var.split()
+                result = re.search(r'^set\s*\((\S+)\s(\S+)[\s\)]', line)
+                varname, varval = result.group(1), result.group(2)
                 if varname.startswith('VERSION_'):
                     ver_components[varname] = varval
+
     if len(ver_components) == 0:
         raise ValueError('Could not find the version')
 
@@ -79,19 +81,12 @@ def _run_make(build_dir, lib_path):
     if not os.path.exists(full_lib_path):
         os.makedirs(full_lib_path)
 
-    # build the cmake command
-    major = sys.version_info[0]
-    cmake_cmd = ['cmake', '-DSKIP_TESTS=TRUE']
-    if major == 3:
-        cmake_cmd += ['-DPYTHON_EXECUTABLE_3=%s' % sys.executable]
-    cmake_cmd += [source_dir]
-
-    # run the cmake command and make
-    check_call(cmake_cmd, cwd=build_dir)
+    # Run the cmake and make commands
+    check_call(['cmake', '-DSKIP_TESTS=TRUE', source_dir], cwd=build_dir)
     check_call(['make'], cwd=build_dir)
 
     # install
-    shutil.copy(os.path.join(build_dir, 'src/python%d/gfal2.so' % major), full_lib_path)
+    shutil.copy(os.path.join(build_dir, 'src/python3/gfal2.so'), full_lib_path)
 
 
 class build_ext(_build_ext.build_ext):
