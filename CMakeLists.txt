@@ -1,96 +1,51 @@
-## cmake build script for gfal2 bindings
-project (gfal2-bindings)
-cmake_minimum_required (VERSION 2.6)
-message("cmake source dir : ${CMAKE_SOURCE_DIR}")
-# build type
-set(CMAKE_BUILD_TYPE "RelWithDebInfo" 
-        CACHE STRING "build type")
+# CMake build script for Gfal2 Python bindings
+project(gfal2-bindings)
+cmake_minimum_required(VERSION 3.12)
+
+# Build type
+set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "build type")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
-# global options
 
-# Find out details if we're on a redhat style platform
-execute_process (COMMAND rpm -E "%{?fedora}" OUTPUT_VARIABLE FEDORA OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process (COMMAND rpm -E "%{?rhel}" OUTPUT_VARIABLE RHEL OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-# load module
+# Load modules and definitions
 include(DefineInstallationPaths REQUIRED)
 include(MacroCopyFile REQUIRED)
 include(ReleaseDebugAutoFlags REQUIRED)
 include(CMakeGeneratePkgConfig REQUIRED)
-
 set(Boost_NO_BOOST_CMAKE ON)
 
-find_package(PythonEasy REQUIRED)
-
-if (PYTHON_EXECUTABLE)
-    if(RHEL STREQUAL "7")
-      find_package(Boost COMPONENTS python REQUIRED)
-    endif()
-endif(PYTHON_EXECUTABLE)
-
-
-if (PYTHON3_CURRENT_VERSION)
-    string(REPLACE "." "" Boost_PYTHON_3_SUFFIX "${PYTHON3_CURRENT_VERSION}")
-
-    find_library(Boost_PYTHON_3_LIBRARY
-        NAMES boost_python${Boost_PYTHON_3_SUFFIX} boost_python-py${Boost_PYTHON_3_SUFFIX} boost_python3
-        HINTS
-            ${Boost_LIBRARYDIR}
-            "/usr/lib"
-            "/usr/lib64"
-    )
-
-    if (Boost_PYTHON_3_LIBRARY)
-        message(STATUS "Boost Python3 library: ${Boost_PYTHON_3_LIBRARY}")
-    else()
-        message(WARNING "Boost Python3 library not found")
-    endif()
-endif()
-
-#define PROJECT vars
-set(PROJECT_NAME_MAIN "gfal2-python")
-
-# EPYDOC definition for EPEL5 support
-if (BUILDDOCS)
-    set(EPYDOC_MODULE_PATH "${CMAKE_BINARY_DIR}/src/python2/gfal2.so")
-    set(EPYDOC_MODULE_URL  "http://dmc.web.cern.ch/projects/gfal2-python")
-    set(EPYDOC_MODULE_NAME "gfal2")
-
-    include(MacroAddepydoc REQUIRED)
-endif (BUILDDOCS)
-
+# Define version
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 12)
 set(VERSION_PATCH 2)
 set(VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 add_definitions(-DGFAL2_PYTHON_VERSION="${VERSION_STRING}")
 
-# libs checks
-find_package (GLIB2 REQUIRED)
-find_package (GTHREAD2 REQUIRED)
-
-# GFAL2
+# Find build packages
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
+find_package(Boost COMPONENTS "python3${Python_VERSION_MINOR}" QUIET)
+if(NOT Boost_LIBRARIES)
+  # Failed to find a specific Python3x version, fallback to Python3
+  find_package(Boost COMPONENTS "python3" REQUIRED)
+endif()
+find_package(GLIB2 REQUIRED)
+find_package(GTHREAD2 REQUIRED)
 find_package(GFAL2 REQUIRED)
 
-# Install doc license
-if (BUILDDOCS)
-install(FILES "LICENSE" "RELEASE-NOTES" "README.md" "readme.html"
-                        DESTINATION ${DOC_INSTALL_DIR})
-endif (BUILDDOCS)
-
-add_definitions( -D_FILE_OFFSET_BITS=64 )
-
-add_subdirectory (src)
+add_definitions(-D_FILE_OFFSET_BITS=64 )
+add_subdirectory(src)
 
 if (NOT SKIP_TESTS)
   enable_testing()
-  add_subdirectory (test)
-endif (NOT SKIP_TESTS)
+  add_subdirectory(test)
+endif()
 
 if (BUILDDOCS)
-  add_subdirectory(doc)
+  # Install docs and license
+  install(FILES "LICENSE" "RELEASE-NOTES" "README.md" "readme.html"
+    DESTINATION ${DOC_INSTALL_DIR})
+
   # Install examples
+  add_subdirectory(doc)
   install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/example/python/"
             DESTINATION ${DOC_INSTALL_DIR}/examples)
-endif (BUILDDOCS)
-
+endif()

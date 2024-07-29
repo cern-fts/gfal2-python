@@ -1,8 +1,7 @@
-if(FUNCTIONAL_TESTS)
-    add_subdirectory (functionals)
-endif(FUNCTIONAL_TESTS)
+if (FUNCTIONAL_TESTS)
+    add_subdirectory(functional)
+endif()
 
-
-if(UNIT_TESTS)
-    add_subdirectory (unit)
-endif(UNIT_TESTS)
+if (UNIT_TESTS)
+    add_subdirectory(unit)
+endif()
