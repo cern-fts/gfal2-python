@@ -26,7 +26,8 @@ from glob import glob
 from subprocess import check_call
 from setuptools import Extension, setup
 
-# Change this for a post release i.e when there are changes in the setup.py or MANIFEST.in but no version change
+# Change this for a post release
+# (i.e there are changes in the setup.py or MANIFEST.in but no version change)
 POST_RELEASE = None
 
 
@@ -39,10 +40,11 @@ def get_version():
         for line in cmake:
             line = line.strip()
             if line.startswith('set') and line.endswith(')'):
-                before, var, after = re.split(r'\(|\)', line)
-                varname, varval = var.split()
+                result = re.search(r'^set\s*\((\S+)\s(\S+)[\s\)]', line)
+                varname, varval = result.group(1), result.group(2)
                 if varname.startswith('VERSION_'):
                     ver_components[varname] = varval
+
     if len(ver_components) == 0:
         raise ValueError('Could not find the version')
 
