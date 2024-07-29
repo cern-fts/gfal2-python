@@ -30,6 +30,7 @@ BuildRequires:      boost-devel
 BuildRequires:      python%{python3_pkgversion}-devel
 BuildRequires:      python%{python3_pkgversion}-setuptools
 BuildRequires:      boost-python%{python3_pkgversion}-devel
+BuildRequires:      python%{python3_pkgversion}-pypandoc
 
 %global _description \
 Python3 bindings for Gfal2. \

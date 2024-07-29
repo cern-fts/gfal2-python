@@ -74,7 +74,7 @@ find_package(GFAL2 REQUIRED)
 
 # Install doc license
 if (BUILDDOCS)
-install(FILES "LICENSE" "RELEASE-NOTES" "README" "readme.html"
+install(FILES "LICENSE" "RELEASE-NOTES" "README.md" "readme.html"
                         DESTINATION ${DOC_INSTALL_DIR})
 endif (BUILDDOCS)
 

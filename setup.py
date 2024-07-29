@@ -53,6 +53,13 @@ def get_version():
     return version % ver_components
 
 
+def long_description():
+    try:
+        import pypandoc
+        return pypandoc.convert_file('README.md', 'rst')
+    except(IOError, ImportError):
+        return open('README.md').read()
+
 def validate():
     if distutils.spawn.find_executable('cmake') is None:
         print('Missing CMake executable')
@@ -95,7 +102,8 @@ class build_ext(_build_ext.build_ext):
 setup(
     name='gfal2-python',
     version=get_version(),
-    description='Python bindings for gfal2',
+    description='Python3 bindings for Gfal2',
+    long_description=long_description(),
     long_description_content_type='text/markdown',
     requires=[],
     install_requires=[],
@@ -105,7 +113,6 @@ setup(
     author_email='dmc-devel@cern.ch',
     maintainer_email='dmc-devel@cern.ch',
     license='Apache 2',
-    long_description='Python bindings for gfal2',
     keywords='gfal2, grid, dmc, data management clients',
     platforms=['GNU/Linux'],
     classifiers=[
