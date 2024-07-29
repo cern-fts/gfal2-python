@@ -16,7 +16,7 @@ Optionally, you may want to install relevant Gfal2 protocol plugins.
 Our example will use HTTP protocol, so we must ensure we have
 the Gfal2 HTTP plugin installed:
 ```bash
-$ dnf install gfal2-plugin-http
+$ dnf install -y gfal2-plugin-http
 ```
 
 #### Examples
@@ -29,7 +29,7 @@ ctx = gfal2.creat_context()
 ctx.stat("https://eospublic.cern.ch/eos/opstest/dteam/file.test")
 ```
 
-Example of copying a file from remote to local:
+Example of copying a file from local to remote:
 ```python
 import gfal2
 
@@ -38,7 +38,7 @@ ctx.filecopy("file:///tmp/file.test", "https://eospublic.cern.ch/eos/opstest/dte
 ctx.stat("https://eospublic.cern.ch/eos/opstest/dteam/file.test")
 ```
 
-Example of copying the file from local to remote (with custom transfer parameters):
+Example of copying the file from remote to local (with custom transfer parameters):
 ```python
 import gfal2
 
@@ -60,7 +60,7 @@ process, hence why you need to make sure you have all the right dependencies.
 This guide details the steps needed to get all the dependencies, starting
 from a *blank* machine.
 
-This guide assumes you have the EPEL repositories installed (`dnf install epel-release`).
+This guide assumes you have the EPEL repositories installed (`epel-release` package).
 In this example, the build platform is `Alma9` and we will use `v1.12.2`,
 but the same process applies for other versions or build platforms.
 
