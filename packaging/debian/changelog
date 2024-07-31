@@ -1,3 +1,9 @@
+gfal2-python (1.13.0-1) unstable; urgency=low
+
+  * New release
+
+ -- DMC Devel <dmc-devel@cern.ch> Wed, 31 Jul 2024 14:35:00 +0100
+
 gfal2-python (1.12.2-1) unstable; urgency=low
 
   * New release

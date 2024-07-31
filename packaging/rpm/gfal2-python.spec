@@ -11,21 +11,18 @@
 %global __provides_exclude_from ^(%{python3_sitearch}/.*\\.so)$
 
 Name:               gfal2-python
-Version:            1.12.2
+Version:            1.13.0
 Release:            1%{?dist}
 Summary:            Python bindings for gfal 2
 License:            ASL 2.0
 URL:                http://dmc.web.cern.ch/
-# git clone --branch master https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.12.1
-# pushd gfal2-python-1.12.1
-# git checkout v1.12.1
-# popd
-# tar czf gfal2-python-1.12.1.tar.gz --exclude-vcs gfal2-python-1.12.1
+# git clone --depth=1 --branch=v1.13.0 https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.13.0
+# tar czf gfal2-python-1.13.0.tar.gz --exclude-vcs gfal2-python-1.13.0
 Source0:            %{name}-%{version}.tar.gz
 
 BuildRequires:      gcc-c++
 BuildRequires:      cmake3
-BuildRequires:      gfal2-devel >= 2.22.0
+BuildRequires:      gfal2-devel >= 2.23.0
 BuildRequires:      boost-devel
 BuildRequires:      python%{python3_pkgversion}-devel
 BuildRequires:      python%{python3_pkgversion}-setuptools
@@ -40,7 +37,7 @@ for file operations in the Grid and Cloud environments.
 
 %package -n python3-gfal2
 Summary:            gfal2 python bindings for Python 3
-Requires:           gfal2-core >= 2.22.0
+Requires:           gfal2-core >= 2.23.0
 Requires:           python3
 # Remove before F30
 Provides:           gfal2-python3 = %{version}-%{release}
@@ -83,6 +80,9 @@ fi
 %doc LICENSE
 
 %changelog
+* Wed Jul 31 2024 Louis Regnier <loregnie@cern.ch> - 1.13.0-1
+- New upstream release
+
 * Tue Dec 12 2023 Mihai Patrascoiu <mipatras@cern.ch> - 1.12.2-1
 - New upstream release
 
