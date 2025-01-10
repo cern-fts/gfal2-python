@@ -15,7 +15,7 @@ Version:            1.13.0
 Release:            1%{?dist}
 Summary:            Python bindings for gfal 2
 License:            ASL 2.0
-URL:                http://dmc.web.cern.ch/
+URL:                https://dmc-docs.web.cern.ch/dmc-docs/gfal2-python.html
 # git clone --depth=1 --branch=v1.13.0 https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.13.0
 # tar czf gfal2-python-1.13.0.tar.gz --exclude-vcs gfal2-python-1.13.0
 Source0:            %{name}-%{version}.tar.gz
