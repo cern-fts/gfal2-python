@@ -11,13 +11,13 @@
 %global __provides_exclude_from ^(%{python3_sitearch}/.*\\.so)$
 
 Name:               gfal2-python
-Version:            1.13.0
+Version:            1.13.1
 Release:            1%{?dist}
 Summary:            Python bindings for gfal 2
 License:            ASL 2.0
 URL:                https://dmc-docs.web.cern.ch/dmc-docs/gfal2-python.html
-# git clone --depth=1 --branch=v1.13.0 https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.13.0
-# tar czf gfal2-python-1.13.0.tar.gz --exclude-vcs gfal2-python-1.13.0
+# git clone --depth=1 --branch=v1.13.1 https://gitlab.cern.ch/dmc/gfal2-bindings.git gfal2-python-1.13.1
+# tar czf gfal2-python-1.13.1.tar.gz --exclude-vcs gfal2-python-1.13.1
 Source0:            %{name}-%{version}.tar.gz
 
 BuildRequires:      gcc-c++
@@ -80,6 +80,9 @@ fi
 %doc LICENSE
 
 %changelog
+* Tue Oct 21 2025 Mihai Patrascoiu <mipatras@cern.ch> - 1.13.1-1
+- New upstream release
+
 * Wed Jul 31 2024 Louis Regnier <loregnie@cern.ch> - 1.13.0-1
 - New upstream release
 

@@ -1,6 +1,14 @@
 GFAL2-PYTHON RELEASE NOTES
 ==========================
 
+* Tue Oct 21 2025 Mihai Patrascoiu <mipatras@cern.ch> - 1.13.1-1
+** Task
+- [DMC-1428] - Data Management Clients for Fedora 41
+- [DMC-1441] - Provide DMC packages for EL10 platform
+** Improvement
+- [DMC-1425] - Old, unavailable URL referenced by Gfal2 Python packages specfile
+- [DMC-1433] - CI: Use pull-through cache for Fedora, Ubuntu and Debian images
+
 * Wed Jul 31 2024 Louis Regnier <loregnie@cern.ch> - 1.13.0-1
 ** Task
 - [DMC-1413] - Data Management Clients for Fedora 39 and Fedora 40
